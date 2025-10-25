@@ -322,6 +322,23 @@ export class UIRenderer {
   }
 
   /**
+   * Render time trial countdown timer with color coding for urgency (red when ≤10 seconds)
+   */
+  public renderTimeTrialTimer(timeLeft: number): void {
+    const secondsLeft = Math.ceil(timeLeft / 1000);
+
+    this.ctx.save();
+    this.ctx.font = 'bold 48px Arial';
+    this.ctx.textAlign = 'center';
+    this.ctx.fillStyle = secondsLeft <= 10 ? '#ef4444' : '#fbbf24';
+    this.ctx.strokeStyle = '#000000';
+    this.ctx.lineWidth = 4;
+    this.ctx.strokeText(`${secondsLeft}s`, GAME_CONFIG.CANVAS_WIDTH / 2, 80);
+    this.ctx.fillText(`${secondsLeft}s`, GAME_CONFIG.CANVAS_WIDTH / 2, 80);
+    this.ctx.restore();
+  }
+
+  /**
    * Render mini map (optional debug view)
    */
   public renderMiniMap(

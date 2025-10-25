@@ -49,12 +49,9 @@ test.describe('Visual Regression Tests', () => {
     const startButton = page.locator('button:has-text("Start Game")');
     await startButton.click();
 
-    await page.waitForTimeout(1000);
-
-    // Check that HUD elements are visible
+    // Wait for HUD elements to be visible
     const score = page.locator('[data-testid="score"]');
     const distance = page.locator('[data-testid="distance"]');
-
     await expect(score).toBeVisible();
     await expect(distance).toBeVisible();
 

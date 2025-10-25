@@ -11,7 +11,7 @@ interface AchievementDefinition {
   description: string;
   icon: string;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  check: (stats: GameStats, profile: any) => number; // Returns progress 0-1
+  check: (stats: GameStats, profile?: import('@/types/Game.types').PlayerProfile) => number; // Returns progress 0-1
   requirement: number;
 }
 

@@ -83,7 +83,7 @@ expect: {
 
 If you've made intentional visual changes, update the baselines:
 ```bash
-npm run test:e2e -- tests/e2e/visual.spec.ts --update-snapshots
+npm run test:visual:update
 ```
 
 ### Flaky Tests

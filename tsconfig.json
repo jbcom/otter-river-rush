@@ -32,6 +32,6 @@
       "@types/*": ["./src/types/*"]
     }
   },
-  "include": ["src", "*.config.ts", "tests", "scripts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "*.config.ts", "tests"],
+  "exclude": ["node_modules", "dist", "scripts"]
 }

@@ -18,7 +18,7 @@ test.describe('Visual Regression Tests', () => {
     await expect(page.locator('canvas')).toBeVisible();
 
     // Wait for any loading to complete
-    await page.waitForTimeout(1000);
+    await expect(page.locator('button:has-text("Start Game")')).toBeVisible();
 
     // Take screenshot and compare against baseline
     await expect(page).toHaveScreenshot('menu-screen.png', {

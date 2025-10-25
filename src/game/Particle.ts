@@ -23,7 +23,13 @@ export class Particle {
     this.active = false;
   }
 
-  init(pos: Vector2, velocity: Vector2, lifetime: number, color: string, size: number): void {
+  init(
+    pos: Vector2,
+    velocity: Vector2,
+    lifetime: number,
+    color: string,
+    size: number
+  ): void {
     this.x = pos.x;
     this.y = pos.y;
     this.vx = velocity.x;

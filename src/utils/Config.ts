@@ -3,11 +3,7 @@
  */
 
 import type { GameConfig } from '@/types/Config.types';
-import {
-  BiomeType,
-  DifficultyLevel,
-  PowerUpType,
-} from '@/types/Game.types';
+import { BiomeType, DifficultyLevel, PowerUpType } from '@/types/Game.types';
 
 export const CONFIG: Readonly<GameConfig> = {
   canvas: {

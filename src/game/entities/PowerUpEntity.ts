@@ -15,13 +15,15 @@ export class PowerUpEntity extends GameObject {
   private color: string;
   private pulseTime: number = 0;
   private rotationSpeed: number;
-  private particles: { x: number; y: number; vx: number; vy: number; life: number }[] = [];
+  private particles: {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    life: number;
+  }[] = [];
 
-  constructor(
-    id: string,
-    position: Vector2D,
-    type: PowerUpType
-  ) {
+  constructor(id: string, position: Vector2D, type: PowerUpType) {
     super(id, position, {
       type: 'circle',
       radius: 20,
@@ -34,7 +36,7 @@ export class PowerUpEntity extends GameObject {
     this.effect = config.effect;
     this.color = config.color;
     this.rotationSpeed = Math.random() * 3 + 2;
-    
+
     // Initialize particles
     for (let i = 0; i < 8; i++) {
       this.particles.push(this.createParticle());
@@ -44,7 +46,13 @@ export class PowerUpEntity extends GameObject {
   /**
    * Create particle for effect
    */
-  private createParticle(): { x: number; y: number; vx: number; vy: number; life: number } {
+  private createParticle(): {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    life: number;
+  } {
     const angle = Math.random() * Math.PI * 2;
     const speed = Math.random() * 2 + 1;
     return {
@@ -73,7 +81,7 @@ export class PowerUpEntity extends GameObject {
       particle.x += particle.vx * deltaTime * 0.05;
       particle.y += particle.vy * deltaTime * 0.05;
       particle.life -= deltaTime * 0.001;
-      
+
       if (particle.life <= 0) {
         Object.assign(particle, this.createParticle());
       }
@@ -94,7 +102,9 @@ export class PowerUpEntity extends GameObject {
     // Render particles
     this.particles.forEach((particle) => {
       const alpha = particle.life * 0.5;
-      ctx.fillStyle = `${this.color}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`;
+      ctx.fillStyle = `${this.color}${Math.floor(alpha * 255)
+        .toString(16)
+        .padStart(2, '0')}`;
       ctx.beginPath();
       ctx.arc(
         this.transform.position.x + particle.x,
@@ -277,13 +287,13 @@ export class PowerUpEntity extends GameObject {
     const spikes = 8;
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    
+
     for (let i = 0; i < spikes * 2; i++) {
       const radius = i % 2 === 0 ? size / 2 : size / 4;
       const angle = (Math.PI * i) / spikes - Math.PI / 2;
       const x = Math.cos(angle) * radius;
       const y = Math.sin(angle) * radius;
-      
+
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {

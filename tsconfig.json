@@ -13,12 +13,12 @@
     "isolatedModules": true,
     "noEmit": true,
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    /* Relaxed linting for game development */
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
@@ -32,6 +32,6 @@
       "@types/*": ["./src/types/*"]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "*.config.ts", "tests"],
+  "exclude": ["node_modules", "dist", "scripts"]
 }

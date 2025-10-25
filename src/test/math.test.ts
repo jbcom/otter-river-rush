@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { checkAABBCollision, clamp, lerp, randomRange, randomInt } from '../utils/math';
+import {
+  checkAABBCollision,
+  clamp,
+  lerp,
+  randomRange,
+  randomInt,
+} from '../utils/math';
 
 describe('Math utilities', () => {
   describe('checkAABBCollision', () => {

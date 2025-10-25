@@ -4,15 +4,28 @@ import { PowerUp } from './PowerUp';
 import { ProceduralGenerator } from './ProceduralGenerator';
 import { InputHandler } from './InputHandler';
 import { Renderer } from '../rendering/Renderer';
+import { UIRenderer, type PowerUpStatus } from '../rendering/UIRenderer';
+// import { SpriteFactory } from '../rendering/SpriteFactory';
+import { BackgroundGenerator } from '../rendering/BackgroundGenerator';
 import { ObjectPool } from '../utils/ObjectPool';
 import { checkAABBCollision, randomRange } from '../utils/math';
 import { StorageManager, SaveData } from '../utils/StorageManager';
-import { AchievementSystem, GameStats } from './AchievementSystem';
+import { AchievementSystem } from './AchievementSystem';
+import type { GameStats } from '@/types/Game.types';
 import { AudioManager } from './AudioManager';
-import { GameState, GAME_CONFIG, PARTICLE_CONFIG, PowerUpType, POWERUP_CONFIG } from './constants';
+import {
+  GameState,
+  GAME_CONFIG,
+  PARTICLE_CONFIG,
+  PowerUpType,
+  POWERUP_CONFIG,
+} from './constants';
 
 export class Game {
   private renderer: Renderer;
+  private uiRenderer: UIRenderer;
+  // TODO: Add SpriteFactory when we replace rectangle rendering with proper sprites
+  private backgroundGenerator: BackgroundGenerator;
   private otter: Otter;
   private generator: ProceduralGenerator;
   private inputHandler: InputHandler;
@@ -23,6 +36,11 @@ export class Game {
   private state: GameState = GameState.MENU;
   private score: number = 0;
   private distance: number = 0;
+  private coins: number = 0;
+  private gems: number = 0;
+  private combo: number = 0;
+  private comboTimer: number = 0;
+  private readonly COMBO_TIMEOUT = 3000; // 3 seconds to maintain combo
   private scrollSpeed: number = GAME_CONFIG.SCROLL_SPEED;
   private difficulty: number = 0;
   private lastTime: number = 0;
@@ -48,6 +66,10 @@ export class Game {
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new Renderer(canvas);
+    this.uiRenderer = new UIRenderer(canvas, { showFPS: false, showDebug: false });
+    // TODO: Initialize SpriteFactory when we replace rectangle rendering
+    // this.spriteFactory = new SpriteFactory(64);
+    this.backgroundGenerator = new BackgroundGenerator(canvas);
     this.otter = new Otter();
     this.generator = new ProceduralGenerator();
     this.inputHandler = new InputHandler(canvas);
@@ -112,6 +134,10 @@ export class Game {
     this.state = GameState.PLAYING;
     this.score = 0;
     this.distance = 0;
+    this.coins = 0;
+    this.gems = 0;
+    this.combo = 0;
+    this.comboTimer = 0;
     this.scrollSpeed = GAME_CONFIG.SCROLL_SPEED;
     this.difficulty = 0;
     this.difficultyTimer = 0;
@@ -164,17 +190,20 @@ export class Game {
     const stats: GameStats = {
       score: this.score,
       distance: this.distance,
+      coins: this.coins,
+      gems: this.gems,
+      combo: this.combo,
+      multiplier: this.scoreMultiplier,
       powerUpsCollected: this.powerUpsCollected,
-      rocksAvoided: this.rocksAvoided,
+      obstaclesAvoided: this.rocksAvoided,
       gamesPlayed: this.saveData.totalGamesPlayed,
+      closeCallsCount: 0,
     };
 
     const newAchievements = this.achievementSystem.check(stats);
     if (newAchievements.length > 0) {
       this.audioManager.playSound('achievement');
-      newAchievements.forEach((achievement) => {
-        console.log(`Achievement unlocked: ${achievement.name}`);
-      });
+      // Achievement unlocked - could show UI notification here
     }
 
     this.saveData.achievements = this.achievementSystem.getUnlockedIds();
@@ -192,10 +221,14 @@ export class Game {
 
     this.updateDifficulty(deltaTime);
     this.updatePowerUps(currentTime);
+    this.updateCombo(deltaTime);
 
     this.otter.update(deltaTime);
     this.generator.update(this.scrollSpeed, this.difficulty, deltaTime);
     this.renderer.update(deltaTime);
+    
+    // Update background generator with biome system
+    this.backgroundGenerator.update(deltaTime, this.scrollSpeed, this.distance);
 
     this.updateRocks(deltaTime);
     this.updatePowerUpItems(deltaTime);
@@ -204,9 +237,20 @@ export class Game {
     this.checkCollisions();
 
     this.distance += this.scrollSpeed * deltaTime;
-    this.score += Math.floor(this.scrollSpeed * deltaTime * this.scoreMultiplier);
+    this.score += Math.floor(
+      this.scrollSpeed * deltaTime * this.scoreMultiplier * (1 + this.combo * 0.1)
+    );
 
     this.updateUI();
+  }
+
+  private updateCombo(deltaTime: number): void {
+    if (this.combo > 0) {
+      this.comboTimer -= deltaTime * 1000;
+      if (this.comboTimer <= 0) {
+        this.combo = 0;
+      }
+    }
   }
 
   private updateDifficulty(deltaTime: number): void {
@@ -219,12 +263,18 @@ export class Game {
       const speedIncrease =
         (GAME_CONFIG.MAX_SCROLL_SPEED - GAME_CONFIG.MIN_SCROLL_SPEED) *
         GAME_CONFIG.DIFFICULTY_INCREASE_RATE;
-      this.scrollSpeed = Math.min(this.scrollSpeed + speedIncrease, GAME_CONFIG.MAX_SCROLL_SPEED);
+      this.scrollSpeed = Math.min(
+        this.scrollSpeed + speedIncrease,
+        GAME_CONFIG.MAX_SCROLL_SPEED
+      );
     }
   }
 
   private updatePowerUps(currentTime: number): void {
-    if (this.scoreMultiplierEndTime > 0 && currentTime >= this.scoreMultiplierEndTime) {
+    if (
+      this.scoreMultiplierEndTime > 0 &&
+      currentTime >= this.scoreMultiplierEndTime
+    ) {
       this.scoreMultiplier = 1;
       this.scoreMultiplierEndTime = 0;
     }
@@ -246,6 +296,9 @@ export class Game {
       if (rock.isOffScreen(GAME_CONFIG.CANVAS_HEIGHT)) {
         this.generator.releaseRock(rock);
         this.rocksAvoided++;
+        // Increment combo for dodging rocks
+        this.combo++;
+        this.comboTimer = this.COMBO_TIMEOUT;
       }
     });
   }
@@ -280,7 +333,11 @@ export class Game {
         if (this.otter.hasShield) {
           this.otter.hasShield = false;
           this.generator.releaseRock(rock);
-          this.createParticles(rock.x + rock.width / 2, rock.y + rock.height / 2, '#60a5fa');
+          this.createParticles(
+            rock.x + rock.width / 2,
+            rock.y + rock.height / 2,
+            '#60a5fa'
+          );
         } else {
           this.audioManager.playSound('collision');
           this.createParticles(
@@ -288,6 +345,9 @@ export class Game {
             this.otter.y + this.otter.height / 2,
             '#d2691e'
           );
+          // Reset combo on collision/death
+          this.combo = 0;
+          this.comboTimer = 0;
           this.gameOver();
           return;
         }
@@ -323,7 +383,11 @@ export class Game {
         break;
     }
 
-    this.createParticles(powerUp.x + powerUp.width / 2, powerUp.y + powerUp.height / 2, '#fbbf24');
+    this.createParticles(
+      powerUp.x + powerUp.width / 2,
+      powerUp.y + powerUp.height / 2,
+      '#fbbf24'
+    );
   }
 
   private createParticles(x: number, y: number, color: string): void {
@@ -343,7 +407,16 @@ export class Game {
 
   render(): void {
     this.renderer.clear();
-    this.renderer.renderBackground();
+    
+    // Show loading screen if sprites aren't loaded yet
+    if (!this.renderer.areSpritesLoaded() && this.state === GameState.MENU) {
+      this.renderer.renderLoadingScreen();
+      return;
+    }
+    
+    // Render new dynamic background with biomes
+    this.backgroundGenerator.render();
+    
     this.renderer.renderLanes();
 
     const rocks = this.generator.getActiveRocks();
@@ -356,6 +429,64 @@ export class Game {
 
     const particles = this.particlePool.getActive();
     this.renderer.renderParticles(particles);
+
+    // Render HUD if playing
+    if (this.state === GameState.PLAYING) {
+      const gameStats: GameStats = {
+        score: this.score,
+        distance: this.distance,
+        coins: this.coins,
+        gems: this.gems,
+        combo: this.combo,
+        multiplier: this.scoreMultiplier,
+        obstaclesAvoided: this.rocksAvoided,
+        powerUpsCollected: this.powerUpsCollected,
+        gamesPlayed: this.saveData.totalGamesPlayed,
+        closeCallsCount: 0,
+      };
+
+      const powerUpStatuses: PowerUpStatus[] = this.getActivePowerUpStatuses();
+      this.uiRenderer.renderHUD(gameStats, powerUpStatuses);
+
+      // Show biome transition notification
+      if (this.backgroundGenerator.isNewBiome()) {
+        this.uiRenderer.renderBiomeTransition(this.backgroundGenerator.getBiomeName());
+      }
+    }
+  }
+
+  private getActivePowerUpStatuses(): PowerUpStatus[] {
+    const now = performance.now();
+    const statuses: PowerUpStatus[] = [];
+
+    if (this.otter.hasShield) {
+      statuses.push({
+        type: 'SHIELD',
+        active: true,
+        duration: 0,
+        timeLeft: 0,
+      });
+    }
+
+    if (this.scoreMultiplierEndTime > now) {
+      statuses.push({
+        type: 'SCORE_MULTIPLIER',
+        active: true,
+        duration: POWERUP_CONFIG.DURATION,
+        timeLeft: this.scoreMultiplierEndTime - now,
+      });
+    }
+
+    if (this.speedBoostEndTime > now) {
+      statuses.push({
+        type: 'SPEED_BOOST',
+        active: true,
+        duration: POWERUP_CONFIG.DURATION,
+        timeLeft: this.speedBoostEndTime - now,
+      });
+    }
+
+    return statuses;
   }
 
   private updateUI(): void {

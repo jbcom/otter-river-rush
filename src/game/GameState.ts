@@ -9,7 +9,9 @@ export class GameStateManager {
   private previousState: GameStateEnum | null = null;
   private stateStartTime: number = 0;
   private listeners: Map<GameStateEnum, Set<() => void>> = new Map();
-  private globalListeners: Set<(state: GameStateEnum, previous: GameStateEnum | null) => void> = new Set();
+  private globalListeners: Set<
+    (state: GameStateEnum, previous: GameStateEnum | null) => void
+  > = new Set();
 
   constructor(initialState: GameStateEnum) {
     this.currentState = initialState;
@@ -114,7 +116,10 @@ export class GameStateManager {
   /**
    * Toggle between playing and paused
    */
-  public togglePause(playingState: GameStateEnum, pausedState: GameStateEnum): void {
+  public togglePause(
+    playingState: GameStateEnum,
+    pausedState: GameStateEnum
+  ): void {
     if (this.currentState === playingState) {
       this.setState(pausedState);
     } else if (this.currentState === pausedState) {

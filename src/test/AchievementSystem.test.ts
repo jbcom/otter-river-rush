@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { AchievementSystem, GameStats } from '../game/AchievementSystem';
+import { AchievementSystem } from '../game/AchievementSystem';
+import type { GameStats } from '@/types/Game.types';
 
 describe('AchievementSystem', () => {
   let achievementSystem: AchievementSystem;
@@ -10,8 +11,14 @@ describe('AchievementSystem', () => {
     stats = {
       score: 0,
       distance: 0,
+      coins: 0,
+      gems: 0,
+      multiplier: 1,
+      combo: 0,
       powerUpsCollected: 0,
+      obstaclesAvoided: 0,
       rocksAvoided: 0,
+      closeCallsCount: 0,
       gamesPlayed: 0,
     };
   });

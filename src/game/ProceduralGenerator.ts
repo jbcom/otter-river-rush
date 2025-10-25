@@ -1,6 +1,11 @@
 import { Rock } from './Rock';
 import { PowerUp } from './PowerUp';
-import { GAME_CONFIG, ROCK_CONFIG, POWERUP_CONFIG, PowerUpType } from './constants';
+import {
+  GAME_CONFIG,
+  ROCK_CONFIG,
+  POWERUP_CONFIG,
+  PowerUpType,
+} from './constants';
 import { randomInt, randomRange } from '../utils/math';
 import { ObjectPool } from '../utils/ObjectPool';
 
@@ -31,7 +36,10 @@ export class ProceduralGenerator {
     this.adjustDifficulty(difficulty);
 
     if (this.lastSpawnY > 0) {
-      const spawnDistance = randomRange(this.minSpawnDistance, this.maxSpawnDistance);
+      const spawnDistance = randomRange(
+        this.minSpawnDistance,
+        this.maxSpawnDistance
+      );
       if (this.lastSpawnY - spawnDistance > 0) {
         this.spawnObstacle();
       }
@@ -74,7 +82,11 @@ export class ProceduralGenerator {
 
   private spawnPowerUp(lane: number, laneX: number): void {
     const powerUp = this.powerUpPool.acquire();
-    const types = [PowerUpType.SHIELD, PowerUpType.SPEED_BOOST, PowerUpType.SCORE_MULTIPLIER];
+    const types = [
+      PowerUpType.SHIELD,
+      PowerUpType.SPEED_BOOST,
+      PowerUpType.SCORE_MULTIPLIER,
+    ];
     const type = types[randomInt(0, types.length - 1)];
     powerUp.init(lane, this.lastSpawnY, laneX, type);
   }

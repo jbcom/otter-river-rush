@@ -74,22 +74,22 @@ body {
   border-radius: 8px;
 }
 
-.instructions {
-  font-size: 24px !important;
+#startScreen .instructions {
+  font-size: 24px;
   font-weight: bold;
-  color: #fbbf24 !important;
-  margin-bottom: 10px !important;
+  color: #fbbf24;
+  margin-bottom: 10px;
 }
 
-.controls {
-  font-size: 16px !important;
-  color: #94a3b8 !important;
-  margin-bottom: 30px !important;
+#startScreen .controls {
+  font-size: 16px;
+  color: #94a3b8;
+  margin-bottom: 30px;
 }
 
-.game-button {
-  font-size: 24px !important;
-  padding: 18px 50px !important;
+.screen .game-button {
+  font-size: 24px;
+  padding: 18px 50px;
   margin-top: 10px;
 }
 
@@ -145,9 +145,9 @@ body {
   margin: 20px 0;
 }
 
-.stats-container p {
-  font-size: 18px !important;
-  margin: 10px 0 !important;
+#gameOverScreen .stats-container p {
+  font-size: 18px;
+  margin: 10px 0;
 }
 
 .game-button.secondary {
@@ -457,11 +457,11 @@ body {
   border-color: #60a5fa;
 }
 
-.rank-display {
-  font-size: 20px !important;
-  color: #fbbf24 !important;
-  font-weight: bold !important;
-  margin-top: 15px !important;
+#gameOverScreen .rank-display {
+  font-size: 20px;
+  color: #fbbf24;
+  font-weight: bold;
+  margin-top: 15px;
 }
 
 .screen.hidden {

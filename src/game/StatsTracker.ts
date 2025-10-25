@@ -13,7 +13,7 @@ export interface LifetimeStats {
   longestRun: number;
   highestScore: number;
   highestCombo: number;
-  
+
   // Per mode stats
   classicGames: number;
   timeTrialGames: number;
@@ -57,7 +57,7 @@ export class StatsTracker {
       longestRun: 0,
       highestScore: 0,
       highestCombo: 0,
-      
+
       classicGames: 0,
       timeTrialGames: 0,
       zenGames: 0,
@@ -180,7 +180,15 @@ export class StatsTracker {
     this.save(stats);
   }
 
-  static recordPowerUp(type: 'shield' | 'magnet' | 'ghost' | 'slow_motion' | 'speed_boost' | 'multiplier'): void {
+  static recordPowerUp(
+    type:
+      | 'shield'
+      | 'magnet'
+      | 'ghost'
+      | 'slow_motion'
+      | 'speed_boost'
+      | 'multiplier'
+  ): void {
     const stats = this.load();
     switch (type) {
       case 'shield':

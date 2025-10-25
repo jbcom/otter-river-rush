@@ -103,7 +103,7 @@ export class Game {
   private highScoreElement: HTMLElement;
   private achievementPopup: HTMLElement;
   private achievementName: HTMLElement;
-  
+
   // New UI elements
   private leaderboardButton: HTMLElement;
   private statsButton: HTMLElement;
@@ -165,7 +165,7 @@ export class Game {
     this.highScoreElement = document.getElementById('highScore')!;
     this.achievementPopup = document.getElementById('achievementPopup')!;
     this.achievementName = document.getElementById('achievementName')!;
-    
+
     this.leaderboardButton = document.getElementById('leaderboardButton')!;
     this.statsButton = document.getElementById('statsButton')!;
     this.settingsButton = document.getElementById('settingsButton')!;
@@ -372,7 +372,8 @@ export class Game {
 
     const content = document.getElementById('leaderboardContent')!;
     if (leaderboard.length === 0) {
-      content.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 40px;">No entries yet. Play to set a record!</p>';
+      content.innerHTML =
+        '<p style="color: #94a3b8; text-align: center; padding: 40px;">No entries yet. Play to set a record!</p>';
       return;
     }
 
@@ -380,8 +381,15 @@ export class Game {
       .map((entry, index) => {
         const rank = index + 1;
         const rankClass =
-          rank === 1 ? 'top-1' : rank === 2 ? 'top-2' : rank === 3 ? 'top-3' : '';
-        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+          rank === 1
+            ? 'top-1'
+            : rank === 2
+              ? 'top-2'
+              : rank === 3
+                ? 'top-3'
+                : '';
+        const medal =
+          rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
         return `
         <div class="leaderboard-entry ${rankClass}">
           <div class="leaderboard-rank">${medal}</div>
@@ -517,6 +525,13 @@ export class Game {
     this.startScreen.classList.remove('hidden');
   }
 
+  private returnToMenu(): void {
+    this.state = GameState.MENU;
+    this.startScreen.classList.remove('hidden');
+    this.gameOverScreen.classList.add('hidden');
+    this.pauseScreen.classList.add('hidden');
+  }
+
   start(mode: GameMode = GameMode.CLASSIC): void {
     this.state = GameState.PLAYING;
     this.gameMode = mode;
@@ -538,6 +553,15 @@ export class Game {
     this.slowMotionEndTime = 0;
     this.rocksAvoided = 0;
     this.powerUpsCollected = 0;
+    this.gameStartTime = performance.now();
+
+    // Apply difficulty setting
+    const settings = SettingsManager.load();
+    const diffMultiplier = SettingsManager.getDifficultyMultiplier(
+      settings.difficulty
+    );
+    this.scrollSpeed *= diffMultiplier;
+    this.baseScrollSpeed *= diffMultiplier;
 
     // Set up mode-specific settings
     if (mode === GameMode.TIME_TRIAL) {
@@ -585,6 +609,11 @@ export class Game {
     this.state = GameState.GAME_OVER;
     this.gameOverScreen.classList.remove('hidden');
 
+    // Calculate play time
+    const playTime = Math.floor(
+      (performance.now() - this.gameStartTime) / 1000
+    );
+
     if (this.score > this.saveData.highScore) {
       this.saveData.highScore = this.score;
     }
@@ -619,11 +648,50 @@ export class Game {
     this.saveData.achievements = this.achievementSystem.getUnlockedIds();
     StorageManager.save(this.saveData);
 
+    // Add to leaderboard
+    LeaderboardManager.addEntry({
+      name: 'Player',
+      score: this.score,
+      distance: this.distance,
+      coins: this.coins,
+      gems: this.gems,
+      mode: this.gameMode,
+    });
+
+    // Track lifetime stats
+    const modeMap = {
+      [GameMode.CLASSIC]: 'classic' as const,
+      [GameMode.TIME_TRIAL]: 'time_trial' as const,
+      [GameMode.ZEN]: 'zen' as const,
+      [GameMode.DAILY_CHALLENGE]: 'daily' as const,
+    };
+
+    StatsTracker.recordGame(
+      modeMap[this.gameMode],
+      this.score,
+      this.distance,
+      this.coins,
+      this.gems,
+      this.powerUpsCollected,
+      this.rocksAvoided,
+      this.combo,
+      playTime
+    );
+
+    // Daily challenge save
+    if (this.gameMode === GameMode.DAILY_CHALLENGE) {
+      DailyChallenge.saveTodayScore(this.score, this.distance);
+    }
+
+    // Update UI
     this.finalScoreElement.textContent = `Score: ${this.score}`;
     this.finalDistanceElement.textContent = `Distance: ${Math.floor(this.distance)}m`;
     this.finalCoinsElement.textContent = `Coins: ${this.coins}`;
     this.finalGemsElement.textContent = `Gems: ${this.gems}`;
     this.highScoreElement.textContent = `High Score: ${this.saveData.highScore}`;
+
+    const rank = LeaderboardManager.getRank(this.score);
+    this.rankElement.textContent = `Rank: #${rank}`;
   }
 
   private showNextAchievement(): void {
@@ -939,6 +1007,17 @@ export class Game {
 
     const currentTime = performance.now();
 
+    // Track stats
+    const typeMap = {
+      [PowerUpType.SHIELD]: 'shield' as const,
+      [PowerUpType.SPEED_BOOST]: 'speed_boost' as const,
+      [PowerUpType.SCORE_MULTIPLIER]: 'multiplier' as const,
+      [PowerUpType.MAGNET]: 'magnet' as const,
+      [PowerUpType.GHOST]: 'ghost' as const,
+      [PowerUpType.SLOW_MOTION]: 'slow_motion' as const,
+    };
+    StatsTracker.recordPowerUp(typeMap[powerUp.type]);
+
     switch (powerUp.type) {
       case PowerUpType.SHIELD:
         this.otter.hasShield = true;
@@ -977,6 +1056,14 @@ export class Game {
     this.combo++;
     this.comboTimer = this.COMBO_TIMEOUT;
 
+    // Track stats
+    const typeMap = {
+      [CoinType.BRONZE]: 'bronze' as const,
+      [CoinType.SILVER]: 'silver' as const,
+      [CoinType.GOLD]: 'gold' as const,
+    };
+    StatsTracker.recordCoin(typeMap[coin.type]);
+
     this.audioManager.playSound('coin');
     this.createParticles(
       coin.x + coin.width / 2,
@@ -990,6 +1077,14 @@ export class Game {
     this.score += gem.value * 50; // Gems worth more!
     this.combo += 2; // Gems give bigger combo boost
     this.comboTimer = this.COMBO_TIMEOUT;
+
+    // Track stats
+    const typeMap = {
+      [GemType.BLUE]: 'blue' as const,
+      [GemType.RED]: 'red' as const,
+      [GemType.RAINBOW]: 'rainbow' as const,
+    };
+    StatsTracker.recordGem(typeMap[gem.type]);
 
     this.audioManager.playSound('gem');
     this.createParticles(
@@ -1043,11 +1138,17 @@ export class Game {
     // Render otter with ghost effect if active
     const isGhost = this.ghostEndTime > performance.now();
     if (isGhost) {
-      this.renderer.setGlobalAlpha(GHOST_CONFIG.ALPHA);
+      const ctx = this.renderer['ctx'];
+      if (ctx) {
+        ctx.globalAlpha = GHOST_CONFIG.ALPHA;
+      }
     }
     this.renderer.renderOtter(this.otter);
     if (isGhost) {
-      this.renderer.setGlobalAlpha(1);
+      const ctx = this.renderer['ctx'];
+      if (ctx) {
+        ctx.globalAlpha = 1;
+      }
     }
 
     const particles = this.particlePool.getActive();
@@ -1086,7 +1187,9 @@ export class Game {
   }
 
   private renderTimeTrialTimer(): void {
-    const ctx = this.renderer.getContext();
+    const ctx = this.renderer['ctx'];
+    if (!ctx) return;
+    
     const secondsLeft = Math.ceil(this.timeTrialTimeLeft / 1000);
 
     ctx.save();

@@ -64,7 +64,9 @@ export class SettingsManager {
     this.save(this.getDefaultSettings());
   }
 
-  static getDifficultyMultiplier(difficulty: GameSettings['difficulty']): number {
+  static getDifficultyMultiplier(
+    difficulty: GameSettings['difficulty']
+  ): number {
     switch (difficulty) {
       case 'easy':
         return 0.7;

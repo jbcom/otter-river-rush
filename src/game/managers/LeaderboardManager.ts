@@ -21,7 +21,7 @@ export class LeaderboardManager {
   static getLeaderboard(): LeaderboardEntry[] {
     const data = localStorage.getItem(this.STORAGE_KEY);
     if (!data) return [];
-    
+
     try {
       return JSON.parse(data);
     } catch {
@@ -31,7 +31,7 @@ export class LeaderboardManager {
 
   static addEntry(entry: Omit<LeaderboardEntry, 'id' | 'date'>): void {
     const leaderboard = this.getLeaderboard();
-    
+
     const newEntry: LeaderboardEntry = {
       ...entry,
       id: Date.now().toString() + Math.random(),
@@ -40,10 +40,10 @@ export class LeaderboardManager {
 
     leaderboard.push(newEntry);
     leaderboard.sort((a, b) => b.score - a.score);
-    
+
     // Keep only top entries
     const trimmed = leaderboard.slice(0, this.MAX_ENTRIES);
-    
+
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(trimmed));
   }
 
@@ -53,13 +53,13 @@ export class LeaderboardManager {
   }
 
   static getTopScoreByMode(mode: string): number {
-    const leaderboard = this.getLeaderboard().filter(e => e.mode === mode);
+    const leaderboard = this.getLeaderboard().filter((e) => e.mode === mode);
     return leaderboard.length > 0 ? leaderboard[0].score : 0;
   }
 
   static getRank(score: number): number {
     const leaderboard = this.getLeaderboard();
-    const rank = leaderboard.filter(e => e.score > score).length + 1;
+    const rank = leaderboard.filter((e) => e.score > score).length + 1;
     return rank;
   }
 
@@ -67,7 +67,7 @@ export class LeaderboardManager {
     const key = `${this.DAILY_KEY}_${date}`;
     const data = localStorage.getItem(key);
     if (!data) return [];
-    
+
     try {
       return JSON.parse(data);
     } catch {
@@ -75,10 +75,13 @@ export class LeaderboardManager {
     }
   }
 
-  static addDailyEntry(entry: Omit<LeaderboardEntry, 'id' | 'date'>, dailyDate: string): void {
+  static addDailyEntry(
+    entry: Omit<LeaderboardEntry, 'id' | 'date'>,
+    dailyDate: string
+  ): void {
     const key = `${this.DAILY_KEY}_${dailyDate}`;
     const leaderboard = this.getDailyLeaderboard(dailyDate);
-    
+
     const newEntry: LeaderboardEntry = {
       ...entry,
       id: Date.now().toString() + Math.random(),
@@ -87,7 +90,7 @@ export class LeaderboardManager {
 
     leaderboard.push(newEntry);
     leaderboard.sort((a, b) => b.score - a.score);
-    
+
     localStorage.setItem(key, JSON.stringify(leaderboard));
   }
 

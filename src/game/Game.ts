@@ -767,7 +767,7 @@ export class Game {
   }
 
   private renderTimeTrialTimer(): void {
-    const ctx = this.renderer['ctx'];
+    const ctx = this.renderer.getContext();
     const secondsLeft = Math.ceil(this.timeTrialTimeLeft / 1000);
 
     ctx.save();

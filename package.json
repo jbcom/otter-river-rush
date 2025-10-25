@@ -21,7 +21,8 @@
     "generate-sprites:list": "tsx scripts/generate-sprites.ts --list",
     "generate-content": "tsx scripts/generate-content.ts",
     "generate-hud": "tsx scripts/generate-hud-sprites.ts",
-    "generate-all": "npm run generate-content && npm run generate-hud",
+    "generate-pwa-icons": "tsx scripts/generate-pwa-icons.ts",
+    "generate-all": "npm run generate-sprites && npm run generate-hud && npm run generate-pwa-icons",
     "analyze": "vite-bundle-visualizer",
     "prepare": "[ -d .git ] && npx husky install || echo 'Not a git repo, skipping husky install'"
   },

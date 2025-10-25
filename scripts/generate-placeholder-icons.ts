@@ -12,7 +12,7 @@ const PUBLIC_DIR = join(process.cwd(), 'public');
 // Simple PNG generator without external dependencies
 function createSimplePNG(width: number, height: number, color: { r: number, g: number, b: number }): Buffer {
   // Create a simple PNG manually
-  // For now, we'll create a basic placeholder
+  // This function creates a minimal PNG with a solid color as its intended implementation
   // This is a minimal PNG with a solid color
   
   const pngHeader = Buffer.from([

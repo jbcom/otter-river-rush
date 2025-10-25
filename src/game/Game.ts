@@ -1,8 +1,8 @@
 import { Otter } from './Otter';
 import { Particle } from './Particle';
 import { PowerUp } from './PowerUp';
-import { Coin } from './Coin';
-import { Gem } from './Gem';
+import { Coin, CoinType } from './Coin';
+import { Gem, GemType } from './Gem';
 import { ProceduralGenerator } from './ProceduralGenerator';
 import { InputHandler } from './InputHandler';
 import { Renderer } from '../rendering/Renderer';
@@ -18,6 +18,10 @@ import { StorageManager, SaveData } from '../utils/StorageManager';
 import { AchievementSystem } from './AchievementSystem';
 import type { GameStats } from '@/types/Game.types';
 import { AudioManager } from './AudioManager';
+import { LeaderboardManager } from './managers/LeaderboardManager';
+import { DailyChallenge } from './DailyChallenge';
+import { SettingsManager } from './SettingsManager';
+import { StatsTracker } from './StatsTracker';
 import {
   GameState,
   GameMode,
@@ -99,6 +103,22 @@ export class Game {
   private highScoreElement: HTMLElement;
   private achievementPopup: HTMLElement;
   private achievementName: HTMLElement;
+  
+  // New UI elements
+  private leaderboardButton: HTMLElement;
+  private statsButton: HTMLElement;
+  private settingsButton: HTMLElement;
+  private leaderboardScreen: HTMLElement;
+  private statsScreen: HTMLElement;
+  private settingsScreen: HTMLElement;
+  private closeLeaderboard: HTMLElement;
+  private closeStats: HTMLElement;
+  private closeSettings: HTMLElement;
+  private rankElement: HTMLElement;
+  private dailyObjectiveElement: HTMLElement;
+
+  // Game start time for tracking
+  private gameStartTime: number = 0;
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new Renderer(canvas);
@@ -145,10 +165,24 @@ export class Game {
     this.highScoreElement = document.getElementById('highScore')!;
     this.achievementPopup = document.getElementById('achievementPopup')!;
     this.achievementName = document.getElementById('achievementName')!;
+    
+    this.leaderboardButton = document.getElementById('leaderboardButton')!;
+    this.statsButton = document.getElementById('statsButton')!;
+    this.settingsButton = document.getElementById('settingsButton')!;
+    this.leaderboardScreen = document.getElementById('leaderboardScreen')!;
+    this.statsScreen = document.getElementById('statsScreen')!;
+    this.settingsScreen = document.getElementById('settingsScreen')!;
+    this.closeLeaderboard = document.getElementById('closeLeaderboard')!;
+    this.closeStats = document.getElementById('closeStats')!;
+    this.closeSettings = document.getElementById('closeSettings')!;
+    this.rankElement = document.getElementById('rank')!;
+    this.dailyObjectiveElement = document.getElementById('dailyObjective')!;
 
     this.setupInputHandlers();
     this.setupUIHandlers();
+    this.setupSettingsHandlers();
     this.updateUI();
+    this.updateDailyChallenge();
   }
 
   private setupInputHandlers(): void {
@@ -189,13 +223,298 @@ export class Game {
     this.resumeButton.addEventListener('click', () => this.resume());
     this.menuButton.addEventListener('click', () => this.returnToMenu());
     this.quitButton.addEventListener('click', () => this.returnToMenu());
+
+    // New UI handlers
+    this.leaderboardButton.addEventListener('click', () =>
+      this.showLeaderboard()
+    );
+    this.statsButton.addEventListener('click', () => this.showStats());
+    this.settingsButton.addEventListener('click', () => this.showSettings());
+    this.closeLeaderboard.addEventListener('click', () =>
+      this.hideLeaderboard()
+    );
+    this.closeStats.addEventListener('click', () => this.hideStats());
+    this.closeSettings.addEventListener('click', () => this.hideSettings());
+
+    // Leaderboard tabs
+    document.querySelectorAll('.tab-button').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        document
+          .querySelectorAll('.tab-button')
+          .forEach((b) => b.classList.remove('active'));
+        target.classList.add('active');
+        const mode = target.getAttribute('data-mode');
+        this.updateLeaderboardDisplay(mode || 'all');
+      });
+    });
   }
 
-  private returnToMenu(): void {
-    this.state = GameState.MENU;
+  private setupSettingsHandlers(): void {
+    const settings = SettingsManager.load();
+
+    // Sound toggle
+    const soundToggle = document.getElementById(
+      'soundToggle'
+    ) as HTMLInputElement;
+    soundToggle.checked = settings.soundEnabled;
+    soundToggle.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      SettingsManager.updateSetting('soundEnabled', checked);
+      this.audioManager.setSoundEnabled(checked);
+    });
+
+    // Music toggle
+    const musicToggle = document.getElementById(
+      'musicToggle'
+    ) as HTMLInputElement;
+    musicToggle.checked = settings.musicEnabled;
+    musicToggle.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      SettingsManager.updateSetting('musicEnabled', checked);
+      this.audioManager.setMusicEnabled(checked);
+    });
+
+    // Volume slider
+    const volumeSlider = document.getElementById(
+      'volumeSlider'
+    ) as HTMLInputElement;
+    volumeSlider.value = String(settings.volume * 100);
+    volumeSlider.addEventListener('input', (e) => {
+      const value = parseInt((e.target as HTMLInputElement).value) / 100;
+      SettingsManager.updateSetting('volume', value);
+      // TODO: Update audio volume
+    });
+
+    // Difficulty select
+    const difficultySelect = document.getElementById(
+      'difficultySelect'
+    ) as HTMLSelectElement;
+    difficultySelect.value = settings.difficulty;
+    difficultySelect.addEventListener('change', (e) => {
+      const value = (e.target as HTMLSelectElement).value as
+        | 'easy'
+        | 'normal'
+        | 'hard';
+      SettingsManager.updateSetting('difficulty', value);
+    });
+
+    // Particles select
+    const particlesSelect = document.getElementById(
+      'particlesSelect'
+    ) as HTMLSelectElement;
+    particlesSelect.value = settings.particles;
+    particlesSelect.addEventListener('change', (e) => {
+      const value = (e.target as HTMLSelectElement).value as
+        | 'low'
+        | 'normal'
+        | 'high';
+      SettingsManager.updateSetting('particles', value);
+    });
+
+    // Screen shake toggle
+    const shakeToggle = document.getElementById(
+      'screenShakeToggle'
+    ) as HTMLInputElement;
+    shakeToggle.checked = settings.screenShake;
+    shakeToggle.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      SettingsManager.updateSetting('screenShake', checked);
+    });
+
+    // Reduced motion toggle
+    const motionToggle = document.getElementById(
+      'reducedMotionToggle'
+    ) as HTMLInputElement;
+    motionToggle.checked = settings.reducedMotion;
+    motionToggle.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      SettingsManager.updateSetting('reducedMotion', checked);
+    });
+
+    // Color blind select
+    const colorBlindSelect = document.getElementById(
+      'colorBlindSelect'
+    ) as HTMLSelectElement;
+    colorBlindSelect.value = settings.colorBlindMode;
+    colorBlindSelect.addEventListener('change', (e) => {
+      const value = (e.target as HTMLSelectElement).value as
+        | 'none'
+        | 'protanopia'
+        | 'deuteranopia'
+        | 'tritanopia';
+      SettingsManager.updateSetting('colorBlindMode', value);
+    });
+  }
+
+  private updateDailyChallenge(): void {
+    const objective = DailyChallenge.getDailyObjective();
+    const modifier = DailyChallenge.getDailyModifier();
+    this.dailyObjectiveElement.textContent = `${objective} - ${modifier}`;
+  }
+
+  private showLeaderboard(): void {
+    this.leaderboardScreen.classList.remove('hidden');
+    this.startScreen.classList.add('hidden');
+    this.updateLeaderboardDisplay('all');
+  }
+
+  private hideLeaderboard(): void {
+    this.leaderboardScreen.classList.add('hidden');
     this.startScreen.classList.remove('hidden');
-    this.gameOverScreen.classList.add('hidden');
-    this.pauseScreen.classList.add('hidden');
+  }
+
+  private updateLeaderboardDisplay(mode: string): void {
+    const leaderboard =
+      mode === 'all'
+        ? LeaderboardManager.getLeaderboard()
+        : LeaderboardManager.getLeaderboard().filter((e) => e.mode === mode);
+
+    const content = document.getElementById('leaderboardContent')!;
+    if (leaderboard.length === 0) {
+      content.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 40px;">No entries yet. Play to set a record!</p>';
+      return;
+    }
+
+    content.innerHTML = leaderboard
+      .map((entry, index) => {
+        const rank = index + 1;
+        const rankClass =
+          rank === 1 ? 'top-1' : rank === 2 ? 'top-2' : rank === 3 ? 'top-3' : '';
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+        return `
+        <div class="leaderboard-entry ${rankClass}">
+          <div class="leaderboard-rank">${medal}</div>
+          <div class="leaderboard-info">
+            <div class="leaderboard-name">${entry.mode.replace('_', ' ').toUpperCase()}</div>
+            <div class="leaderboard-details">
+              ${Math.floor(entry.distance)}m | ${entry.coins} coins | ${entry.gems} gems
+            </div>
+          </div>
+          <div class="leaderboard-score">${entry.score}</div>
+        </div>
+      `;
+      })
+      .join('');
+  }
+
+  private showStats(): void {
+    this.statsScreen.classList.remove('hidden');
+    this.startScreen.classList.add('hidden');
+    this.updateStatsDisplay();
+  }
+
+  private hideStats(): void {
+    this.statsScreen.classList.add('hidden');
+    this.startScreen.classList.remove('hidden');
+  }
+
+  private updateStatsDisplay(): void {
+    const stats = StatsTracker.load();
+    const averages = StatsTracker.getAverages();
+    const content = document.getElementById('statsContent')!;
+
+    const formatTime = (seconds: number): string => {
+      const hours = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${mins}m`;
+    };
+
+    content.innerHTML = `
+      <div class="stat-category">
+        <h3>🎮 Overall Stats</h3>
+        <div class="stat-row">
+          <span class="stat-label">Total Games Played</span>
+          <span class="stat-value">${stats.totalGamesPlayed}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Total Play Time</span>
+          <span class="stat-value">${formatTime(stats.totalPlayTime)}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Highest Score</span>
+          <span class="stat-value">${stats.highestScore.toLocaleString()}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Longest Run</span>
+          <span class="stat-value">${Math.floor(stats.longestRun)}m</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Highest Combo</span>
+          <span class="stat-value">${stats.highestCombo}x</span>
+        </div>
+      </div>
+
+      <div class="stat-category">
+        <h3>💰 Collectibles</h3>
+        <div class="stat-row">
+          <span class="stat-label">Bronze Coins</span>
+          <span class="stat-value">${stats.bronzeCoins}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Silver Coins</span>
+          <span class="stat-value">${stats.silverCoins}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Gold Coins</span>
+          <span class="stat-value">${stats.goldCoins}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Blue Gems</span>
+          <span class="stat-value">${stats.blueGems}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Red Gems</span>
+          <span class="stat-value">${stats.redGems}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Rainbow Gems</span>
+          <span class="stat-value">${stats.rainbowGems}</span>
+        </div>
+      </div>
+
+      <div class="stat-category">
+        <h3>⚡ Power-Ups</h3>
+        <div class="stat-row">
+          <span class="stat-label">Shield Used</span>
+          <span class="stat-value">${stats.shieldUsed}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Magnet Used</span>
+          <span class="stat-value">${stats.magnetUsed}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Ghost Used</span>
+          <span class="stat-value">${stats.ghostUsed}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Slow Motion Used</span>
+          <span class="stat-value">${stats.slowMotionUsed}</span>
+        </div>
+      </div>
+
+      <div class="stat-category">
+        <h3>📊 Averages</h3>
+        <div class="stat-row">
+          <span class="stat-label">Avg Score</span>
+          <span class="stat-value">${averages.avgScore.toLocaleString()}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Avg Distance</span>
+          <span class="stat-value">${averages.avgDistance}m</span>
+        </div>
+      </div>
+    `;
+  }
+
+  private showSettings(): void {
+    this.settingsScreen.classList.remove('hidden');
+    this.startScreen.classList.add('hidden');
+  }
+
+  private hideSettings(): void {
+    this.settingsScreen.classList.add('hidden');
+    this.startScreen.classList.remove('hidden');
   }
 
   start(mode: GameMode = GameMode.CLASSIC): void {

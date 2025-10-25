@@ -408,6 +408,12 @@ export class Game {
   render(): void {
     this.renderer.clear();
     
+    // Show loading screen if sprites aren't loaded yet
+    if (!this.renderer.areSpritesLoaded() && this.state === GameState.MENU) {
+      this.renderer.renderLoadingScreen();
+      return;
+    }
+    
     // Render new dynamic background with biomes
     this.backgroundGenerator.render();
     

@@ -45,17 +45,18 @@ export class Otter {
     }
   }
 
-  update(_deltaTime: number): void {
+  update(deltaTime: number): void {
     if (this.isMoving) {
       const targetX = this.getLaneX(this.targetLane);
       const diff = targetX - this.x;
+      const moveDistance = OTTER_CONFIG.MOVE_SPEED * deltaTime;
 
-      if (Math.abs(diff) < OTTER_CONFIG.MOVE_SPEED) {
+      if (Math.abs(diff) <= moveDistance) {
         this.x = targetX;
         this.currentLane = this.targetLane;
         this.isMoving = false;
       } else {
-        this.x += Math.sign(diff) * OTTER_CONFIG.MOVE_SPEED;
+        this.x += Math.sign(diff) * moveDistance;
       }
     }
   }

@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 /**
- * Sprite Generator - Uses OpenAI's image generation to create game sprites
+ * Sprite Generator - Uses OpenAI's GPT-IMAGE-1 to create game sprites
  * Run with: npm run generate-sprites
  */
 
 import { openai } from '@ai-sdk/openai';
-import OpenAI from 'openai';
+import { experimental_generateImage as generateImage } from 'ai';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
-import { fetch } from 'undici';
 
 const SPRITES_DIR = join(process.cwd(), 'public', 'sprites');
-const IMAGE_SIZE = '1024x1024'; // DALL-E 3 requires 1024x1024, 1024x1792, or 1792x1024
 
 // Ensure sprites directory exists
 if (!existsSync(SPRITES_DIR)) {
@@ -111,33 +109,20 @@ async function generateSprite(config: SpriteConfig): Promise<void> {
   console.log(`   Prompt: ${config.prompt.substring(0, 80)}...`);
   
   try {
-    // Use OpenAI SDK directly for image generation
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-
-    const response = await client.images.generate({
-      model: 'dall-e-3',
+    const result = await generateImage({
+      model: openai.image('gpt-image-1'),
       prompt: config.prompt,
       size: '1024x1024',
-      quality: 'standard',
-      n: 1,
     });
 
-    const imageUrl = response.data[0].url;
-    if (!imageUrl) {
-      throw new Error('No image URL returned');
-    }
-
-    // Download the image
-    const imageResponse = await fetch(imageUrl);
-    const arrayBuffer = await imageResponse.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // Get the base64 image data
+    const base64Data = result.image.base64;
+    const buffer = Buffer.from(base64Data, 'base64');
     
     const filepath = join(SPRITES_DIR, config.filename);
     writeFileSync(filepath, buffer);
     
-    console.log(`   ✅ Saved: ${config.filename}`);
+    console.log(`   ✅ Saved: ${config.filename} (${Math.round(buffer.length / 1024)}KB)`);
   } catch (error) {
     console.error(`   ❌ Failed to generate ${config.name}:`, error);
   }

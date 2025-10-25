@@ -155,10 +155,12 @@ export class BackgroundGenerator {
    */
   private renderSky(): void {
     const config = this.biomeConfigs[this.currentBiome];
-    
+
     // Safety check - fallback to FOREST if config is undefined
     if (!config) {
-      console.warn(`Invalid biome: ${this.currentBiome}, falling back to FOREST`);
+      console.warn(
+        `Invalid biome: ${this.currentBiome}, falling back to FOREST`
+      );
       this.currentBiome = Biome.FOREST;
       return this.renderSky();
     }

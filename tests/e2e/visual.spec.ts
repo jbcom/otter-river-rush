@@ -34,9 +34,9 @@ test.describe('Visual Regression Tests', () => {
 
     // Wait for game to start by waiting for score to be visible
     await expect(page.locator('[data-testid="score"]')).toBeVisible();
-    
+
     // (Score visibility already verified above)
-    
+
     // Take screenshot of gameplay
     await expect(page).toHaveScreenshot('gameplay-screen.png', {
       maxDiffPixels: 500, // Higher tolerance due to animation

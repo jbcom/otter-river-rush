@@ -24,7 +24,7 @@ import {
 export class Game {
   private renderer: Renderer;
   private uiRenderer: UIRenderer;
-  private _spriteFactory: SpriteFactory; // Prefix with underscore to mark as intentionally unused for now
+  // TODO: Add SpriteFactory when we replace rectangle rendering with proper sprites
   private backgroundGenerator: BackgroundGenerator;
   private otter: Otter;
   private generator: ProceduralGenerator;

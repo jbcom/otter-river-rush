@@ -194,7 +194,7 @@ export class Game {
     this.updatePowerUps(currentTime);
 
     this.otter.update(deltaTime);
-    this.generator.update(this.scrollSpeed, this.difficulty);
+    this.generator.update(this.scrollSpeed, this.difficulty, deltaTime);
     this.renderer.update(deltaTime);
 
     this.updateRocks(deltaTime);

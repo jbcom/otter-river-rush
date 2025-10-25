@@ -5,7 +5,7 @@ import { ProceduralGenerator } from './ProceduralGenerator';
 import { InputHandler } from './InputHandler';
 import { Renderer } from '../rendering/Renderer';
 import { UIRenderer, type PowerUpStatus } from '../rendering/UIRenderer';
-import { SpriteFactory } from '../rendering/SpriteFactory';
+// import { SpriteFactory } from '../rendering/SpriteFactory';
 import { BackgroundGenerator } from '../rendering/BackgroundGenerator';
 import { ObjectPool } from '../utils/ObjectPool';
 import { checkAABBCollision, randomRange } from '../utils/math';

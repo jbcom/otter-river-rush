@@ -99,9 +99,9 @@ Adjust `maxDiffPixels` in test configuration if needed.
 
 Run tests for a specific browser:
 ```bash
-npm run test:e2e -- tests/e2e/visual.spec.ts --project=chromium
-npm run test:e2e -- tests/e2e/visual.spec.ts --project=firefox
-npm run test:e2e -- tests/e2e/visual.spec.ts --project=webkit
+npm run test:visual -- --project=chromium
+npm run test:visual -- --project=firefox
+npm run test:visual -- --project=webkit
 ```
 
 ## CI/CD Integration

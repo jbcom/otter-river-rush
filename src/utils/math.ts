@@ -11,7 +11,9 @@ export interface AABB {
 }
 
 export function checkAABBCollision(a: AABB, b: AABB): boolean {
-  return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+  const horizontalOverlap = a.x < b.x + b.width && a.x + a.width > b.x;
+  const verticalOverlap = a.y < b.y + b.height && a.y + a.height > b.y;
+  return horizontalOverlap && verticalOverlap;
 }
 
 export function clamp(value: number, min: number, max: number): number {

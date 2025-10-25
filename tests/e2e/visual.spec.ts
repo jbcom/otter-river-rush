@@ -32,12 +32,11 @@ test.describe('Visual Regression Tests', () => {
     const startButton = page.locator('button:has-text("Start Game")');
     await startButton.click();
 
-    // Wait for game to start
-    await page.waitForTimeout(1500);
-
-    // Verify score is visible
+    // Wait for game to start by waiting for score to be visible
     await expect(page.locator('[data-testid="score"]')).toBeVisible();
-
+    
+    // (Score visibility already verified above)
+    
     // Take screenshot of gameplay
     await expect(page).toHaveScreenshot('gameplay-screen.png', {
       maxDiffPixels: 500, // Higher tolerance due to animation

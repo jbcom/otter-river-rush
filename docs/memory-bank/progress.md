@@ -2,7 +2,8 @@
 
 **Last Updated**: 2025-10-25  
 **Current Version**: Alpha (Feature Complete, Polish Phase)  
-**Latest Session**: Documentation reorganization and Renovate optimization ✅
+**Latest Session**: Documentation reorganization and Renovate optimization ✅  
+**Recent Update**: Removed historical docs per user request - keeping only canonical architecture and memory bank
 
 ## What Works
 
@@ -52,8 +53,9 @@
 - **Testing**: Unit and E2E test examples
 - **Contributing**: Complete contributor guide
 - **Memory Bank**: Active development context (6 files, 1,552 lines)
-- **Organization**: Clean 4-section structure in `docs/`
+- **Organization**: Clean 3-section structure in `docs/` (architecture, implementation, memory-bank)
 - **DRY Implementation**: TOC-based references, no duplication
+- **Focus**: Only canonical architectural documentation and memory bank retained
 
 ## What's Left to Build
 

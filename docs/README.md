@@ -7,22 +7,14 @@ Welcome to the comprehensive documentation for Otter River Rush, a TypeScript-ba
 ### Architecture & Design
 Foundational documents describing the system architecture and design decisions:
 - [Architecture Overview](./architecture/README.md) - System architecture and technical decisions
-- [System Patterns](./architecture/system-patterns.md) - Design patterns and component relationships
-- [Tech Context](./architecture/tech-context.md) - Technologies, dependencies, and tooling
 
 ### Implementation Guides
 Step-by-step guides and implementation details:
 - [Implementation Status](./implementation/README.md) - Current implementation status
-- [Sprite System](./implementation/sprites.md) - Sprite generation and integration
-- [Visual Testing](./implementation/visual-testing.md) - Visual regression testing setup
-- [Asset Management](./implementation/assets.md) - Asset generation and attribution
-
-### Historical Context
-Archives of major changes and development history:
-- [Development History](./history/README.md) - Timeline of major changes
-- [Build Fixes](./history/build-fixes.md) - Summary of build-related fixes
-- [Feature Enhancements](./history/enhancements.md) - Major feature additions
-- [Production Journey](./history/production-journey.md) - Path to production readiness
+- [Sprite Generation](./implementation/SPRITE_GENERATION.md) - How sprites were generated
+- [Sprite Integration](./implementation/SPRITE_INTEGRATION.md) - Sprite system integration
+- [Visual Testing](./implementation/VISUAL_TESTING.md) - Visual regression testing overview
+- [Asset Management](./implementation/ASSETS.md) - Asset attribution and sources
 
 ### Memory Bank
 Active development context and progress tracking (aligned with .clinerules):
@@ -45,7 +37,6 @@ Active development context and progress tracking (aligned with .clinerules):
 1. Keep [Memory Bank](./memory-bank/) updated with current context
 2. Review [Active Context](./memory-bank/activeContext.md) before starting work
 3. Update [Progress](./memory-bank/progress.md) after significant changes
-4. Archive completed work in [History](./history/)
 
 ## 📋 Documentation Principles
 
@@ -64,7 +55,6 @@ This structure follows the `.clinerules` memory bank pattern:
 ### Organization
 - **Architecture**: Stable, frozen documentation of system design
 - **Implementation**: Detailed guides that evolve with features
-- **History**: Archive of completed work and major changes
 - **Memory Bank**: Active working context for AI and developers
 
 ## 🔄 Maintenance
@@ -73,14 +63,12 @@ This structure follows the `.clinerules` memory bank pattern:
 - **Memory Bank**: Update after every significant change or session
 - **Architecture**: Only update when fundamental design changes
 - **Implementation**: Update when features are added/changed
-- **History**: Archive major milestones and completed phases
 
 ### Update Process
 1. Make changes to code/features
 2. Update relevant implementation docs
 3. Update memory-bank/activeContext.md and progress.md
-4. If major milestone, add entry to history/
-5. Rarely: Update architecture/ if fundamentals change
+4. Rarely: Update architecture/ if fundamentals change
 
 ## 📖 Document Formats
 

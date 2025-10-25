@@ -28,11 +28,6 @@ See [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) and [PROJECT_STATUS
 - ✅ **[VISUAL_TESTING_IMPLEMENTATION.md](./VISUAL_TESTING_IMPLEMENTATION.md)** - Implementation details
 - ✅ **[VISUAL_TESTING_QUICKSTART.md](./VISUAL_TESTING_QUICKSTART.md)** - Quick start guide
 
-### Production 🚀
-- ✅ **[production-checklist.md](./production-checklist.md)** - Pre-launch checklist
-- ✅ **[PRODUCTION_READY.md](./PRODUCTION_READY.md)** - Production readiness report
-- ✅ **[texture-status.md](./texture-status.md)** - Texture implementation status
-
 ### Current Session Work 📋
 - 🔄 **[OUTSTANDING_ISSUES.md](./OUTSTANDING_ISSUES.md)** - Analysis of all outstanding issues
 - 🎯 **[OPTION_C_ACTION_PLAN.md](./OPTION_C_ACTION_PLAN.md)** - Renovate PR cleanup action plan
@@ -63,7 +58,6 @@ See [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) and [PROJECT_STATUS
 
 - **Architecture**: [../architecture/](../architecture/) - System design
 - **Memory Bank**: [../memory-bank/](../memory-bank/) - Active development context
-- **History**: [../history/](../history/) - Past changes and milestones
 
 ## Contributing
 
@@ -76,7 +70,7 @@ When adding new implementation guides:
 
 ## Document Status
 
-All documents in this directory are **active** and should be updated as implementation progresses. For historical documentation of completed work, see [../history/](../history/).
+All documents in this directory are **active** and should be updated as implementation progresses.
 
 ---
 

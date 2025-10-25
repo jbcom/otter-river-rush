@@ -1189,7 +1189,7 @@ export class Game {
   private renderTimeTrialTimer(): void {
     const ctx = this.renderer['ctx'];
     if (!ctx) return;
-    
+
     const secondsLeft = Math.ceil(this.timeTrialTimeLeft / 1000);
 
     ctx.save();

@@ -5,10 +5,12 @@
 export class SpriteLoader {
   private sprites: Map<string, HTMLImageElement> = new Map();
   private loading: Map<string, Promise<HTMLImageElement>> = new Map();
-  private basePath: string = '/sprites/';
+  private basePath: string;
 
-  constructor(basePath: string = '/sprites/') {
-    this.basePath = basePath;
+  constructor(basePath?: string) {
+    // Match the base path from vite.config.ts
+    // For GitHub Pages deployment, sprites are at /otter-river-rush/sprites/
+    this.basePath = basePath || '/otter-river-rush/sprites/';
   }
 
   /**

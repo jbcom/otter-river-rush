@@ -52,6 +52,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Increase the maximum file size limit to 3.5 MB to accommodate splash screens
+        maximumFileSizeToCacheInBytes: 3.5 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,mp3,ogg,woff2}'],
         runtimeCaching: [
           {

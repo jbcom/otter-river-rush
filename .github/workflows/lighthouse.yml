@@ -44,18 +44,23 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const results = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
-            const summary = results.map(r => {
-              const scores = r.summary;
-              return `
-              ### Lighthouse Scores
-              - Performance: ${scores.performance * 100}
-              - Accessibility: ${scores.accessibility * 100}
-              - Best Practices: ${scores['best-practices'] * 100}
-              - SEO: ${scores.seo * 100}
-              - PWA: ${scores.pwa * 100}
-              `;
-            }).join('\n');
+            let summary;
+            if (fs.existsSync('.lighthouseci/manifest.json')) {
+              const results = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
+              summary = results.map(r => {
+                const scores = r.summary;
+                return `
+                ### Lighthouse Scores
+                - Performance: ${scores.performance * 100}
+                - Accessibility: ${scores.accessibility * 100}
+                - Best Practices: ${scores['best-practices'] * 100}
+                - SEO: ${scores.seo * 100}
+                - PWA: ${scores.pwa * 100}
+                `;
+              }).join('\n');
+            } else {
+              summary = "Lighthouse results are unavailable. The manifest file was not found.";
+            }
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,

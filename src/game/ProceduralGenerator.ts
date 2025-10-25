@@ -27,7 +27,7 @@ export class ProceduralGenerator {
     this.maxSpawnDistance = ROCK_CONFIG.MAX_SPAWN_DISTANCE;
   }
 
-  update(scrollSpeed: number, difficulty: number): void {
+  update(scrollSpeed: number, difficulty: number, deltaTime: number): void {
     this.adjustDifficulty(difficulty);
 
     if (this.lastSpawnY > 0) {
@@ -36,7 +36,7 @@ export class ProceduralGenerator {
         this.spawnObstacle();
       }
     } else {
-      this.lastSpawnY += scrollSpeed / 60;
+      this.lastSpawnY += scrollSpeed * deltaTime;
     }
   }
 

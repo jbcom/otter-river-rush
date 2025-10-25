@@ -240,7 +240,7 @@ export class EnhancedProceduralGenerator {
     const densityMod = biomeConfig.obstacles.densityModifier;
 
     // Adjust density
-    if (densityMod > 1) {
+    if (densityMod > 1 && obstacles.length > 0) {
       // Add more obstacles
       const additionalCount = Math.floor(
         obstacles.length * (densityMod - 1)

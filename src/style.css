@@ -49,6 +49,7 @@ body {
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   pointer-events: none;
+  display: none; /* Hidden - score is rendered on canvas by UIRenderer */
 }
 
 .screen {

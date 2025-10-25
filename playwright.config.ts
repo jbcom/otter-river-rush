@@ -12,6 +12,17 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
+  // Visual testing specific settings
+  expect: {
+    toHaveScreenshot: {
+      // Maximum number of pixels that can differ
+      maxDiffPixels: 100,
+      // Threshold for color difference (0-1)
+      threshold: 0.2,
+      // Animation handling
+      animations: 'disabled',
+    },
+  },
   projects: [
     {
       name: 'chromium',

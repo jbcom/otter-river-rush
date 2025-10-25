@@ -201,6 +201,24 @@ E2E tests verify:
 - Power-ups activate correctly
 - Leaderboard persistence
 
+### Visual Regression Tests
+```bash
+npm run test:visual
+```
+
+Visual tests ensure:
+- UI renders correctly across browsers
+- Game graphics display properly
+- Responsive design works on all viewports
+- No visual regressions in updates
+
+See [VISUAL_TESTING.md](./VISUAL_TESTING.md) for detailed guide.
+
+To update visual baselines after intentional changes:
+```bash
+npm run test:visual:update
+```
+
 ## 🚀 Deployment
 
 The game automatically deploys to GitHub Pages on push to main branch.

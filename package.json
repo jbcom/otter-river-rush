@@ -23,6 +23,7 @@
     "generate-hud": "tsx scripts/generate-hud-sprites.ts",
     "generate-pwa-icons": "tsx scripts/generate-pwa-icons.ts",
     "create-placeholder-icons": "tsx scripts/create-placeholder-icons.ts",
+    // Note: 'generate-content' was intentionally removed from 'generate-all'. See README or CHANGELOG for details.
     "generate-all": "npm run generate-sprites && npm run generate-hud && npm run generate-pwa-icons",
     "analyze": "vite-bundle-visualizer",
     "prepare": "[ -d .git ] && npx husky install || echo 'Not a git repo, skipping husky install'"

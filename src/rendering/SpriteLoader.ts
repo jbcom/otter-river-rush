@@ -10,7 +10,7 @@ export class SpriteLoader {
   constructor(basePath?: string) {
     // For local dev, sprites are at /sprites/
     // For production, this can be overridden
-    this.basePath = basePath || '/sprites/';
+    this.basePath = basePath || `${import.meta.env.BASE_URL}sprites/`;
   }
 
   /**

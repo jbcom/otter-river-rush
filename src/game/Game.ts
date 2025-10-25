@@ -1174,7 +1174,7 @@ export class Game {
 
       // Show time remaining for Time Trial
       if (this.gameMode === GameMode.TIME_TRIAL) {
-        this.renderTimeTrialTimer();
+        this.uiRenderer.renderTimeTrialTimer(this.timeTrialTimeLeft);
       }
 
       // Show biome transition notification
@@ -1184,23 +1184,6 @@ export class Game {
         );
       }
     }
-  }
-
-  private renderTimeTrialTimer(): void {
-    const ctx = this.renderer['ctx'];
-    if (!ctx) return;
-
-    const secondsLeft = Math.ceil(this.timeTrialTimeLeft / 1000);
-
-    ctx.save();
-    ctx.font = 'bold 48px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = secondsLeft <= 10 ? '#ef4444' : '#fbbf24';
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 4;
-    ctx.strokeText(`${secondsLeft}s`, GAME_CONFIG.CANVAS_WIDTH / 2, 80);
-    ctx.fillText(`${secondsLeft}s`, GAME_CONFIG.CANVAS_WIDTH / 2, 80);
-    ctx.restore();
   }
 
   private getActivePowerUpStatuses(): PowerUpStatus[] {

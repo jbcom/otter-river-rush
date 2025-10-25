@@ -40,7 +40,7 @@ export const POWERUP_CONFIG = {
 
 export enum PowerUpType {
   SHIELD = 'shield',
-  SPEED_BOOST = 'speed_boost',
+  CONTROL_BOOST = 'control_boost', // Formerly SPEED_BOOST
   SCORE_MULTIPLIER = 'score_multiplier',
   MAGNET = 'magnet',
   GHOST = 'ghost',

@@ -17,7 +17,7 @@ export class Otter {
     this.currentLane = OTTER_CONFIG.START_LANE;
     this.targetLane = OTTER_CONFIG.START_LANE;
     this.x = this.getLaneX(this.currentLane);
-    this.y = GAME_CONFIG.CANVAS_HEIGHT - 150;
+    this.y = GAME_CONFIG.CANVAS_HEIGHT - 180; // Near bottom - racing towards player!
     this.isMoving = false;
     this.hasShield = false;
   }
@@ -74,7 +74,7 @@ export class Otter {
     this.currentLane = OTTER_CONFIG.START_LANE;
     this.targetLane = OTTER_CONFIG.START_LANE;
     this.x = this.getLaneX(this.currentLane);
-    this.y = GAME_CONFIG.CANVAS_HEIGHT - 150;
+    this.y = GAME_CONFIG.CANVAS_HEIGHT - 180; // Near bottom - racing towards player!
     this.isMoving = false;
     this.hasShield = false;
   }

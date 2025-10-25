@@ -15,19 +15,21 @@
       <div id="ui">
         <div id="score">Score: 0</div>
         <div id="startScreen" class="screen">
+          <img src="/hud/splash-screen.png" alt="Otter River Rush" class="splash-image" />
           <h1>Otter River Rush</h1>
-          <p>Use arrow keys or touch to move between lanes</p>
-          <button id="startButton">Start Game</button>
+          <p class="instructions">🌊 Race down the wild river! 🌊</p>
+          <p class="controls">Swipe LEFT/RIGHT or use Arrow Keys to dodge obstacles</p>
+          <button id="startButton" class="game-button">Start Game</button>
         </div>
         <div id="gameOverScreen" class="screen hidden">
           <h2>Game Over!</h2>
           <p id="finalScore">Score: 0</p>
           <p id="highScore">High Score: 0</p>
-          <button id="restartButton">Play Again</button>
+          <button id="restartButton" class="game-button">Play Again</button>
         </div>
         <div id="pauseScreen" class="screen hidden">
           <h2>Paused</h2>
-          <button id="resumeButton">Resume</button>
+          <button id="resumeButton" class="game-button">Resume</button>
         </div>
       </div>
     </div>

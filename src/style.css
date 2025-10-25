@@ -63,6 +63,32 @@ body {
   text-align: center;
   pointer-events: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  max-width: 500px;
+}
+
+.splash-image {
+  max-width: 300px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.instructions {
+  font-size: 24px !important;
+  font-weight: bold;
+  color: #fbbf24 !important;
+  margin-bottom: 10px !important;
+}
+
+.controls {
+  font-size: 16px !important;
+  color: #94a3b8 !important;
+  margin-bottom: 30px !important;
+}
+
+.game-button {
+  font-size: 24px !important;
+  padding: 18px 50px !important;
+  margin-top: 10px;
 }
 
 .screen.hidden {

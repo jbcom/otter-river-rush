@@ -4,17 +4,17 @@ export const GAME_CONFIG = {
   LANE_COUNT: 3,
   LANE_WIDTH: 200,
   LANE_OFFSET: 100,
-  SCROLL_SPEED: 200,
-  MIN_SCROLL_SPEED: 200,
-  MAX_SCROLL_SPEED: 600,
+  SCROLL_SPEED: 500, // Much faster - racing down river!
+  MIN_SCROLL_SPEED: 500,
+  MAX_SCROLL_SPEED: 1200, // Can get VERY fast
   DIFFICULTY_INCREASE_RATE: 0.05,
   DIFFICULTY_INCREASE_INTERVAL: 10000,
 };
 
 export const OTTER_CONFIG = {
-  WIDTH: 60,
-  HEIGHT: 60,
-  MOVE_SPEED: 10,
+  WIDTH: 100, // Much bigger and more visible!
+  HEIGHT: 100,
+  MOVE_SPEED: 800, // Super fast lane changes for swipe feel
   START_LANE: 1,
 };
 

@@ -1,6 +1,8 @@
 import { Otter } from '../game/Otter';
 import { Rock } from '../game/Rock';
 import { PowerUp } from '../game/PowerUp';
+import { Coin } from '../game/Coin';
+import { Gem } from '../game/Gem';
 import { Particle } from '../game/Particle';
 import { GAME_CONFIG, PowerUpType } from '../game/constants';
 import { spriteLoader } from './SpriteLoader';
@@ -212,6 +214,15 @@ export class Renderer {
         case PowerUpType.SCORE_MULTIPLIER:
           spriteName = 'powerup-multiplier.png';
           break;
+        case PowerUpType.MAGNET:
+          spriteName = 'powerup-magnet.png';
+          break;
+        case PowerUpType.GHOST:
+          spriteName = 'powerup-shield.png'; // Reuse shield for now
+          break;
+        case PowerUpType.SLOW_MOTION:
+          spriteName = 'powerup-speed.png'; // Reuse speed for now
+          break;
       }
 
       const sprite = spriteLoader.get(spriteName);
@@ -247,6 +258,15 @@ export class Renderer {
       case PowerUpType.SCORE_MULTIPLIER:
         this.ctx.fillStyle = '#34d399';
         break;
+      case PowerUpType.MAGNET:
+        this.ctx.fillStyle = '#a855f7';
+        break;
+      case PowerUpType.GHOST:
+        this.ctx.fillStyle = '#94a3b8';
+        break;
+      case PowerUpType.SLOW_MOTION:
+        this.ctx.fillStyle = '#06b6d4';
+        break;
     }
 
     this.ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
@@ -260,6 +280,122 @@ export class Renderer {
     );
 
     this.ctx.restore();
+  }
+
+  renderCoin(coin: Coin): void {
+    const centerX = coin.x + coin.width / 2;
+    const centerY = coin.y + coin.height / 2;
+    const floatY = centerY + Math.sin(coin['floatOffset'] || 0) * 3;
+
+    // Use sprite if loaded
+    if (this.spritesLoaded) {
+      const sprite = spriteLoader.get('coin.png');
+      if (sprite) {
+        spriteLoader.draw(
+          this.ctx,
+          'coin.png',
+          centerX,
+          floatY,
+          coin.width,
+          coin.height,
+          {
+            rotation: (coin['rotation'] || 0) * 0.1,
+          }
+        );
+        return;
+      }
+    }
+
+    // Fallback: Draw circle with color
+    this.ctx.save();
+    this.ctx.fillStyle = coin.getColor();
+    this.ctx.strokeStyle = '#fbbf24';
+    this.ctx.lineWidth = 3;
+
+    this.ctx.beginPath();
+    this.ctx.arc(centerX, floatY, coin.width / 2, 0, Math.PI * 2);
+    this.ctx.fill();
+    this.ctx.stroke();
+
+    // Inner shine
+    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    this.ctx.beginPath();
+    this.ctx.arc(centerX - 5, floatY - 5, coin.width / 4, 0, Math.PI * 2);
+    this.ctx.fill();
+
+    this.ctx.restore();
+  }
+
+  renderGem(gem: Gem): void {
+    const centerX = gem.x + gem.width / 2;
+    const centerY = gem.y + gem.height / 2;
+    const scale = 1 + Math.sin(gem['pulsePhase'] || 0) * 0.1;
+
+    // Use sprite if loaded
+    if (this.spritesLoaded) {
+      let spriteName = 'gem-blue.png';
+      if (gem.type === 'red') spriteName = 'gem-red.png';
+
+      const sprite = spriteLoader.get(spriteName);
+      if (sprite) {
+        spriteLoader.draw(
+          this.ctx,
+          spriteName,
+          centerX,
+          centerY,
+          gem.width * scale,
+          gem.height * scale,
+          {
+            rotation: gem['rotation'] || 0,
+          }
+        );
+        return;
+      }
+    }
+
+    // Fallback: Draw diamond shape
+    this.ctx.save();
+    this.ctx.translate(centerX, centerY);
+    this.ctx.rotate(gem['rotation'] || 0);
+    this.ctx.scale(scale, scale);
+
+    this.ctx.fillStyle = gem.getColor();
+    this.ctx.strokeStyle = '#ffffff';
+    this.ctx.lineWidth = 2;
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, -gem.height / 2);
+    this.ctx.lineTo(gem.width / 2, 0);
+    this.ctx.lineTo(0, gem.height / 2);
+    this.ctx.lineTo(-gem.width / 2, 0);
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.ctx.stroke();
+
+    // Sparkle effect
+    const sparkleIntensity = gem.getSparkleIntensity();
+    this.ctx.fillStyle = `rgba(255, 255, 255, ${sparkleIntensity * 0.6})`;
+    this.ctx.beginPath();
+    this.ctx.arc(0, 0, gem.width / 4, 0, Math.PI * 2);
+    this.ctx.fill();
+
+    this.ctx.restore();
+  }
+
+  renderCoins(coins: Coin[]): void {
+    coins.forEach((coin) => {
+      if (coin.active) {
+        this.renderCoin(coin);
+      }
+    });
+  }
+
+  renderGems(gems: Gem[]): void {
+    gems.forEach((gem) => {
+      if (gem.active) {
+        this.renderGem(gem);
+      }
+    });
   }
 
   renderParticle(particle: Particle): void {

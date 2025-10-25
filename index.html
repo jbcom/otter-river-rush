@@ -19,17 +19,56 @@
           <h1>Otter River Rush</h1>
           <p class="instructions">🌊 Race down the wild river! 🌊</p>
           <p class="controls">Swipe LEFT/RIGHT or use Arrow Keys to dodge obstacles</p>
-          <button id="startButton" class="game-button">Start Game</button>
+          
+          <div class="mode-selection">
+            <h3>Select Game Mode:</h3>
+            <button id="classicButton" class="mode-button">
+              <span class="mode-icon">🏃</span>
+              <span class="mode-name">Classic</span>
+              <span class="mode-desc">Endless runner with increasing difficulty</span>
+            </button>
+            <button id="timeTrialButton" class="mode-button">
+              <span class="mode-icon">⏱️</span>
+              <span class="mode-name">Time Trial</span>
+              <span class="mode-desc">Reach max distance in 60 seconds</span>
+            </button>
+            <button id="zenButton" class="mode-button">
+              <span class="mode-icon">🧘</span>
+              <span class="mode-name">Zen Mode</span>
+              <span class="mode-desc">Relaxing ride, collect coins peacefully</span>
+            </button>
+            <button id="dailyButton" class="mode-button">
+              <span class="mode-icon">🎲</span>
+              <span class="mode-name">Daily Challenge</span>
+              <span class="mode-desc">New challenge every day!</span>
+            </button>
+          </div>
         </div>
         <div id="gameOverScreen" class="screen hidden">
           <h2>Game Over!</h2>
-          <p id="finalScore">Score: 0</p>
-          <p id="highScore">High Score: 0</p>
+          <div class="stats-container">
+            <p id="finalScore">Score: 0</p>
+            <p id="finalDistance">Distance: 0m</p>
+            <p id="finalCoins">Coins: 0</p>
+            <p id="finalGems">Gems: 0</p>
+            <p id="highScore">High Score: 0</p>
+          </div>
           <button id="restartButton" class="game-button">Play Again</button>
+          <button id="menuButton" class="game-button secondary">Main Menu</button>
         </div>
         <div id="pauseScreen" class="screen hidden">
           <h2>Paused</h2>
           <button id="resumeButton" class="game-button">Resume</button>
+          <button id="quitButton" class="game-button secondary">Quit to Menu</button>
+        </div>
+        
+        <!-- Achievement Popup -->
+        <div id="achievementPopup" class="achievement-popup hidden">
+          <img src="/hud/achievement-badge.png" alt="Achievement" class="achievement-icon" />
+          <div class="achievement-content">
+            <h3>Achievement Unlocked!</h3>
+            <p id="achievementName">Achievement Name</p>
+          </div>
         </div>
       </div>
     </div>

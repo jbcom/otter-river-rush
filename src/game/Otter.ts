@@ -10,6 +10,7 @@ export class Otter {
   targetLane: number;
   isMoving: boolean;
   hasShield: boolean;
+  isGhost: boolean;
 
   constructor() {
     this.width = OTTER_CONFIG.WIDTH;
@@ -20,6 +21,7 @@ export class Otter {
     this.y = GAME_CONFIG.CANVAS_HEIGHT - 180; // Near bottom - racing towards player!
     this.isMoving = false;
     this.hasShield = false;
+    this.isGhost = false;
   }
 
   getLaneX(lane: number): number {
@@ -77,5 +79,6 @@ export class Otter {
     this.y = GAME_CONFIG.CANVAS_HEIGHT - 180; // Near bottom - racing towards player!
     this.isMoving = false;
     this.hasShield = false;
+    this.isGhost = false;
   }
 }

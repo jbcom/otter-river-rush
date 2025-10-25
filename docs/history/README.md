@@ -12,6 +12,10 @@ Historical documents are **frozen** - they represent the state at a point in tim
 
 ## Timeline
 
+### Documentation Reorganization (2025-10-25)
+- **[DOCS_REORGANIZATION.md](./DOCS_REORGANIZATION.md)** - Documentation reorganization technical details
+- **[TASK_COMPLETE.md](./TASK_COMPLETE.md)** - Task completion verification
+
 ### Phase 2 Complete
 - **[PHASE_2_COMPLETE.md](./PHASE_2_COMPLETE.md)** - Phase 2 milestone completion
 

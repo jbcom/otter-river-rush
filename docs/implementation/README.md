@@ -29,9 +29,13 @@ See [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) and [PROJECT_STATUS
 - ✅ **[VISUAL_TESTING_QUICKSTART.md](./VISUAL_TESTING_QUICKSTART.md)** - Quick start guide
 
 ### Production 🚀
-- ✅ **[PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md)** - Pre-launch checklist
+- ✅ **[production-checklist.md](./production-checklist.md)** - Pre-launch checklist
 - ✅ **[PRODUCTION_READY.md](./PRODUCTION_READY.md)** - Production readiness report
 - ✅ **[texture-status.md](./texture-status.md)** - Texture implementation status
+
+### Current Session Work 📋
+- 🔄 **[OUTSTANDING_ISSUES.md](./OUTSTANDING_ISSUES.md)** - Analysis of all outstanding issues
+- 🎯 **[OPTION_C_ACTION_PLAN.md](./OPTION_C_ACTION_PLAN.md)** - Renovate PR cleanup action plan
 
 ## Implementation Guides by Topic
 

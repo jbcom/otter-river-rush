@@ -15,7 +15,7 @@ describe('Math utilities', () => {
       expect(checkAABBCollision(a, b)).toBe(false);
     });
 
-    it('should detect collision when boxes touch edges', () => {
+    it('should not detect collision when boxes only touch at edges', () => {
       const a = { x: 0, y: 0, width: 10, height: 10 };
       const b = { x: 10, y: 0, width: 10, height: 10 };
       expect(checkAABBCollision(a, b)).toBe(false);

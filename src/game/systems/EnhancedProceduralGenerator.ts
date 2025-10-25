@@ -46,7 +46,7 @@ export class EnhancedProceduralGenerator {
     patterns.set('wave', {
       name: 'Wave',
       difficulty: 1,
-      generate: (lane, distance, random) => {
+      generate: (_lane, distance, random) => {
         const obstacles: ObstacleSpawn[] = [];
         const amplitude = 1;
         const frequency = 0.002;
@@ -56,7 +56,7 @@ export class EnhancedProceduralGenerator {
           const offset = Math.floor(
             Math.sin(d * frequency) * amplitude + amplitude
           );
-          const targetLane = (lane + offset) % CONFIG.game.lanes;
+          const targetLane = (offset) % CONFIG.game.lanes;
           
           obstacles.push({
             lane: targetLane,
@@ -103,7 +103,7 @@ export class EnhancedProceduralGenerator {
     patterns.set('gauntlet', {
       name: 'Gauntlet',
       difficulty: 3,
-      generate: (lane, distance, random) => {
+      generate: (_lane, distance, random) => {
         const obstacles: ObstacleSpawn[] = [];
         
         for (let i = 0; i < 8; i++) {
@@ -221,6 +221,7 @@ export class EnhancedProceduralGenerator {
     }
 
     // Generate obstacles using current pattern
+    // Note: currentLane is used by patterns internally
     const obstacles = this.currentPattern.generate(
       currentLane,
       distance,

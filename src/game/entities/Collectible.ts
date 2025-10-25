@@ -20,7 +20,7 @@ export class Collectible extends GameObject {
     id: string,
     position: Vector2D,
     type: CollectibleType,
-    lane: number
+    _lane: number // Prefix with _ to indicate intentionally unused
   ) {
     const config = CONFIG.collectibles.types[type.toLowerCase() as keyof typeof CONFIG.collectibles.types];
     
@@ -92,8 +92,9 @@ export class Collectible extends GameObject {
 
     ctx.restore();
 
-    // Debug: Draw collision circle
-    if (process.env.NODE_ENV === 'development') {
+    // Debug: Draw collision circle (only in development builds)
+    const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+    if (isDev) {
       ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
       ctx.beginPath();
       ctx.arc(
@@ -212,7 +213,7 @@ export class Collectible extends GameObject {
   /**
    * Move towards target (magnetized)
    */
-  public moveTowards(target: Vector2D, speed: number, deltaTime: number): void {
+  public moveTowards(target: Vector2D, speed: number, _deltaTime: number): void {
     const dx = target.x - this.transform.position.x;
     const dy = target.y - this.transform.position.y;
     const distance = Math.sqrt(dx * dx + dy * dy);

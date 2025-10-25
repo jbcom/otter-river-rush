@@ -3,7 +3,7 @@
  * Adapts game difficulty based on player performance
  */
 
-import type { DifficultyLevel } from '@/types/Game.types';
+import { DifficultyLevel } from '@/types/Game.types';
 
 interface PerformanceMetrics {
   deaths: number;
@@ -23,7 +23,7 @@ export class DifficultyScaler {
   private metrics: PerformanceMetrics;
   private state: DifficultyState;
   private readonly windowSize: number = 10;
-  private readonly adjustmentRate: number = 0.05;
+  // private readonly adjustmentRate: number = 0.05; // Currently unused
   private readonly targetFlowScore: number = 0;
   private readonly flowTolerance: number = 20;
 

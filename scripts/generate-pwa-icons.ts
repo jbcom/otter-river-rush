@@ -14,7 +14,7 @@ interface IconConfig {
   name: string;
   prompt: string;
   filename: string;
-  size: '1024x1024' | '256x256' | '512x512';
+  size: '1024x1024' | '1024x1536' | '1536x1024';
 }
 
 const ICON_CONFIGS: IconConfig[] = [
@@ -28,19 +28,19 @@ const ICON_CONFIGS: IconConfig[] = [
     name: 'PWA Icon 192x192',
     prompt: 'Otter River Rush game app icon, cute otter face mascot, bright blue water background, circular app icon design, professional mobile game icon, vibrant colors, simple clean design, centered character',
     filename: 'pwa-192x192.png',
-    size: '256x256',
+    size: '1024x1024',
   },
   {
     name: 'Apple Touch Icon',
     prompt: 'Otter River Rush game app icon, cute otter face mascot, bright blue water background, rounded square app icon for iOS, professional mobile game icon, vibrant colors, simple clean design',
     filename: 'apple-touch-icon.png',
-    size: '512x512',
+    size: '1024x1024',
   },
   {
     name: 'Favicon',
     prompt: 'Cute otter face icon, simple minimalist design, game mascot, bright colors, small icon suitable for browser tab, clear at small sizes',
     filename: 'favicon-temp.png',
-    size: '256x256',
+    size: '1024x1024',
   },
 ];
 

@@ -724,11 +724,11 @@ export class Game {
     // Render otter with ghost effect if active
     const isGhost = this.ghostEndTime > performance.now();
     if (isGhost) {
-      this.renderer['ctx'].globalAlpha = GHOST_CONFIG.ALPHA;
+      this.renderer.setGlobalAlpha(GHOST_CONFIG.ALPHA);
     }
     this.renderer.renderOtter(this.otter);
     if (isGhost) {
-      this.renderer['ctx'].globalAlpha = 1;
+      this.renderer.setGlobalAlpha(1);
     }
 
     const particles = this.particlePool.getActive();

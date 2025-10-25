@@ -322,7 +322,7 @@ export class UIRenderer {
   }
 
   /**
-   * Render time trial timer
+   * Render time trial countdown timer with color coding for urgency (red when ≤10 seconds)
    */
   public renderTimeTrialTimer(timeLeft: number): void {
     const secondsLeft = Math.ceil(timeLeft / 1000);

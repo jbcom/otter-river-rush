@@ -4,7 +4,7 @@ import { PowerUp } from '../game/PowerUp';
 import { Coin } from '../game/Coin';
 import { Gem } from '../game/Gem';
 import { Particle } from '../game/Particle';
-import { GAME_CONFIG, PowerUpType } from '../game/constants';
+import { GAME_CONFIG, PowerUpType, GHOST_CONFIG } from '../game/constants';
 import { spriteLoader } from './SpriteLoader';
 
 export class Renderer {
@@ -107,6 +107,12 @@ export class Renderer {
     const spriteWidth = otter.width;
     const spriteHeight = otter.height;
 
+    // Apply ghost effect transparency if active
+    if (otter.isGhost) {
+      this.ctx.save();
+      this.ctx.globalAlpha = GHOST_CONFIG.ALPHA;
+    }
+
     // Use sprite if loaded, otherwise fallback to rectangle
     if (this.spritesLoaded) {
       const spriteName = otter.hasShield ? 'otter-shield.png' : 'otter.png';
@@ -124,6 +130,11 @@ export class Renderer {
           spriteWidth,
           spriteHeight
         );
+
+        // Restore context if ghost effect was applied
+        if (otter.isGhost) {
+          this.ctx.restore();
+        }
         return;
       }
     }
@@ -156,6 +167,11 @@ export class Renderer {
         Math.PI * 2
       );
       this.ctx.stroke();
+    }
+
+    // Restore context if ghost effect was applied
+    if (otter.isGhost) {
+      this.ctx.restore();
     }
   }
 

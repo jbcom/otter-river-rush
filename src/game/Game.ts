@@ -1135,21 +1135,8 @@ export class Game {
     const powerUps = this.generator.getActivePowerUps();
     this.renderer.renderPowerUps(powerUps);
 
-    // Render otter with ghost effect if active
-    const isGhost = this.ghostEndTime > performance.now();
-    if (isGhost) {
-      const ctx = this.renderer['ctx'];
-      if (ctx) {
-        ctx.globalAlpha = GHOST_CONFIG.ALPHA;
-      }
-    }
+    // Render otter with ghost effect (handled internally by renderer)
     this.renderer.renderOtter(this.otter);
-    if (isGhost) {
-      const ctx = this.renderer['ctx'];
-      if (ctx) {
-        ctx.globalAlpha = 1;
-      }
-    }
 
     const particles = this.particlePool.getActive();
     this.renderer.renderParticles(particles);
@@ -1189,7 +1176,7 @@ export class Game {
   private renderTimeTrialTimer(): void {
     const ctx = this.renderer['ctx'];
     if (!ctx) return;
-    
+
     const secondsLeft = Math.ceil(this.timeTrialTimeLeft / 1000);
 
     ctx.save();

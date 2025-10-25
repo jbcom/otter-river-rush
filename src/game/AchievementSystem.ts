@@ -1,17 +1,11 @@
+import type { GameStats } from '@/types/Game.types';
+
 export interface Achievement {
   id: string;
   name: string;
   description: string;
   condition: (stats: GameStats) => boolean;
   unlocked: boolean;
-}
-
-export interface GameStats {
-  score: number;
-  distance: number;
-  powerUpsCollected: number;
-  rocksAvoided: number;
-  gamesPlayed: number;
 }
 
 export class AchievementSystem {
@@ -60,7 +54,7 @@ export class AchievementSystem {
         id: 'rocks_50',
         name: 'Skilled Navigator',
         description: 'Avoid 50 rocks',
-        condition: (stats) => stats.rocksAvoided >= 50,
+        condition: (stats) => (stats.rocksAvoided || stats.obstaclesAvoided) >= 50,
         unlocked: false,
       },
     ];

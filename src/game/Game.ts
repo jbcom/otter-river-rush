@@ -10,7 +10,8 @@ import { BackgroundGenerator } from '../rendering/BackgroundGenerator';
 import { ObjectPool } from '../utils/ObjectPool';
 import { checkAABBCollision, randomRange } from '../utils/math';
 import { StorageManager, SaveData } from '../utils/StorageManager';
-import { AchievementSystem, GameStats } from './AchievementSystem';
+import { AchievementSystem } from './AchievementSystem';
+import type { GameStats } from '@/types/Game.types';
 import { AudioManager } from './AudioManager';
 import {
   GameState,
@@ -23,7 +24,7 @@ import {
 export class Game {
   private renderer: Renderer;
   private uiRenderer: UIRenderer;
-  private spriteFactory: SpriteFactory;
+  private _spriteFactory: SpriteFactory; // Prefix with underscore to mark as intentionally unused for now
   private backgroundGenerator: BackgroundGenerator;
   private otter: Otter;
   private generator: ProceduralGenerator;
@@ -66,7 +67,8 @@ export class Game {
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new Renderer(canvas);
     this.uiRenderer = new UIRenderer(canvas, { showFPS: false, showDebug: false });
-    this.spriteFactory = new SpriteFactory(64);
+    // TODO: Initialize SpriteFactory when we replace rectangle rendering
+    // this.spriteFactory = new SpriteFactory(64);
     this.backgroundGenerator = new BackgroundGenerator(canvas);
     this.otter = new Otter();
     this.generator = new ProceduralGenerator();
@@ -188,9 +190,14 @@ export class Game {
     const stats: GameStats = {
       score: this.score,
       distance: this.distance,
+      coins: this.coins,
+      gems: this.gems,
+      combo: this.combo,
+      multiplier: this.scoreMultiplier,
       powerUpsCollected: this.powerUpsCollected,
-      rocksAvoided: this.rocksAvoided,
+      obstaclesAvoided: this.rocksAvoided,
       gamesPlayed: this.saveData.totalGamesPlayed,
+      closeCallsCount: 0,
     };
 
     const newAchievements = this.achievementSystem.check(stats);

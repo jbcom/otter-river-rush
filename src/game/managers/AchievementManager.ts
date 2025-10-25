@@ -255,7 +255,7 @@ export class AchievementManager {
         icon: '⏱️',
         rarity: 'common',
         requirement: 60000,
-        check: (stats) => stats.sessionTime / 60000,
+        check: (stats) => (stats.sessionTime || 0) / 60000,
       },
       {
         id: 'endurance',
@@ -264,7 +264,7 @@ export class AchievementManager {
         icon: '⏳',
         rarity: 'rare',
         requirement: 300000,
-        check: (stats) => stats.sessionTime / 300000,
+        check: (stats) => (stats.sessionTime || 0) / 300000,
       },
       {
         id: 'marathon',
@@ -273,7 +273,7 @@ export class AchievementManager {
         icon: '🏃',
         rarity: 'epic',
         requirement: 600000,
-        check: (stats) => stats.sessionTime / 600000,
+        check: (stats) => (stats.sessionTime || 0) / 600000,
       },
     ];
   }

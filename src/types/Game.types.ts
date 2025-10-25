@@ -84,8 +84,10 @@ export interface GameStats {
   combo: number;
   powerUpsCollected: number;
   obstaclesAvoided: number;
+  rocksAvoided?: number; // Alias for obstaclesAvoided
   closeCallsCount: number;
-  sessionTime: number;
+  gamesPlayed: number;
+  sessionTime?: number;
 }
 
 export interface Achievement {

@@ -28,6 +28,7 @@ export class ScoreManager {
       powerUpsCollected: 0,
       obstaclesAvoided: 0,
       closeCallsCount: 0,
+      gamesPlayed: 0,
       sessionTime: 0,
     };
   }
@@ -122,7 +123,9 @@ export class ScoreManager {
    * Update timers
    */
   public update(deltaTime: number): void {
-    this.stats.sessionTime += deltaTime;
+    if (this.stats.sessionTime !== undefined) {
+      this.stats.sessionTime += deltaTime;
+    }
 
     const now = Date.now();
 

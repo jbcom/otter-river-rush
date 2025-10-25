@@ -120,10 +120,10 @@ export class Random {
   public noise(x: number, y: number = 0): number {
     const seed1 = Math.floor(x);
     const seed2 = Math.floor(y);
-    
+
     const originalSeed = this.seed;
     this.seed = seed1 * 374761393 + seed2 * 668265263;
-    
+
     const n1 = this.next();
     this.seed = (seed1 + 1) * 374761393 + seed2 * 668265263;
     const n2 = this.next();
@@ -131,18 +131,18 @@ export class Random {
     const n3 = this.next();
     this.seed = (seed1 + 1) * 374761393 + (seed2 + 1) * 668265263;
     const n4 = this.next();
-    
+
     this.seed = originalSeed;
-    
+
     const fx = x - seed1;
     const fy = y - seed2;
-    
+
     const sx = fx * fx * (3 - 2 * fx);
     const sy = fy * fy * (3 - 2 * fy);
-    
+
     const i1 = n1 * (1 - sx) + n2 * sx;
     const i2 = n3 * (1 - sx) + n4 * sx;
-    
+
     return i1 * (1 - sy) + i2 * sy;
   }
 }

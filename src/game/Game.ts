@@ -9,7 +9,13 @@ import { checkAABBCollision, randomRange } from '../utils/math';
 import { StorageManager, SaveData } from '../utils/StorageManager';
 import { AchievementSystem, GameStats } from './AchievementSystem';
 import { AudioManager } from './AudioManager';
-import { GameState, GAME_CONFIG, PARTICLE_CONFIG, PowerUpType, POWERUP_CONFIG } from './constants';
+import {
+  GameState,
+  GAME_CONFIG,
+  PARTICLE_CONFIG,
+  PowerUpType,
+  POWERUP_CONFIG,
+} from './constants';
 
 export class Game {
   private renderer: Renderer;
@@ -172,9 +178,7 @@ export class Game {
     const newAchievements = this.achievementSystem.check(stats);
     if (newAchievements.length > 0) {
       this.audioManager.playSound('achievement');
-      newAchievements.forEach((achievement) => {
-        console.log(`Achievement unlocked: ${achievement.name}`);
-      });
+      // Achievement unlocked - could show UI notification here
     }
 
     this.saveData.achievements = this.achievementSystem.getUnlockedIds();
@@ -204,7 +208,9 @@ export class Game {
     this.checkCollisions();
 
     this.distance += this.scrollSpeed * deltaTime;
-    this.score += Math.floor(this.scrollSpeed * deltaTime * this.scoreMultiplier);
+    this.score += Math.floor(
+      this.scrollSpeed * deltaTime * this.scoreMultiplier
+    );
 
     this.updateUI();
   }
@@ -219,12 +225,18 @@ export class Game {
       const speedIncrease =
         (GAME_CONFIG.MAX_SCROLL_SPEED - GAME_CONFIG.MIN_SCROLL_SPEED) *
         GAME_CONFIG.DIFFICULTY_INCREASE_RATE;
-      this.scrollSpeed = Math.min(this.scrollSpeed + speedIncrease, GAME_CONFIG.MAX_SCROLL_SPEED);
+      this.scrollSpeed = Math.min(
+        this.scrollSpeed + speedIncrease,
+        GAME_CONFIG.MAX_SCROLL_SPEED
+      );
     }
   }
 
   private updatePowerUps(currentTime: number): void {
-    if (this.scoreMultiplierEndTime > 0 && currentTime >= this.scoreMultiplierEndTime) {
+    if (
+      this.scoreMultiplierEndTime > 0 &&
+      currentTime >= this.scoreMultiplierEndTime
+    ) {
       this.scoreMultiplier = 1;
       this.scoreMultiplierEndTime = 0;
     }
@@ -280,7 +292,11 @@ export class Game {
         if (this.otter.hasShield) {
           this.otter.hasShield = false;
           this.generator.releaseRock(rock);
-          this.createParticles(rock.x + rock.width / 2, rock.y + rock.height / 2, '#60a5fa');
+          this.createParticles(
+            rock.x + rock.width / 2,
+            rock.y + rock.height / 2,
+            '#60a5fa'
+          );
         } else {
           this.audioManager.playSound('collision');
           this.createParticles(
@@ -323,7 +339,11 @@ export class Game {
         break;
     }
 
-    this.createParticles(powerUp.x + powerUp.width / 2, powerUp.y + powerUp.height / 2, '#fbbf24');
+    this.createParticles(
+      powerUp.x + powerUp.width / 2,
+      powerUp.y + powerUp.height / 2,
+      '#fbbf24'
+    );
   }
 
   private createParticles(x: number, y: number, color: string): void {

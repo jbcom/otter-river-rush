@@ -22,8 +22,11 @@ export class Collectible extends GameObject {
     type: CollectibleType,
     _lane: number // Prefix with _ to indicate intentionally unused
   ) {
-    const config = CONFIG.collectibles.types[type.toLowerCase() as keyof typeof CONFIG.collectibles.types];
-    
+    const config =
+      CONFIG.collectibles.types[
+        type.toLowerCase() as keyof typeof CONFIG.collectibles.types
+      ];
+
     super(id, position, {
       type: 'circle',
       radius: config.size / 2,
@@ -93,7 +96,8 @@ export class Collectible extends GameObject {
     ctx.restore();
 
     // Debug: Draw collision circle (only in development builds)
-    const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+    const isDev =
+      typeof window !== 'undefined' && window.location.hostname === 'localhost';
     if (isDev) {
       ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
       ctx.beginPath();
@@ -183,7 +187,7 @@ export class Collectible extends GameObject {
     gradient.addColorStop(1, '#701a75');
 
     ctx.fillStyle = gradient;
-    
+
     const spikes = 5;
     const outerRadius = size / 2;
     const innerRadius = size / 4;
@@ -194,7 +198,7 @@ export class Collectible extends GameObject {
       const angle = (Math.PI * i) / spikes;
       const x = Math.cos(angle) * radius;
       const y = Math.sin(angle) * radius;
-      
+
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {
@@ -213,7 +217,11 @@ export class Collectible extends GameObject {
   /**
    * Move towards target (magnetized)
    */
-  public moveTowards(target: Vector2D, speed: number, _deltaTime: number): void {
+  public moveTowards(
+    target: Vector2D,
+    speed: number,
+    _deltaTime: number
+  ): void {
     const dx = target.x - this.transform.position.x;
     const dy = target.y - this.transform.position.y;
     const distance = Math.sqrt(dx * dx + dy * dy);

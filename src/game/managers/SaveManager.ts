@@ -100,7 +100,7 @@ export class SaveManager {
     mode: GameMode
   ): void {
     const entries = this.loadLeaderboard();
-    
+
     entries.push({
       rank: 0,
       playerName,
@@ -274,13 +274,13 @@ export class SaveManager {
   public importData(jsonData: string): boolean {
     try {
       const data = JSON.parse(jsonData);
-      
+
       if (data.profile) this.saveProfile(data.profile);
       if (data.leaderboard) this.saveLeaderboard(data.leaderboard);
       if (data.settings) this.saveSettings(data.settings);
       if (data.achievements) this.saveAchievements(data.achievements);
       if (data.dailyChallenge) this.saveDailyChallenge(data.dailyChallenge);
-      
+
       return true;
     } catch (error) {
       console.error('Failed to import data:', error);

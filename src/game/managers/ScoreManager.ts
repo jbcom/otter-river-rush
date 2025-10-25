@@ -95,7 +95,7 @@ export class ScoreManager {
   private incrementCombo(): void {
     this.stats.combo++;
     this.comboEndTime = Date.now() + CONFIG.game.comboTimeout;
-    
+
     // Add combo bonus
     const comboBonus = Math.floor(
       this.stats.combo * CONFIG.scoring.comboBonus * this.stats.multiplier
@@ -163,10 +163,14 @@ export class ScoreManager {
   /**
    * Get multiplier info
    */
-  public getMultiplierInfo(): { value: number; active: boolean; timeLeft: number } {
+  public getMultiplierInfo(): {
+    value: number;
+    active: boolean;
+    timeLeft: number;
+  } {
     const now = Date.now();
     const timeLeft = Math.max(0, this.multiplierEndTime - now);
-    
+
     return {
       value: this.stats.multiplier,
       active: this.stats.multiplier > 1,
@@ -180,7 +184,7 @@ export class ScoreManager {
   public getComboInfo(): { value: number; active: boolean; timeLeft: number } {
     const now = Date.now();
     const timeLeft = Math.max(0, this.comboEndTime - now);
-    
+
     return {
       value: this.stats.combo,
       active: this.stats.combo > 0,

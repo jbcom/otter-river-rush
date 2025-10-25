@@ -26,7 +26,8 @@ export default defineConfig({
       manifest: {
         name: 'Otter River Rush',
         short_name: 'OtterRush',
-        description: 'An endless runner game featuring an adventurous otter navigating a rushing river',
+        description:
+          'An endless runner game featuring an adventurous otter navigating a rushing river',
         theme_color: '#1e3a8a',
         background_color: '#0f172a',
         display: 'standalone',

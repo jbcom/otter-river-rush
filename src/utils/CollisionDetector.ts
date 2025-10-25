@@ -146,16 +146,12 @@ export function checkColliders(
   }
 
   if (colliderA.type === 'rectangle' && colliderB.type === 'circle') {
-    return checkCircleAABB(
-      centerB,
-      colliderB.radius!,
-      {
-        x: centerA.x - colliderA.width! / 2,
-        y: centerA.y - colliderA.height! / 2,
-        width: colliderA.width!,
-        height: colliderA.height!,
-      }
-    );
+    return checkCircleAABB(centerB, colliderB.radius!, {
+      x: centerA.x - colliderA.width! / 2,
+      y: centerA.y - colliderA.height! / 2,
+      width: colliderA.width!,
+      height: colliderA.height!,
+    });
   }
 
   return false;

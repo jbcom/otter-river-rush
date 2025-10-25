@@ -40,7 +40,11 @@ export class Renderer {
     this.renderParallaxLayer('#1d4ed8', 0.6, 40);
   }
 
-  private renderParallaxLayer(color: string, speed: number, size: number): void {
+  private renderParallaxLayer(
+    color: string,
+    speed: number,
+    size: number
+  ): void {
     this.ctx.fillStyle = color;
     const offset = (this.parallaxOffset * speed) % (size * 2);
 
@@ -73,7 +77,12 @@ export class Renderer {
     this.ctx.fillRect(otter.x, otter.y, otter.width, otter.height);
 
     this.ctx.fillStyle = '#d2691e';
-    this.ctx.fillRect(otter.x + 10, otter.y + 10, otter.width - 20, otter.height - 20);
+    this.ctx.fillRect(
+      otter.x + 10,
+      otter.y + 10,
+      otter.width - 20,
+      otter.height - 20
+    );
 
     this.ctx.fillStyle = '#000000';
     this.ctx.fillRect(otter.x + 15, otter.y + 15, 8, 8);
@@ -99,7 +108,12 @@ export class Renderer {
     this.ctx.fillRect(rock.x, rock.y, rock.width, rock.height);
 
     this.ctx.fillStyle = '#475569';
-    this.ctx.fillRect(rock.x + 5, rock.y + 5, rock.width - 10, rock.height - 10);
+    this.ctx.fillRect(
+      rock.x + 5,
+      rock.y + 5,
+      rock.width - 10,
+      rock.height - 10
+    );
   }
 
   renderPowerUp(powerUp: PowerUp): void {
@@ -126,7 +140,12 @@ export class Renderer {
     this.ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
 
     this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    this.ctx.fillRect(powerUp.x + 5, powerUp.y + 5, powerUp.width - 10, powerUp.height - 10);
+    this.ctx.fillRect(
+      powerUp.x + 5,
+      powerUp.y + 5,
+      powerUp.width - 10,
+      powerUp.height - 10
+    );
 
     this.ctx.restore();
   }

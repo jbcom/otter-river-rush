@@ -36,7 +36,11 @@ export class PhysicsSystem {
   /**
    * Apply force to transform
    */
-  public applyForce(transform: Transform, force: Vector2D, deltaTime: number): void {
+  public applyForce(
+    transform: Transform,
+    force: Vector2D,
+    deltaTime: number
+  ): void {
     const acceleration = vec2.multiply(force, deltaTime);
     transform.velocity = vec2.add(transform.velocity, acceleration);
   }
@@ -134,9 +138,7 @@ export class PhysicsSystem {
     speed: number,
     deltaTime: number
   ): void {
-    const direction = vec2.normalize(
-      vec2.subtract(target, transform.position)
-    );
+    const direction = vec2.normalize(vec2.subtract(target, transform.position));
     const velocity = vec2.multiply(direction, speed);
     const displacement = vec2.multiply(velocity, deltaTime);
     transform.position = vec2.add(transform.position, displacement);
@@ -157,24 +159,24 @@ export class PhysicsSystem {
     const omega = 2 / smoothTime;
     const x = omega * deltaTime;
     const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
-    
+
     let change = current - target;
     const originalTo = target;
-    
+
     const maxChange = maxSpeed * smoothTime;
     change = clamp(change, -maxChange, maxChange);
     const newTarget = current - change;
-    
+
     const temp = (currentVelocity.value + omega * change) * deltaTime;
     currentVelocity.value = (currentVelocity.value - omega * temp) * exp;
-    
+
     let output = newTarget + (change + temp) * exp;
-    
+
     if (originalTo - current > 0 === output > originalTo) {
       output = originalTo;
       currentVelocity.value = (output - originalTo) / deltaTime;
     }
-    
+
     return output;
   }
 

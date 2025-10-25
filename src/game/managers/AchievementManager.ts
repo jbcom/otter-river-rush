@@ -2,7 +2,7 @@
  * Achievement management system
  */
 
-import type { Achievement, GameStats } from '@/types/Game.types';
+import type { Achievement, GameStats, PlayerProfile } from '@/types/Game.types';
 import { SaveManager } from './SaveManager';
 
 interface AchievementDefinition {
@@ -11,7 +11,10 @@ interface AchievementDefinition {
   description: string;
   icon: string;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  check: (stats: GameStats, profile?: import('@/types/Game.types').PlayerProfile) => number; // Returns progress 0-1
+  check: (
+    stats: GameStats,
+    profile?: import('@/types/Game.types').PlayerProfile
+  ) => number; // Returns progress 0-1
   requirement: number;
 }
 
@@ -280,7 +283,7 @@ export class AchievementManager {
    */
   private loadAchievements(): void {
     const saved = this.saveManager.loadAchievements();
-    
+
     if (saved.length > 0) {
       this.achievements = saved;
     } else {
@@ -309,7 +312,10 @@ export class AchievementManager {
   /**
    * Check and update achievements
    */
-  public checkAchievements(stats: GameStats, profile?: any): Achievement[] {
+  public checkAchievements(
+    stats: GameStats,
+    profile?: PlayerProfile
+  ): Achievement[] {
     const newlyUnlocked: Achievement[] = [];
 
     this.achievements.forEach((achievement) => {
@@ -327,7 +333,7 @@ export class AchievementManager {
         achievement.unlocked = true;
         achievement.unlockedAt = Date.now();
         newlyUnlocked.push(achievement);
-        
+
         // Notify listeners
         this.unlockCallbacks.forEach((callback) => callback(achievement));
       }
@@ -414,10 +420,10 @@ export class AchievementManager {
     achievement.unlocked = true;
     achievement.unlockedAt = Date.now();
     achievement.progress = achievement.requirement;
-    
+
     this.unlockCallbacks.forEach((callback) => callback(achievement));
     this.saveAchievements();
-    
+
     return true;
   }
 }

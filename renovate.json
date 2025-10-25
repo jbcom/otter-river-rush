@@ -20,12 +20,7 @@
       "groupSlug": "major",
       "automerge": false
     },
-    {
-      "description": "Automerge ESLint/Prettier updates (non-major)",
-      "matchPackagePatterns": ["^eslint", "^prettier", "^@typescript-eslint/"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
+
     {
       "description": "Automerge testing framework patches",
       "matchPackagePatterns": ["^vitest$", "^@vitest/", "^playwright$", "^@playwright/"],

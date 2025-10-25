@@ -14,6 +14,8 @@
       <canvas id="gameCanvas"></canvas>
       <div id="ui">
         <div id="score">Score: 0</div>
+        
+        <!-- Main Menu -->
         <div id="startScreen" class="screen">
           <img src="/hud/splash-screen.png" alt="Otter River Rush" class="splash-image" />
           <h1>Otter River Rush</h1>
@@ -40,10 +42,24 @@
             <button id="dailyButton" class="mode-button">
               <span class="mode-icon">🎲</span>
               <span class="mode-name">Daily Challenge</span>
-              <span class="mode-desc">New challenge every day!</span>
+              <span class="mode-desc" id="dailyObjective">New challenge every day!</span>
+            </button>
+          </div>
+          
+          <div class="menu-buttons">
+            <button id="leaderboardButton" class="menu-action-button">
+              🏆 Leaderboard
+            </button>
+            <button id="statsButton" class="menu-action-button">
+              📊 Stats
+            </button>
+            <button id="settingsButton" class="menu-action-button">
+              ⚙️ Settings
             </button>
           </div>
         </div>
+        
+        <!-- Game Over Screen -->
         <div id="gameOverScreen" class="screen hidden">
           <h2>Game Over!</h2>
           <div class="stats-container">
@@ -52,14 +68,90 @@
             <p id="finalCoins">Coins: 0</p>
             <p id="finalGems">Gems: 0</p>
             <p id="highScore">High Score: 0</p>
+            <p id="rank" class="rank-display"></p>
           </div>
           <button id="restartButton" class="game-button">Play Again</button>
           <button id="menuButton" class="game-button secondary">Main Menu</button>
         </div>
+        
+        <!-- Pause Screen -->
         <div id="pauseScreen" class="screen hidden">
           <h2>Paused</h2>
           <button id="resumeButton" class="game-button">Resume</button>
           <button id="quitButton" class="game-button secondary">Quit to Menu</button>
+        </div>
+        
+        <!-- Leaderboard Screen -->
+        <div id="leaderboardScreen" class="screen hidden">
+          <h2>🏆 Leaderboard</h2>
+          <div class="leaderboard-tabs">
+            <button class="tab-button active" data-mode="all">All Modes</button>
+            <button class="tab-button" data-mode="classic">Classic</button>
+            <button class="tab-button" data-mode="time_trial">Time Trial</button>
+            <button class="tab-button" data-mode="zen">Zen</button>
+          </div>
+          <div id="leaderboardContent" class="leaderboard-content"></div>
+          <button id="closeLeaderboard" class="game-button secondary">Back</button>
+        </div>
+        
+        <!-- Stats Screen -->
+        <div id="statsScreen" class="screen hidden">
+          <h2>📊 Lifetime Stats</h2>
+          <div id="statsContent" class="stats-content"></div>
+          <button id="closeStats" class="game-button secondary">Back</button>
+        </div>
+        
+        <!-- Settings Screen -->
+        <div id="settingsScreen" class="screen hidden">
+          <h2>⚙️ Settings</h2>
+          <div class="settings-content">
+            <div class="setting-item">
+              <label for="soundToggle">🔊 Sound Effects</label>
+              <input type="checkbox" id="soundToggle" class="toggle" checked />
+            </div>
+            <div class="setting-item">
+              <label for="musicToggle">🎵 Music</label>
+              <input type="checkbox" id="musicToggle" class="toggle" checked />
+            </div>
+            <div class="setting-item">
+              <label for="volumeSlider">🔉 Volume</label>
+              <input type="range" id="volumeSlider" min="0" max="100" value="70" class="slider" />
+            </div>
+            <div class="setting-item">
+              <label for="difficultySelect">⚡ Difficulty</label>
+              <select id="difficultySelect" class="select">
+                <option value="easy">Easy</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label for="particlesSelect">✨ Particles</label>
+              <select id="particlesSelect" class="select">
+                <option value="low">Low</option>
+                <option value="normal" selected>Normal</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label for="screenShakeToggle">📳 Screen Shake</label>
+              <input type="checkbox" id="screenShakeToggle" class="toggle" checked />
+            </div>
+            <div class="setting-item">
+              <label for="reducedMotionToggle">♿ Reduced Motion</label>
+              <input type="checkbox" id="reducedMotionToggle" class="toggle" />
+            </div>
+            <div class="setting-item">
+              <label for="colorBlindSelect">🎨 Color Blind Mode</label>
+              <select id="colorBlindSelect" class="select">
+                <option value="none" selected>None</option>
+                <option value="protanopia">Protanopia</option>
+                <option value="deuteranopia">Deuteranopia</option>
+                <option value="tritanopia">Tritanopia</option>
+              </select>
+            </div>
+          </div>
+          <button id="closeSettings" class="game-button secondary">Back</button>
         </div>
         
         <!-- Achievement Popup -->

@@ -19,6 +19,9 @@
     "verify": "npm run lint && npm run type-check && npm test -- --run && npm run build",
     "generate-sprites": "tsx scripts/generate-sprites.ts",
     "generate-sprites:list": "tsx scripts/generate-sprites.ts --list",
+    "generate-content": "tsx scripts/generate-content.ts",
+    "generate-hud": "tsx scripts/generate-hud-sprites.ts",
+    "generate-all": "npm run generate-content && npm run generate-hud",
     "analyze": "vite-bundle-visualizer",
     "prepare": "[ -d .git ] && npx husky install || echo 'Not a git repo, skipping husky install'"
   },
@@ -28,6 +31,7 @@
   },
   "devDependencies": {
     "@ai-sdk/openai": "^2.0.53",
+    "@anthropic-ai/sdk": "^0.67.0",
     "@playwright/test": "^1.47.0",
     "@types/howler": "^2.2.11",
     "@types/node": "^24.9.1",

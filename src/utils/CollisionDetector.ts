@@ -112,7 +112,7 @@ export function checkColliders(
   if (colliderA.type === 'circle' && colliderB.type === 'circle') {
     return checkCircle(
       centerA,
-      colliderA.radius!,
+      colliderA.radius ?? 0,
       centerB,
       colliderB.radius!
     );

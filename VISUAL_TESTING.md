@@ -27,7 +27,7 @@ npm run test:e2e -- tests/e2e/visual.spec.ts --update-snapshots
 
 Run visual regression tests:
 ```bash
-npm run test:e2e -- tests/e2e/visual.spec.ts
+npm run test:visual
 ```
 
 Run with UI mode for debugging:

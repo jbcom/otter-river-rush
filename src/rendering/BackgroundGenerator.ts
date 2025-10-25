@@ -113,15 +113,20 @@ export class BackgroundGenerator {
   /**
    * Update background state
    */
-  public update(deltaTime: number, scrollSpeed: number, currentDistance: number): void {
+  public update(
+    deltaTime: number,
+    scrollSpeed: number,
+    currentDistance: number
+  ): void {
     this.distance = currentDistance;
     this.parallaxOffset += scrollSpeed * deltaTime;
     this.waveOffset += deltaTime * 2;
 
     // Update biome based on distance
-    const biomeIndex = Math.floor(this.distance / this.BIOME_DISTANCE) % this.biomeOrder.length;
+    const biomeIndex =
+      Math.floor(this.distance / this.BIOME_DISTANCE) % this.biomeOrder.length;
     const nextBiome = this.biomeOrder[biomeIndex];
-    
+
     if (nextBiome !== this.currentBiome) {
       this.currentBiome = nextBiome;
       this.biomeTransitionProgress = 0;
@@ -150,7 +155,7 @@ export class BackgroundGenerator {
    */
   private renderSky(): void {
     const config = this.biomeConfigs[this.currentBiome];
-    
+
     const gradient = this.ctx.createLinearGradient(
       0,
       0,
@@ -169,7 +174,7 @@ export class BackgroundGenerator {
    */
   private renderWater(): void {
     const config = this.biomeConfigs[this.currentBiome];
-    
+
     const gradient = this.ctx.createLinearGradient(
       0,
       this.canvas.height * 0.4,
@@ -191,11 +196,12 @@ export class BackgroundGenerator {
     // Water texture (flowing lines)
     this.ctx.strokeStyle = `${config.waterColors.top}40`;
     this.ctx.lineWidth = 2;
-    
+
     for (let i = 0; i < 5; i++) {
       const y = this.canvas.height * 0.5 + i * 50;
-      const offset = (this.parallaxOffset * (1 + i * 0.2)) % (this.canvas.width + 100);
-      
+      const offset =
+        (this.parallaxOffset * (1 + i * 0.2)) % (this.canvas.width + 100);
+
       this.ctx.beginPath();
       this.ctx.moveTo(-100 + offset, y);
       for (let x = 0; x < this.canvas.width + 100; x += 20) {
@@ -211,24 +217,24 @@ export class BackgroundGenerator {
    */
   private renderRiverBanks(): void {
     const config = this.biomeConfigs[this.currentBiome];
-    
+
     // Left bank
     this.ctx.fillStyle = config.accentColor + '40';
     this.ctx.fillRect(0, 0, 50, this.canvas.height);
-    
+
     // Right bank
     this.ctx.fillRect(this.canvas.width - 50, 0, 50, this.canvas.height);
 
     // Bank details (rocks/vegetation)
     this.ctx.fillStyle = config.accentColor + '60';
     const bankOffset = (this.parallaxOffset * 0.6) % 80;
-    
+
     for (let y = -bankOffset; y < this.canvas.height; y += 80) {
       // Left bank details
       this.ctx.beginPath();
       this.ctx.arc(20, y, 8, 0, Math.PI * 2);
       this.ctx.fill();
-      
+
       // Right bank details
       this.ctx.beginPath();
       this.ctx.arc(this.canvas.width - 20, y + 40, 8, 0, Math.PI * 2);
@@ -244,7 +250,7 @@ export class BackgroundGenerator {
     const foliageOffset = (this.parallaxOffset * 0.3) % 120;
 
     this.ctx.fillStyle = config.accentColor;
-    
+
     switch (this.currentBiome) {
       case Biome.FOREST:
         // Trees
@@ -302,11 +308,13 @@ export class BackgroundGenerator {
 
     for (let i = 0; i < 3 * intensity; i++) {
       const y = this.canvas.height * 0.5 + i * 80;
-      const offset = (this.waveOffset * 30 + i * 20) % (this.canvas.width + 200);
+      const offset =
+        (this.waveOffset * 30 + i * 20) % (this.canvas.width + 200);
 
       this.ctx.beginPath();
       for (let x = -100; x < this.canvas.width + 100; x += 10) {
-        const wave = Math.sin((x + offset) * 0.03 + this.waveOffset) * 5 * intensity;
+        const wave =
+          Math.sin((x + offset) * 0.03 + this.waveOffset) * 5 * intensity;
         if (x === -100) {
           this.ctx.moveTo(x, y + wave);
         } else {
@@ -322,7 +330,7 @@ export class BackgroundGenerator {
    */
   private renderFog(): void {
     const config = this.biomeConfigs[this.currentBiome];
-    
+
     if (config.fogDensity > 0) {
       this.ctx.fillStyle = `rgba(255, 255, 255, ${config.fogDensity * 0.3})`;
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

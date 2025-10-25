@@ -7,7 +7,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🏊',
     requirement: 100,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.totalDistanceTraveled >= 100
+    checkCondition: (stats: GameStats) => stats.totalDistanceTraveled >= 100,
   },
   {
     id: 'river_explorer',
@@ -16,7 +16,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🗺️',
     requirement: 10000,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.totalDistanceTraveled >= 10000
+    checkCondition: (stats: GameStats) => stats.totalDistanceTraveled >= 10000,
   },
   {
     id: 'marathon_swimmer',
@@ -25,7 +25,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🏃',
     requirement: 42195,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.longestSingleRun >= 42195
+    checkCondition: (stats: GameStats) => stats.longestSingleRun >= 42195,
   },
   {
     id: 'ocean_bound',
@@ -34,7 +34,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🌊',
     requirement: 100000,
     rarity: 'legendary',
-    checkCondition: (stats: GameStats) => stats.totalDistanceTraveled >= 100000
+    checkCondition: (stats: GameStats) => stats.totalDistanceTraveled >= 100000,
   },
   {
     id: 'endless_current',
@@ -43,7 +43,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '⏰',
     requirement: 1800,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.longestRunTime >= 1800
+    checkCondition: (stats: GameStats) => stats.longestRunTime >= 1800,
   },
 
   // Skill-Based Achievements
@@ -54,7 +54,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '✨',
     requirement: 50,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.maxConsecutiveJumps >= 50
+    checkCondition: (stats: GameStats) => stats.maxConsecutiveJumps >= 50,
   },
   {
     id: 'combo_master',
@@ -63,7 +63,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🔥',
     requirement: 100,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.maxComboMultiplier >= 100
+    checkCondition: (stats: GameStats) => stats.maxComboMultiplier >= 100,
   },
   {
     id: 'untouchable',
@@ -72,7 +72,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🛡️',
     requirement: 5000,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.longestNoDamageRun >= 5000
+    checkCondition: (stats: GameStats) => stats.longestNoDamageRun >= 5000,
   },
   {
     id: 'precision_swimmer',
@@ -81,7 +81,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🎯',
     requirement: 25,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.maxPerfectTimingsInRun >= 25
+    checkCondition: (stats: GameStats) => stats.maxPerfectTimingsInRun >= 25,
   },
   {
     id: 'reflex_master',
@@ -90,7 +90,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '⚡',
     requirement: 200,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.maxObstaclesDodgedInRun >= 200
+    checkCondition: (stats: GameStats) => stats.maxObstaclesDodgedInRun >= 200,
   },
 
   // Collection Achievements
@@ -101,7 +101,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🪙',
     requirement: 1000,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.totalCoinsCollected >= 1000
+    checkCondition: (stats: GameStats) => stats.totalCoinsCollected >= 1000,
   },
   {
     id: 'treasure_hunter',
@@ -110,7 +110,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '💰',
     requirement: 50000,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.totalCoinsCollected >= 50000
+    checkCondition: (stats: GameStats) => stats.totalCoinsCollected >= 50000,
   },
   {
     id: 'gem_collector',
@@ -119,7 +119,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '💎',
     requirement: 100,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.totalGemsCollected >= 100
+    checkCondition: (stats: GameStats) => stats.totalGemsCollected >= 100,
   },
   {
     id: 'hoarder',
@@ -128,7 +128,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🏦',
     requirement: 500,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.maxCoinsInSingleRun >= 500
+    checkCondition: (stats: GameStats) => stats.maxCoinsInSingleRun >= 500,
   },
   {
     id: 'magnet_master',
@@ -137,7 +137,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🧲',
     requirement: 1000,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.coinsMagnetCollected >= 1000
+    checkCondition: (stats: GameStats) => stats.coinsMagnetCollected >= 1000,
   },
 
   // Mastery Achievements
@@ -148,7 +148,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '⚡',
     requirement: 8,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.uniquePowerUpsUsed.size >= 8
+    checkCondition: (stats: GameStats) => stats.uniquePowerUpsUsed.size >= 8,
   },
   {
     id: 'speed_demon',
@@ -157,7 +157,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '💨',
     requirement: 100,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.speedBoostsUsed >= 100
+    checkCondition: (stats: GameStats) => stats.speedBoostsUsed >= 100,
   },
   {
     id: 'invincible_veteran',
@@ -166,7 +166,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '✨',
     requirement: 50,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.invincibilityUsed >= 50
+    checkCondition: (stats: GameStats) => stats.invincibilityUsed >= 50,
   },
   {
     id: 'enemy_encyclopedia',
@@ -175,7 +175,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '📚',
     requirement: 12,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.uniqueEnemyTypes.size >= 12
+    checkCondition: (stats: GameStats) => stats.uniqueEnemyTypes.size >= 12,
   },
   {
     id: 'obstacle_course',
@@ -184,7 +184,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🏆',
     requirement: 1000,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.totalObstaclesAvoided >= 1000
+    checkCondition: (stats: GameStats) => stats.totalObstaclesAvoided >= 1000,
   },
 
   // Secret/Easter Egg Achievements
@@ -195,7 +195,8 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🕳️',
     requirement: 1,
     rarity: 'legendary',
-    checkCondition: (stats: GameStats) => stats.secretAreasFound.includes('underwater_cave')
+    checkCondition: (stats: GameStats) =>
+      stats.secretAreasFound.includes('underwater_cave'),
   },
   {
     id: 'rainbow_fish',
@@ -204,7 +205,8 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🌈',
     requirement: 1,
     rarity: 'legendary',
-    checkCondition: (stats: GameStats) => stats.secretAreasFound.includes('rainbow_fish_encounter')
+    checkCondition: (stats: GameStats) =>
+      stats.secretAreasFound.includes('rainbow_fish_encounter'),
   },
   {
     id: 'midnight_swim',
@@ -213,7 +215,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🌙',
     requirement: 1,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.midnightPlaysCompleted >= 1
+    checkCondition: (stats: GameStats) => stats.midnightPlaysCompleted >= 1,
   },
   {
     id: 'birthday_otter',
@@ -222,7 +224,8 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🎂',
     requirement: 1,
     rarity: 'epic',
-    checkCondition: (stats: GameStats, currentDate: Date) => stats.birthdayPlays >= 1
+    checkCondition: (stats: GameStats, _currentDate: Date) =>
+      stats.birthdayPlays >= 1,
   },
   {
     id: 'konami_code',
@@ -231,7 +234,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🎮',
     requirement: 1,
     rarity: 'legendary',
-    checkCondition: (stats: GameStats) => stats.konamiCodeEntered
+    checkCondition: (stats: GameStats) => stats.konamiCodeEntered,
   },
 
   // Time-Based Challenges
@@ -242,7 +245,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '📅',
     requirement: 7,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.consecutiveDaysPlayed >= 7
+    checkCondition: (stats: GameStats) => stats.consecutiveDaysPlayed >= 7,
   },
   {
     id: 'dedication',
@@ -251,7 +254,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🔥',
     requirement: 30,
     rarity: 'epic',
-    checkCondition: (stats: GameStats) => stats.consecutiveDaysPlayed >= 30
+    checkCondition: (stats: GameStats) => stats.consecutiveDaysPlayed >= 30,
   },
   {
     id: 'speed_runner',
@@ -260,7 +263,8 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '⏱️',
     requirement: 120,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.fastestTo1000m <= 120 && stats.fastestTo1000m > 0
+    checkCondition: (stats: GameStats) =>
+      stats.fastestTo1000m <= 120 && stats.fastestTo1000m > 0,
   },
   {
     id: 'weekend_warrior',
@@ -269,7 +273,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '🏖️',
     requirement: 10,
     rarity: 'common',
-    checkCondition: (stats: GameStats) => stats.weekendRuns >= 10
+    checkCondition: (stats: GameStats) => stats.weekendRuns >= 10,
   },
   {
     id: 'century_club',
@@ -278,8 +282,8 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '💯',
     requirement: 100,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.totalRuns >= 100
-  }
+    checkCondition: (stats: GameStats) => stats.totalRuns >= 100,
+  },
 ];
 
 export interface GameStats {

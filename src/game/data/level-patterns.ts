@@ -2,7 +2,8 @@ export const LEVEL_PATTERNS = [
   {
     id: 'gentle_wave',
     name: 'Gentle Wave',
-    description: 'Alternating obstacles between lanes to ease players into the rhythm',
+    description:
+      'Alternating obstacles between lanes to ease players into the rhythm',
     difficulty: 2,
     duration: 8,
     obstacles: [
@@ -10,13 +11,13 @@ export const LEVEL_PATTERNS = [
       { lane: 1, spawnTime: 1.5, type: 'rock' },
       { lane: 2, spawnTime: 3, type: 'rock' },
       { lane: 1, spawnTime: 4.5, type: 'rock' },
-      { lane: 0, spawnTime: 6, type: 'rock' }
+      { lane: 0, spawnTime: 6, type: 'rock' },
     ],
     recommendedBiome: 'FOREST',
     enemySpawnRules: { type: 'lazy_log', count: 1, timing: 'random' },
-    collectibleDensity: 0.8
+    collectibleDensity: 0.8,
   },
-  
+
   {
     id: 'zigzag_challenge',
     name: 'Zigzag Challenge',
@@ -32,11 +33,11 @@ export const LEVEL_PATTERNS = [
       { lane: 1, spawnTime: 5, type: 'log' },
       { lane: 0, spawnTime: 6.5, type: 'rock' },
       { lane: 2, spawnTime: 7.5, type: 'log' },
-      { lane: 1, spawnTime: 8.5, type: 'rock' }
+      { lane: 1, spawnTime: 8.5, type: 'rock' },
     ],
     recommendedBiome: 'RAPIDS',
     enemySpawnRules: { type: 'river_snake', count: 2, timing: 'mid_pattern' },
-    collectibleDensity: 0.4
+    collectibleDensity: 0.4,
   },
 
   {
@@ -55,27 +56,28 @@ export const LEVEL_PATTERNS = [
       { lane: 1, spawnTime: 4.8, type: 'rock' },
       { lane: 0, spawnTime: 5.6, type: 'log' },
       { lane: 2, spawnTime: 6.4, type: 'rock' },
-      { lane: 1, spawnTime: 7.2, type: 'log' }
+      { lane: 1, spawnTime: 7.2, type: 'log' },
     ],
     recommendedBiome: 'CANYON',
     enemySpawnRules: { type: 'diving_bird', count: 3, timing: 'scattered' },
-    collectibleDensity: 0.2
+    collectibleDensity: 0.2,
   },
 
   {
     id: 'peaceful_breather',
     name: 'Peaceful Breather',
-    description: 'Recovery pattern with sparse obstacles and bonus collectibles',
+    description:
+      'Recovery pattern with sparse obstacles and bonus collectibles',
     difficulty: 1,
     duration: 15,
     obstacles: [
       { lane: 0, spawnTime: 3, type: 'turtle' },
       { lane: 2, spawnTime: 8, type: 'turtle' },
-      { lane: 1, spawnTime: 12, type: 'rock' }
+      { lane: 1, spawnTime: 12, type: 'rock' },
     ],
     recommendedBiome: 'FOREST',
     enemySpawnRules: { type: 'friendly_fish', count: 4, timing: 'bonus' },
-    collectibleDensity: 1.2
+    collectibleDensity: 1.2,
   },
 
   {
@@ -90,11 +92,15 @@ export const LEVEL_PATTERNS = [
       { lane: 1, spawnTime: 3, type: 'log' },
       { lane: 2, spawnTime: 3, type: 'rock' },
       { lane: 0, spawnTime: 6, type: 'rock' },
-      { lane: 2, spawnTime: 6, type: 'log' }
+      { lane: 2, spawnTime: 6, type: 'log' },
     ],
     recommendedBiome: 'MOUNTAIN',
-    enemySpawnRules: { type: 'boulder_crab', count: 2, timing: 'between_walls' },
-    collectibleDensity: 0.3
+    enemySpawnRules: {
+      type: 'boulder_crab',
+      count: 2,
+      timing: 'between_walls',
+    },
+    collectibleDensity: 0.3,
   },
 
   {
@@ -114,11 +120,15 @@ export const LEVEL_PATTERNS = [
       { lane: 0, spawnTime: 7, type: 'log' },
       { lane: 1, spawnTime: 8, type: 'rock' },
       { lane: 2, spawnTime: 9, type: 'log' },
-      { lane: 0, spawnTime: 10, type: 'rock' }
+      { lane: 0, spawnTime: 10, type: 'rock' },
     ],
     recommendedBiome: 'RAPIDS',
-    enemySpawnRules: { type: 'whirlpool_spirit', count: 1, timing: 'center_spawn' },
-    collectibleDensity: 0.5
+    enemySpawnRules: {
+      type: 'whirlpool_spirit',
+      count: 1,
+      timing: 'center_spawn',
+    },
+    collectibleDensity: 0.5,
   },
 
   {
@@ -135,11 +145,15 @@ export const LEVEL_PATTERNS = [
       { lane: 2, spawnTime: 6.3, type: 'log' },
       { lane: 0, spawnTime: 11, type: 'rock' },
       { lane: 1, spawnTime: 11.2, type: 'rock' },
-      { lane: 2, spawnTime: 11.4, type: 'rock' }
+      { lane: 2, spawnTime: 11.4, type: 'rock' },
     ],
     recommendedBiome: 'MOUNTAIN',
-    enemySpawnRules: { type: 'mountain_goat', count: 2, timing: 'cluster_gaps' },
-    collectibleDensity: 0.7
+    enemySpawnRules: {
+      type: 'mountain_goat',
+      count: 2,
+      timing: 'cluster_gaps',
+    },
+    collectibleDensity: 0.7,
   },
 
   {
@@ -160,11 +174,11 @@ export const LEVEL_PATTERNS = [
       { lane: 2, spawnTime: 4, type: 'log' },
       { lane: 1, spawnTime: 4.5, type: 'rock' },
       { lane: 0, spawnTime: 5, type: 'log' },
-      { lane: 2, spawnTime: 5.5, type: 'rock' }
+      { lane: 2, spawnTime: 5.5, type: 'rock' },
     ],
     recommendedBiome: 'RAPIDS',
     enemySpawnRules: { type: 'lightning_eel', count: 1, timing: 'chase_mode' },
-    collectibleDensity: 0.1
+    collectibleDensity: 0.1,
   },
 
   {
@@ -179,11 +193,15 @@ export const LEVEL_PATTERNS = [
       { lane: 2, spawnTime: 8, type: 'turtle' },
       { lane: 1, spawnTime: 11, type: 'moving_turtle' },
       { lane: 0, spawnTime: 14, type: 'turtle' },
-      { lane: 2, spawnTime: 16, type: 'rock' }
+      { lane: 2, spawnTime: 16, type: 'rock' },
     ],
     recommendedBiome: 'FOREST',
-    enemySpawnRules: { type: 'shell_snapper', count: 2, timing: 'turtle_vicinity' },
-    collectibleDensity: 0.6
+    enemySpawnRules: {
+      type: 'shell_snapper',
+      count: 2,
+      timing: 'turtle_vicinity',
+    },
+    collectibleDensity: 0.6,
   },
 
   {
@@ -200,11 +218,15 @@ export const LEVEL_PATTERNS = [
       { lane: 0, spawnTime: 6, type: 'rock' },
       { lane: 2, spawnTime: 6.2, type: 'rock' },
       { lane: 0, spawnTime: 9, type: 'log' },
-      { lane: 1, spawnTime: 9.2, type: 'log' }
+      { lane: 1, spawnTime: 9.2, type: 'log' },
     ],
     recommendedBiome: 'CANYON',
-    enemySpawnRules: { type: 'canyon_hawk', count: 3, timing: 'overhead_threat' },
-    collectibleDensity: 0.25
+    enemySpawnRules: {
+      type: 'canyon_hawk',
+      count: 3,
+      timing: 'overhead_threat',
+    },
+    collectibleDensity: 0.25,
   },
 
   {
@@ -217,11 +239,11 @@ export const LEVEL_PATTERNS = [
       { lane: 0, spawnTime: 4, type: 'log' },
       { lane: 2, spawnTime: 8, type: 'rock' },
       { lane: 1, spawnTime: 12, type: 'turtle' },
-      { lane: 0, spawnTime: 16, type: 'log' }
+      { lane: 0, spawnTime: 16, type: 'log' },
     ],
     recommendedBiome: 'FOREST',
     enemySpawnRules: { type: 'curious_duck', count: 5, timing: 'peaceful' },
-    collectibleDensity: 0.9
+    collectibleDensity: 0.9,
   },
 
   {
@@ -242,11 +264,15 @@ export const LEVEL_PATTERNS = [
       { lane: 0, spawnTime: 6, type: 'rock' },
       { lane: 1, spawnTime: 8, type: 'log' },
       { lane: 2, spawnTime: 10, type: 'log' },
-      { lane: 0, spawnTime: 12, type: 'rock' }
+      { lane: 0, spawnTime: 12, type: 'rock' },
     ],
     recommendedBiome: 'MOUNTAIN',
-    enemySpawnRules: { type: 'rockslide_bear', count: 1, timing: 'avalanche_end' },
-    collectibleDensity: 0.3
+    enemySpawnRules: {
+      type: 'rockslide_bear',
+      count: 1,
+      timing: 'avalanche_end',
+    },
+    collectibleDensity: 0.3,
   },
 
   {
@@ -263,11 +289,11 @@ export const LEVEL_PATTERNS = [
       { lane: 2, spawnTime: 7, type: 'rock' },
       { lane: 1, spawnTime: 10, type: 'log' },
       { lane: 0, spawnTime: 13, type: 'log' },
-      { lane: 2, spawnTime: 13, type: 'log' }
+      { lane: 2, spawnTime: 13, type: 'log' },
     ],
     recommendedBiome: 'RAPIDS',
     enemySpawnRules: { type: 'racing_fish', count: 3, timing: 'gate_passages' },
-    collectibleDensity: 0.4
+    collectibleDensity: 0.4,
   },
 
   {
@@ -291,11 +317,11 @@ export const LEVEL_PATTERNS = [
       { lane: 0, spawnTime: 9.2, type: 'moving_turtle' },
       { lane: 1, spawnTime: 10, type: 'log' },
       { lane: 2, spawnTime: 11.5, type: 'turtle' },
-      { lane: 0, spawnTime: 12.8, type: 'rock' }
+      { lane: 0, spawnTime: 12.8, type: 'rock' },
     ],
     recommendedBiome: 'CANYON',
     enemySpawnRules: { type: 'storm_spirit', count: 2, timing: 'chaos_mode' },
-    collectibleDensity: 0.15
+    collectibleDensity: 0.15,
   },
 
   {
@@ -321,10 +347,14 @@ export const LEVEL_PATTERNS = [
       { lane: 2, spawnTime: 12.8, type: 'log' },
       { lane: 1, spawnTime: 14.2, type: 'log' },
       { lane: 0, spawnTime: 15.5, type: 'log' },
-      { lane: 2, spawnTime: 16.8, type: 'log' }
+      { lane: 2, spawnTime: 16.8, type: 'log' },
     ],
     recommendedBiome: 'FOREST',
-    enemySpawnRules: { type: 'lumberjack_beaver', count: 1, timing: 'jam_master' },
-    collectibleDensity: 0.05
-  }
+    enemySpawnRules: {
+      type: 'lumberjack_beaver',
+      count: 1,
+      timing: 'jam_master',
+    },
+    collectibleDensity: 0.05,
+  },
 ];

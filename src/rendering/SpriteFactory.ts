@@ -243,7 +243,13 @@ export class SpriteFactory {
     if (animated) {
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.arc(centerX - radius * 0.5, centerY - radius * 0.5, 2, 0, Math.PI * 2);
+      ctx.arc(
+        centerX - radius * 0.5,
+        centerY - radius * 0.5,
+        2,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
     }
 
@@ -413,8 +419,18 @@ export class SpriteFactory {
         ctx.arc(centerX, centerY, size * 0.25, 0, Math.PI, true);
         ctx.stroke();
         // Magnet ends
-        ctx.fillRect(centerX - size * 0.3, centerY - size * 0.05, size * 0.1, size * 0.15);
-        ctx.fillRect(centerX + size * 0.2, centerY - size * 0.05, size * 0.1, size * 0.15);
+        ctx.fillRect(
+          centerX - size * 0.3,
+          centerY - size * 0.05,
+          size * 0.1,
+          size * 0.15
+        );
+        ctx.fillRect(
+          centerX + size * 0.2,
+          centerY - size * 0.05,
+          size * 0.1,
+          size * 0.15
+        );
         break;
     }
 

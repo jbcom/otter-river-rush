@@ -6,7 +6,7 @@ import prettierPlugin from 'eslint-plugin-prettier';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '*.cjs'],
+    ignores: ['dist/**', 'node_modules/**', '*.cjs', 'scripts/**'],
   },
   js.configs.recommended,
   {
@@ -34,6 +34,8 @@ export default [
         navigator: 'readonly',
         HTMLCanvasElement: 'readonly',
         HTMLElement: 'readonly',
+        HTMLImageElement: 'readonly',
+        Image: 'readonly',
         requestAnimationFrame: 'readonly',
         performance: 'readonly',
         localStorage: 'readonly',

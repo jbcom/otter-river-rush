@@ -5,10 +5,10 @@
 import * as YUKA from 'yuka';
 
 export enum EnemyType {
-  CHASER = 'CHASER',       // Follows player
-  PATROL = 'PATROL',       // Patrols lanes
-  ZIGZAG = 'ZIGZAG',       // Zigzag pattern
-  AMBUSH = 'AMBUSH',       // Waits and strikes
+  CHASER = 'CHASER', // Follows player
+  PATROL = 'PATROL', // Patrols lanes
+  ZIGZAG = 'ZIGZAG', // Zigzag pattern
+  AMBUSH = 'AMBUSH', // Waits and strikes
 }
 
 export interface EnemyConfig {
@@ -25,28 +25,25 @@ export class AIEnemy {
   public health: number;
   public scoreValue: number;
   public active: boolean = true;
-  
+
   private aiUpdateInterval: number;
   private lastAIUpdate: number = 0;
   private targetPosition: YUKA.Vector3;
   private patrolPoints: YUKA.Vector3[] = [];
   private currentPatrolIndex: number = 0;
 
-  constructor(
-    position: YUKA.Vector3,
-    config: EnemyConfig
-  ) {
+  constructor(position: YUKA.Vector3, config: EnemyConfig) {
     this.vehicle = new YUKA.Vehicle();
     this.vehicle.position.copy(position);
     this.vehicle.maxSpeed = config.speed;
     this.vehicle.maxForce = config.speed * 2;
-    
+
     this.type = config.type;
     this.health = config.health;
     this.scoreValue = config.scoreValue;
     this.aiUpdateInterval = config.aiUpdateInterval;
     this.targetPosition = new YUKA.Vector3();
-    
+
     this.setupBehavior();
   }
 
@@ -66,12 +63,13 @@ export class AIEnemy {
         // Setup patrol points (will be set externally)
         break;
 
-      case EnemyType.ZIGZAG:
+      case EnemyType.ZIGZAG: {
         // Wander behavior for zigzag movement
         const wanderBehavior = new YUKA.WanderBehavior();
         wanderBehavior.weight = 1;
         this.vehicle.steering.add(wanderBehavior);
         break;
+      }
 
       case EnemyType.AMBUSH:
         // Starts stationary, will activate when player is close
@@ -134,7 +132,7 @@ export class AIEnemy {
    */
   private updateChaser(playerPos: YUKA.Vector3): void {
     this.vehicle.steering.clear();
-    
+
     const seekBehavior = new YUKA.SeekBehavior(playerPos);
     seekBehavior.weight = 1;
     this.vehicle.steering.add(seekBehavior);
@@ -152,7 +150,7 @@ export class AIEnemy {
     if (this.patrolPoints.length === 0) {
       // Initialize patrol points based on lanes
       this.patrolPoints = lanes.map(
-        laneX => new YUKA.Vector3(laneX, this.vehicle.position.y, 0)
+        (laneX) => new YUKA.Vector3(laneX, this.vehicle.position.y, 0)
       );
     }
 
@@ -162,7 +160,8 @@ export class AIEnemy {
 
     if (distance < 20) {
       // Move to next patrol point
-      this.currentPatrolIndex = (this.currentPatrolIndex + 1) % this.patrolPoints.length;
+      this.currentPatrolIndex =
+        (this.currentPatrolIndex + 1) % this.patrolPoints.length;
     }
 
     // Seek current patrol point
@@ -179,13 +178,13 @@ export class AIEnemy {
    */
   private updateAmbush(playerPos: YUKA.Vector3): void {
     const distanceToPlayer = this.vehicle.position.distanceTo(playerPos);
-    
+
     // Activate when player is within range
     if (distanceToPlayer < 150 && this.vehicle.maxSpeed === 0) {
       // Activate!
       this.vehicle.maxSpeed = 200; // Fast strike
       this.vehicle.steering.clear();
-      
+
       const pursueBehavior = new YUKA.PursuitBehavior(this.vehicle, playerPos);
       pursueBehavior.weight = 1;
       this.vehicle.steering.add(pursueBehavior);
@@ -249,10 +248,7 @@ export class AIEnemyManager {
   /**
    * Spawn an AI enemy
    */
-  public spawn(
-    position: { x: number; y: number },
-    type: EnemyType
-  ): AIEnemy {
+  public spawn(position: { x: number; y: number }, type: EnemyType): AIEnemy {
     const configs: Record<EnemyType, EnemyConfig> = {
       [EnemyType.CHASER]: {
         type: EnemyType.CHASER,
@@ -303,7 +299,7 @@ export class AIEnemyManager {
     lanes: number[]
   ): void {
     const currentTime = performance.now();
-    
+
     // Update Yuka's time
     this.time.update();
     const yukaDelta = this.time.getDelta();
@@ -312,7 +308,7 @@ export class AIEnemyManager {
     this.entityManager.update(yukaDelta);
 
     // Update individual enemies
-    this.enemies = this.enemies.filter(enemy => {
+    this.enemies = this.enemies.filter((enemy) => {
       if (!enemy.active) {
         this.entityManager.remove(enemy.vehicle);
         return false;
@@ -327,14 +323,14 @@ export class AIEnemyManager {
    * Get all active enemies
    */
   public getActive(): AIEnemy[] {
-    return this.enemies.filter(e => e.active);
+    return this.enemies.filter((e) => e.active);
   }
 
   /**
    * Clear all enemies
    */
   public clear(): void {
-    this.enemies.forEach(enemy => {
+    this.enemies.forEach((enemy) => {
       this.entityManager.remove(enemy.vehicle);
     });
     this.enemies = [];

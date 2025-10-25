@@ -54,7 +54,8 @@ export class AchievementSystem {
         id: 'rocks_50',
         name: 'Skilled Navigator',
         description: 'Avoid 50 rocks',
-        condition: (stats) => (stats.rocksAvoided || stats.obstaclesAvoided) >= 50,
+        condition: (stats) =>
+          (stats.rocksAvoided || stats.obstaclesAvoided) >= 50,
         unlocked: false,
       },
     ];

@@ -18,19 +18,22 @@ export class Renderer {
     this.ctx = canvas.getContext('2d')!;
     this.canvas.width = GAME_CONFIG.CANVAS_WIDTH;
     this.canvas.height = GAME_CONFIG.CANVAS_HEIGHT;
-    
+
     // Start loading sprites
     this.loadSprites();
   }
 
   private async loadSprites(): Promise<void> {
     try {
-      console.log('🎮 Loading game sprites...');
+      // Loading game sprites...
       await spriteLoader.preloadAll();
       this.spritesLoaded = true;
-      console.log('✅ All sprites loaded!');
+      // All sprites loaded!
     } catch (error) {
-      console.warn('⚠️ Sprites failed to load, using fallback rectangles:', error);
+      console.warn(
+        '⚠️ Sprites failed to load, using fallback rectangles:',
+        error
+      );
       this.spritesLoaded = false;
     }
   }
@@ -101,14 +104,15 @@ export class Renderer {
   renderOtter(otter: Otter): void {
     const spriteWidth = otter.width;
     const spriteHeight = otter.height;
-    
+
     // Use sprite if loaded, otherwise fallback to rectangle
     if (this.spritesLoaded) {
       const spriteName = otter.hasShield ? 'otter-shield.png' : 'otter.png';
-      
+
       // Check if sprite exists, fallback to otter.png if shield sprite not found
-      const sprite = spriteLoader.get(spriteName) || spriteLoader.get('otter.png');
-      
+      const sprite =
+        spriteLoader.get(spriteName) || spriteLoader.get('otter.png');
+
       if (sprite) {
         spriteLoader.draw(
           this.ctx,
@@ -160,7 +164,7 @@ export class Renderer {
       const rockVariant = (rock.lane % 3) + 1;
       const spriteName = `rock-${rockVariant}.png`;
       const sprite = spriteLoader.get(spriteName);
-      
+
       if (sprite) {
         spriteLoader.draw(
           this.ctx,
@@ -171,7 +175,7 @@ export class Renderer {
           rock.height,
           {
             // Add slight rotation for variety
-            rotation: (rock.lane * 0.5),
+            rotation: rock.lane * 0.5,
           }
         );
         return;
@@ -303,52 +307,56 @@ export class Renderer {
    */
   renderLoadingScreen(): void {
     this.clear();
-    
+
     const centerX = this.canvas.width / 2;
     const centerY = this.canvas.height / 2;
-    
+
     // Background
     const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
     gradient.addColorStop(0, '#1e3a8a');
     gradient.addColorStop(1, '#3b82f6');
     this.ctx.fillStyle = gradient;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Title
     this.ctx.font = 'bold 48px Arial';
     this.ctx.fillStyle = '#ffffff';
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
     this.ctx.fillText('Otter River Rush', centerX, centerY - 80);
-    
+
     // Loading text
     this.ctx.font = '24px Arial';
     this.ctx.fillStyle = '#a0aec0';
     this.ctx.fillText('Loading sprites...', centerX, centerY);
-    
+
     // Progress bar
     const progress = this.getSpriteLoadingProgress();
     const barWidth = 300;
     const barHeight = 20;
     const barX = centerX - barWidth / 2;
     const barY = centerY + 40;
-    
+
     // Bar background
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
     this.ctx.fillRect(barX, barY, barWidth, barHeight);
-    
+
     // Bar progress
     this.ctx.fillStyle = '#34d399';
     this.ctx.fillRect(barX, barY, barWidth * progress, barHeight);
-    
+
     // Bar border
     this.ctx.strokeStyle = '#ffffff';
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(barX, barY, barWidth, barHeight);
-    
+
     // Percentage
     this.ctx.font = '16px Arial';
     this.ctx.fillStyle = '#ffffff';
-    this.ctx.fillText(`${Math.round(progress * 100)}%`, centerX, barY + barHeight + 25);
+    this.ctx.fillText(
+      `${Math.round(progress * 100)}%`,
+      centerX,
+      barY + barHeight + 25
+    );
   }
 }

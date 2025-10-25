@@ -66,7 +66,10 @@ export class Game {
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new Renderer(canvas);
-    this.uiRenderer = new UIRenderer(canvas, { showFPS: false, showDebug: false });
+    this.uiRenderer = new UIRenderer(canvas, {
+      showFPS: false,
+      showDebug: false,
+    });
     // TODO: Initialize SpriteFactory when we replace rectangle rendering
     // this.spriteFactory = new SpriteFactory(64);
     this.backgroundGenerator = new BackgroundGenerator(canvas);
@@ -226,7 +229,7 @@ export class Game {
     this.otter.update(deltaTime);
     this.generator.update(this.scrollSpeed, this.difficulty, deltaTime);
     this.renderer.update(deltaTime);
-    
+
     // Update background generator with biome system
     this.backgroundGenerator.update(deltaTime, this.scrollSpeed, this.distance);
 
@@ -238,7 +241,10 @@ export class Game {
 
     this.distance += this.scrollSpeed * deltaTime;
     this.score += Math.floor(
-      this.scrollSpeed * deltaTime * this.scoreMultiplier * (1 + this.combo * 0.1)
+      this.scrollSpeed *
+        deltaTime *
+        this.scoreMultiplier *
+        (1 + this.combo * 0.1)
     );
 
     this.updateUI();
@@ -407,16 +413,16 @@ export class Game {
 
   render(): void {
     this.renderer.clear();
-    
+
     // Show loading screen if sprites aren't loaded yet
     if (!this.renderer.areSpritesLoaded() && this.state === GameState.MENU) {
       this.renderer.renderLoadingScreen();
       return;
     }
-    
+
     // Render new dynamic background with biomes
     this.backgroundGenerator.render();
-    
+
     this.renderer.renderLanes();
 
     const rocks = this.generator.getActiveRocks();
@@ -450,7 +456,9 @@ export class Game {
 
       // Show biome transition notification
       if (this.backgroundGenerator.isNewBiome()) {
-        this.uiRenderer.renderBiomeTransition(this.backgroundGenerator.getBiomeName());
+        this.uiRenderer.renderBiomeTransition(
+          this.backgroundGenerator.getBiomeName()
+        );
       }
     }
   }

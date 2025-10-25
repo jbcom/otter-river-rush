@@ -44,7 +44,7 @@ export class SpriteLoader {
    * Load multiple sprites at once
    */
   public async loadBatch(filenames: string[]): Promise<HTMLImageElement[]> {
-    return Promise.all(filenames.map(f => this.load(f)));
+    return Promise.all(filenames.map((f) => this.load(f)));
   }
 
   /**
@@ -55,35 +55,38 @@ export class SpriteLoader {
       // Characters
       'otter.png',
       'otter-shield.png',
-      
+
       // Obstacles
       'rock-1.png',
       'rock-2.png',
       'rock-3.png',
-      
+
       // Collectibles
       'coin.png',
       'gem-blue.png',
       'gem-red.png',
-      
+
       // Power-ups
       'powerup-shield.png',
       'powerup-speed.png',
       'powerup-multiplier.png',
       'powerup-magnet.png',
-      
+
       // Effects
       'water-ripple.png',
       'splash.png',
     ];
 
-    console.log('🎮 Preloading sprites...');
+    // Preloading sprites...
     const start = performance.now();
-    
+
     await this.loadBatch(spriteFiles);
-    
+
     const duration = Math.round(performance.now() - start);
-    console.log(`✅ Loaded ${spriteFiles.length} sprites in ${duration}ms`);
+    // Sprites loaded
+    if (duration > 1000) {
+      console.warn(`Slow sprite loading: ${duration}ms`);
+    }
   }
 
   /**
@@ -123,12 +126,12 @@ export class SpriteLoader {
   private loadImage(filename: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      
+
       img.onload = () => resolve(img);
       img.onerror = () => {
         reject(new Error(`Failed to load sprite: ${filename}`));
       };
-      
+
       img.src = this.basePath + filename;
     });
   }
@@ -183,7 +186,7 @@ export class SpriteLoader {
     // Draw sprite centered
     const drawWidth = width || sprite.width;
     const drawHeight = height || sprite.height;
-    
+
     ctx.drawImage(
       sprite,
       -drawWidth / 2,

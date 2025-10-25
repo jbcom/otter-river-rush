@@ -81,11 +81,7 @@ export class UIRenderer {
     if (stats.multiplier > 1) {
       this.ctx.font = 'bold 18px Arial';
       this.ctx.fillStyle = '#fbbf24';
-      this.ctx.fillText(
-        `x${stats.multiplier}`,
-        padding + 10,
-        padding + 85
-      );
+      this.ctx.fillText(`x${stats.multiplier}`, padding + 10, padding + 85);
     }
   }
 
@@ -231,10 +227,7 @@ export class UIRenderer {
     this.fpsFrames.push(now);
 
     // Keep only last second of frames
-    while (
-      this.fpsFrames.length > 0 &&
-      this.fpsFrames[0] < now - 1000
-    ) {
+    while (this.fpsFrames.length > 0 && this.fpsFrames[0] < now - 1000) {
       this.fpsFrames.shift();
     }
 
@@ -277,7 +270,12 @@ export class UIRenderer {
     this.ctx.shadowBlur = 20;
     this.ctx.strokeStyle = '#fbbf24';
     this.ctx.lineWidth = 3;
-    this.ctx.strokeRect(centerX - width / 2, centerY - height / 2, width, height);
+    this.ctx.strokeRect(
+      centerX - width / 2,
+      centerY - height / 2,
+      width,
+      height
+    );
     this.ctx.shadowBlur = 0;
 
     // Achievement unlocked text

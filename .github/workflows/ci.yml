@@ -154,6 +154,8 @@ jobs:
     name: Visual Regression Tests
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
     
     steps:
       - uses: actions/checkout@v5

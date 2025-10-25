@@ -32,7 +32,7 @@ npm run test:e2e -- tests/e2e/visual.spec.ts
 
 Run with UI mode for debugging:
 ```bash
-npm run test:e2e:ui -- tests/e2e/visual.spec.ts
+npm run test:visual:ui
 ```
 
 ### Updating Baselines

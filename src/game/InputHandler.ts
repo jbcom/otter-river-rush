@@ -5,7 +5,9 @@ export class InputHandler {
   private rightCallbacks: InputCallback[] = [];
   private pauseCallbacks: InputCallback[] = [];
   private touchStartX: number | null = null;
-  private touchThreshold = 30;
+  private touchStartY: number | null = null;
+  private swipeThreshold = 50; // Increased for better swipe detection
+  private isSwiping = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.setupKeyboardInput();
@@ -43,19 +45,24 @@ export class InputHandler {
       e.preventDefault();
       const touch = e.touches[0];
       this.touchStartX = touch.clientX;
+      this.touchStartY = touch.clientY;
+      this.isSwiping = false;
     });
 
     canvas.addEventListener('touchmove', (e) => {
       e.preventDefault();
-    });
-
-    canvas.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      if (this.touchStartX !== null && e.changedTouches.length > 0) {
-        const touch = e.changedTouches[0];
+      if (this.touchStartX !== null && e.touches.length > 0) {
+        const touch = e.touches[0];
         const deltaX = touch.clientX - this.touchStartX;
+        const deltaY = Math.abs(touch.clientY - this.touchStartY!);
 
-        if (Math.abs(deltaX) > this.touchThreshold) {
+        // Detect horizontal swipe (not vertical)
+        if (
+          !this.isSwiping &&
+          Math.abs(deltaX) > this.swipeThreshold &&
+          deltaY < this.swipeThreshold * 2
+        ) {
+          this.isSwiping = true;
           if (deltaX < 0) {
             this.triggerLeft();
           } else {
@@ -63,7 +70,13 @@ export class InputHandler {
           }
         }
       }
+    });
+
+    canvas.addEventListener('touchend', (e) => {
+      e.preventDefault();
       this.touchStartX = null;
+      this.touchStartY = null;
+      this.isSwiping = false;
     });
   }
 

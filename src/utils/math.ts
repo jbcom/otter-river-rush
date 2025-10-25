@@ -31,3 +31,9 @@ export function randomRange(min: number, max: number): number {
 export function randomInt(min: number, max: number): number {
   return Math.floor(randomRange(min, max + 1));
 }
+
+export function distance(a: Vector2, b: Vector2): number {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}

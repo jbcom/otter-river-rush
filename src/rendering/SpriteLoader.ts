@@ -8,9 +8,9 @@ export class SpriteLoader {
   private basePath: string;
 
   constructor(basePath?: string) {
-    // Match the base path from vite.config.ts
-    // For GitHub Pages deployment, sprites are at /otter-river-rush/sprites/
-    this.basePath = basePath || '/otter-river-rush/sprites/';
+    // For local dev, sprites are at /sprites/
+    // For production, this can be overridden
+    this.basePath = basePath || `${import.meta.env.BASE_URL}sprites/`;
   }
 
   /**

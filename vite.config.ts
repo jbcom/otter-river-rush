@@ -18,6 +18,10 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
+      // The following assets must exist in the public directory:
+      // - favicon.ico
+      // - apple-touch-icon.png
+      // - mask-icon.svg
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'Otter River Rush',

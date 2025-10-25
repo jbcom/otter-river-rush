@@ -21,12 +21,7 @@
       "automerge": false
     },
 
-    {
-      "description": "Automerge testing framework patches",
-      "matchPackagePatterns": ["^vitest$", "^@vitest/", "^playwright$", "^@playwright/"],
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
-    },
+
     {
       "description": "Group GitHub Actions updates",
       "matchManagers": ["github-actions"],

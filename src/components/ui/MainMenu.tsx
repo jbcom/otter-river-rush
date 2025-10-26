@@ -19,9 +19,7 @@ export function MainMenu(): React.JSX.Element {
             alt="Rusty the Otter"
             className="mx-auto w-64 h-64 object-contain mb-4 otter-bounce"
           />
-          <h1 className="otter-title">
-            Otter River Rush
-          </h1>
+          <h1 className="otter-title">Otter River Rush</h1>
           <p className="otter-subtitle mt-3">
             🌊 Jump in and ride the rapids! 🌊
           </p>
@@ -40,7 +38,13 @@ export function MainMenu(): React.JSX.Element {
             onClick={() => startGame('classic')}
             className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <div className="otter-mode-icon">🏃</div>
+            <div className="otter-mode-icon">
+              <img
+                src="/icons/mode-rapid-rush.png"
+                alt="Rapid Rush"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div className="flex-1">
               <div className="otter-mode-title">Rapid Rush</div>
               <div className="otter-mode-desc">
@@ -53,7 +57,13 @@ export function MainMenu(): React.JSX.Element {
             onClick={() => startGame('time_trial')}
             className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <div className="otter-mode-icon">⏱️</div>
+            <div className="otter-mode-icon">
+              <img
+                src="/icons/mode-speed-splash.png"
+                alt="Speed Splash"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div className="flex-1">
               <div className="otter-mode-title">Speed Splash</div>
               <div className="otter-mode-desc">
@@ -66,7 +76,13 @@ export function MainMenu(): React.JSX.Element {
             onClick={() => startGame('zen')}
             className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <div className="otter-mode-icon">🧘</div>
+            <div className="otter-mode-icon">
+              <img
+                src="/icons/mode-chill-cruise.png"
+                alt="Chill Cruise"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div className="flex-1">
               <div className="otter-mode-title">Chill Cruise</div>
               <div className="otter-mode-desc">
@@ -79,7 +95,13 @@ export function MainMenu(): React.JSX.Element {
             onClick={() => startGame('daily_challenge')}
             className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <div className="otter-mode-icon">🎲</div>
+            <div className="otter-mode-icon">
+              <img
+                src="/icons/mode-daily-dive.png"
+                alt="Daily Dive"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div className="flex-1">
               <div className="otter-mode-title">Daily Dive</div>
               <div className="otter-mode-desc">Fresh challenge every day!</div>

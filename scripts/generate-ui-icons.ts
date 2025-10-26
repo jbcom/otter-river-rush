@@ -1,115 +1,166 @@
 #!/usr/bin/env node
 /**
- * UI Icon Generator - Creates custom game icons using AI
- * Replaces generic emojis with branded Otter River Rush icons
+ * UI Icon Generator - Manifest-based, idempotent icon generation
+ * Only generates missing icons, can be run multiple times safely
  */
 
 import { openai } from '@ai-sdk/openai';
 import { experimental_generateImage as generateImage } from 'ai';
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 const ICONS_DIR = join(process.cwd(), 'public', 'icons');
-
-// Ensure directory exists
-if (!existsSync(ICONS_DIR)) {
-  mkdirSync(ICONS_DIR, { recursive: true });
-}
+const MANIFEST_PATH = join(ICONS_DIR, 'manifest.json');
 
 interface IconConfig {
   name: string;
   prompt: string;
   filename: string;
   size: '1024x1024';
+  category: 'mode' | 'hud' | 'menu';
 }
 
-const ICON_CONFIGS: IconConfig[] = [
+interface IconManifest {
+  version: string;
+  generated: string;
+  icons: {
+    [key: string]: {
+      name: string;
+      category: string;
+      generated: string;
+      size: number;
+    };
+  };
+}
+
+const ICON_MANIFEST: IconConfig[] = [
   // Game Mode Icons
   {
-    name: 'Rapid Rush Mode Icon',
-    prompt: 'Cute cartoon otter running fast through water, dynamic action pose, blue water splash, vibrant colors, game mode icon, circular icon design, playful style, clean simple design for mobile game UI',
+    name: 'Rapid Rush Mode',
+    prompt: 'Cute cartoon otter mascot running fast through blue water with dynamic splash, vibrant colors, circular icon badge design, playful energetic style, clean simple design for mobile game UI, icon illustration',
     filename: 'mode-rapid-rush.png',
     size: '1024x1024',
+    category: 'mode',
   },
   {
-    name: 'Speed Splash Mode Icon',
-    prompt: 'Stopwatch or timer with water droplets, blue and orange colors, fast motion effect, game mode icon, circular icon design, energetic feel, clean simple design for mobile game UI',
+    name: 'Speed Splash Mode',
+    prompt: 'Stopwatch timer icon with blue water droplets and splashes, orange and blue color scheme, fast motion lines, circular icon badge design, energetic feel, clean simple design for mobile game UI',
     filename: 'mode-speed-splash.png',
     size: '1024x1024',
+    category: 'mode',
   },
   {
-    name: 'Chill Cruise Mode Icon',
-    prompt: 'Relaxed cartoon otter floating peacefully on water, calm serene expression, gentle waves, pastel colors, game mode icon, circular icon design, zen peaceful style, clean simple design for mobile game UI',
+    name: 'Chill Cruise Mode',
+    prompt: 'Relaxed cartoon otter floating peacefully on calm water, serene expression, gentle ripples, soft pastel blue and green colors, circular icon badge design, zen peaceful meditation style, clean simple design for mobile game UI',
     filename: 'mode-chill-cruise.png',
     size: '1024x1024',
+    category: 'mode',
   },
   {
-    name: 'Daily Dive Mode Icon',
-    prompt: 'Calendar with water splash or otter diving, daily challenge theme, colorful vibrant design, game mode icon, circular icon design, exciting feel, clean simple design for mobile game UI',
+    name: 'Daily Dive Mode',
+    prompt: 'Calendar icon with water splash effect and cartoon otter diving, daily challenge theme, vibrant colorful design with blue and orange, circular icon badge design, exciting dynamic feel, clean simple design for mobile game UI',
     filename: 'mode-daily-dive.png',
     size: '1024x1024',
+    category: 'mode',
   },
   
-  // HUD Icons
+  // HUD Icons - Small, high contrast
   {
-    name: 'Score Star Icon',
-    prompt: 'Bright golden star with water droplets, sparkling effect, game score icon, small UI element, clean simple design suitable for HUD overlay',
+    name: 'Score Star',
+    prompt: 'Bright golden yellow star icon with sparkles and water droplets, shiny glossy effect, simple clean design readable at small sizes, game UI icon for score display',
     filename: 'hud-star.png',
     size: '1024x1024',
+    category: 'hud',
   },
   {
-    name: 'Distance Runner Icon',
-    prompt: 'Cute cartoon otter running silhouette, side view, dynamic pose, small UI icon, game distance meter, clean simple design suitable for HUD overlay',
+    name: 'Distance Meter',
+    prompt: 'Small cartoon otter silhouette running, side view profile, simple clean design, blue color, readable at tiny sizes, game UI icon for distance counter',
     filename: 'hud-distance.png',
     size: '1024x1024',
+    category: 'hud',
   },
   {
-    name: 'Coin Icon',
-    prompt: 'Shiny gold coin with otter paw print embossed on it, sparkling effect, game currency icon, small UI element, clean simple design suitable for HUD overlay',
+    name: 'Coin Currency',
+    prompt: 'Shiny gold coin with otter paw print embossed on surface, sparkling highlights, simple clean design readable at small sizes, game currency icon',
     filename: 'hud-coin.png',
     size: '1024x1024',
+    category: 'hud',
   },
   {
-    name: 'Gem Icon',
-    prompt: 'Brilliant blue gemstone, diamond cut, sparkling effect, premium game currency, small UI element, clean simple design suitable for HUD overlay',
+    name: 'Gem Premium Currency',
+    prompt: 'Brilliant blue gemstone crystal, diamond faceted cut, sparkling highlights, simple clean design readable at small sizes, premium game currency icon',
     filename: 'hud-gem.png',
     size: '1024x1024',
+    category: 'hud',
   },
   {
-    name: 'Heart Life Icon',
-    prompt: 'Cute cartoon heart with water droplet pattern, bright red color, glossy effect, life counter icon, game health indicator, small UI element, clean simple design suitable for HUD overlay',
+    name: 'Heart Life',
+    prompt: 'Cute cartoon heart with water droplet texture pattern, bright red color, glossy shiny effect, simple clean design readable at small sizes, life counter health icon',
     filename: 'hud-heart.png',
     size: '1024x1024',
+    category: 'hud',
   },
   
   // Menu Icons
   {
-    name: 'Leaderboard Trophy Icon',
-    prompt: 'Golden trophy with otter ears on top, victory celebration, game leaderboard icon, medium size UI button icon, clean simple design',
+    name: 'Leaderboard Trophy',
+    prompt: 'Golden trophy cup with cute otter ears on top, victory celebration theme, shiny metallic gold, game leaderboard icon, clean simple design for menu button',
     filename: 'menu-leaderboard.png',
     size: '1024x1024',
+    category: 'menu',
   },
   {
-    name: 'Stats Chart Icon',
-    prompt: 'Bar chart or statistics graph with water theme, blue and orange colors, game stats icon, medium size UI button icon, clean simple design',
+    name: 'Stats Chart',
+    prompt: 'Bar chart statistics graph with water wave theme, blue and orange color bars, game stats icon, clean simple design for menu button',
     filename: 'menu-stats.png',
     size: '1024x1024',
+    category: 'menu',
   },
   {
-    name: 'Settings Gear Icon',
-    prompt: 'Mechanical gear with water droplets, blue-gray metallic color, game settings icon, medium size UI button icon, clean simple design',
+    name: 'Settings Gear',
+    prompt: 'Mechanical gear cog icon with water droplets, blue-gray metallic color, game settings icon, clean simple design for menu button',
     filename: 'menu-settings.png',
     size: '1024x1024',
+    category: 'menu',
   },
 ];
 
-async function generateIcon(config: IconConfig): Promise<void> {
+function loadManifest(): IconManifest {
+  if (!existsSync(MANIFEST_PATH)) {
+    return {
+      version: '1.0.0',
+      generated: new Date().toISOString(),
+      icons: {},
+    };
+  }
+  return JSON.parse(readFileSync(MANIFEST_PATH, 'utf-8'));
+}
+
+function saveManifest(manifest: IconManifest): void {
+  writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
+}
+
+function iconExists(filename: string, manifest: IconManifest): boolean {
+  const filepath = join(ICONS_DIR, filename);
+  return existsSync(filepath) && manifest.icons[filename] !== undefined;
+}
+
+async function generateIcon(config: IconConfig, manifest: IconManifest): Promise<boolean> {
+  const filepath = join(ICONS_DIR, config.filename);
+  
+  // Skip if already exists and in manifest
+  if (iconExists(config.filename, manifest)) {
+    console.log(`   ⏭️  Skipping: ${config.filename} (already exists)`);
+    return false;
+  }
+  
   console.log(`\n🎨 Generating: ${config.name}`);
+  console.log(`   Category: ${config.category}`);
   console.log(`   Size: ${config.size}`);
   
   try {
     const result = await generateImage({
-      model: openai.image('gpt-image-1'),
+      model: openai.image('dall-e-3'),
       prompt: config.prompt,
       size: config.size,
     });
@@ -117,40 +168,77 @@ async function generateIcon(config: IconConfig): Promise<void> {
     const base64Data = result.image.base64;
     const buffer = Buffer.from(base64Data, 'base64');
     
-    const filepath = join(ICONS_DIR, config.filename);
     writeFileSync(filepath, buffer);
     
-    console.log(`   ✅ Saved: ${config.filename} (${Math.round(buffer.length / 1024)}KB)`);
+    // Update manifest
+    manifest.icons[config.filename] = {
+      name: config.name,
+      category: config.category,
+      generated: new Date().toISOString(),
+      size: buffer.length,
+    };
+    
+    console.log(`   ✅ Generated: ${config.filename} (${Math.round(buffer.length / 1024)}KB)`);
+    return true;
   } catch (error) {
     console.error(`   ❌ Failed to generate ${config.name}:`, error);
+    return false;
   }
 }
 
 async function main() {
-  console.log('🚀 Starting UI Icon Generation...\n');
+  console.log('🚀 UI Icon Generator (Manifest-based & Idempotent)\n');
   console.log(`📁 Output directory: ${ICONS_DIR}`);
-  console.log(`🖼️  Total icons: ${ICON_CONFIGS.length}\n`);
-
-  // Check for OpenAI API key
-  if (!process.env.OPENAI_API_KEY) {
-    console.error('\n❌ Error: OPENAI_API_KEY environment variable not set');
-    console.log('💡 Set your OpenAI API key: export OPENAI_API_KEY=your-key-here');
-    process.exit(1);
+  
+  // Ensure directory exists
+  if (!existsSync(ICONS_DIR)) {
+    mkdirSync(ICONS_DIR, { recursive: true });
+    console.log('   Created icons directory');
   }
-
-  // Generate all icons
-  for (const config of ICON_CONFIGS) {
-    await generateIcon(config);
-    // Delay to avoid rate limits
-    await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  // Load existing manifest
+  const manifest = loadManifest();
+  console.log(`📋 Loaded manifest: ${Object.keys(manifest.icons).length} icons tracked\n`);
+  
+  // Determine what needs to be generated
+  const toGenerate = ICON_MANIFEST.filter(config => !iconExists(config.filename, manifest));
+  const skipped = ICON_MANIFEST.length - toGenerate.length;
+  
+  console.log(`📊 Status:`);
+  console.log(`   Total icons: ${ICON_MANIFEST.length}`);
+  console.log(`   Already exist: ${skipped}`);
+  console.log(`   To generate: ${toGenerate.length}\n`);
+  
+  if (toGenerate.length === 0) {
+    console.log('✨ All icons already generated!');
+    console.log('💡 Delete icons or manifest.json to regenerate');
+    return;
   }
-
-  console.log('\n✨ UI Icon Generation Complete!');
-  console.log(`📂 Icons saved to: ${ICONS_DIR}`);
-  console.log('\n📝 Next steps:');
-  console.log('   1. Run: npm run process-icons (to resize/optimize)');
-  console.log('   2. Icons will be automatically used by UI components');
-  console.log('   3. Check the icons at multiple sizes to ensure quality');
+  
+  // Generate missing icons
+  let generated = 0;
+  let failed = 0;
+  
+  for (const config of toGenerate) {
+    const success = await generateIcon(config, manifest);
+    if (success) {
+      generated++;
+      saveManifest(manifest);
+      // Rate limiting
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } else {
+      failed++;
+    }
+  }
+  
+  console.log('\n✨ Icon Generation Complete!');
+  console.log(`📊 Results:`);
+  console.log(`   Generated: ${generated}`);
+  console.log(`   Skipped: ${skipped}`);
+  console.log(`   Failed: ${failed}`);
+  console.log(`   Total: ${Object.keys(manifest.icons).length} icons`);
+  console.log(`\n📂 Icons saved to: ${ICONS_DIR}`);
+  console.log(`📋 Manifest saved to: ${MANIFEST_PATH}`);
 }
 
 main().catch(console.error);

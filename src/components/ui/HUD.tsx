@@ -23,20 +23,26 @@ export function HUD(): React.JSX.Element {
       <div className="absolute top-4 left-4 space-y-2">
         <div className="otter-hud-panel pointer-events-auto">
           <div className="flex items-center gap-2">
-            <span className="otter-stat-label">⭐</span>
+            <img src="/icons/hud-star.png" alt="Score" className="w-6 h-6" />
             <span className="otter-stat">{score.toLocaleString()}</span>
           </div>
         </div>
         <div className="otter-hud-panel pointer-events-auto">
           <div className="flex items-center gap-2">
-            <span className="otter-stat-label">🏃</span>
+            <img
+              src="/icons/hud-distance.png"
+              alt="Distance"
+              className="w-6 h-6"
+            />
             <span className="otter-stat">{Math.floor(distance)}m</span>
           </div>
         </div>
         <div className="otter-hud-panel pointer-events-auto">
           <div className="flex items-center gap-2">
-            <span className="otter-stat">💰 {coins}</span>
-            <span className="otter-stat">💎 {gems}</span>
+            <img src="/icons/hud-coin.png" alt="Coins" className="w-5 h-5" />
+            <span className="otter-stat">{coins}</span>
+            <img src="/icons/hud-gem.png" alt="Gems" className="w-5 h-5 ml-2" />
+            <span className="otter-stat">{gems}</span>
           </div>
         </div>
       </div>
@@ -56,9 +62,12 @@ export function HUD(): React.JSX.Element {
       <div className="absolute top-20 right-4 otter-hud-panel pointer-events-auto">
         <div className="flex gap-1">
           {Array.from({ length: lives }).map((_, i) => (
-            <span key={i} className="text-2xl drop-shadow-lg">
-              ❤️
-            </span>
+            <img
+              key={i}
+              src="/icons/hud-heart.png"
+              alt="Life"
+              className="w-6 h-6"
+            />
           ))}
         </div>
       </div>

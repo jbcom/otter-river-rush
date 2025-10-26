@@ -20,12 +20,12 @@ export function GameOver(): React.JSX.Element {
   // Determine otter's reaction based on score
   const isNewHighScore = score === highScore && highScore > 0;
   const otterMessage = isNewHighScore
-    ? "Otterly Amazing! New Record!"
+    ? 'Otterly Amazing! New Record!'
     : score > highScore * 0.8
-    ? "What a Rush! So Close!"
-    : score > highScore * 0.5
-    ? "Great Splashing Out There!"
-    : "Let's Dive In Again!";
+      ? 'What a Rush! So Close!'
+      : score > highScore * 0.5
+        ? 'Great Splashing Out There!'
+        : "Let's Dive In Again!";
 
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-auto game-bg-overlay z-50">
@@ -37,23 +37,35 @@ export function GameOver(): React.JSX.Element {
             alt="Rusty the Otter"
             className="mx-auto w-32 h-32 object-contain mb-3 otter-mascot-tired"
           />
-          <div className="otter-speech-bubble inline-block">
-            {otterMessage}
-          </div>
+          <div className="otter-speech-bubble inline-block">{otterMessage}</div>
         </div>
 
         {/* Stats Display */}
         <div className="space-y-3 mb-6">
           <div className="otter-hud-panel">
             <div className="flex justify-between items-center">
-              <span className="otter-stat-label">⭐ Score</span>
+              <div className="flex items-center gap-2">
+                <img
+                  src="/icons/hud-star.png"
+                  alt="Score"
+                  className="w-5 h-5"
+                />
+                <span className="otter-stat-label">Score</span>
+              </div>
               <span className="otter-stat">{score.toLocaleString()}</span>
             </div>
           </div>
 
           <div className="otter-hud-panel">
             <div className="flex justify-between items-center">
-              <span className="otter-stat-label">🏃 Distance</span>
+              <div className="flex items-center gap-2">
+                <img
+                  src="/icons/hud-distance.png"
+                  alt="Distance"
+                  className="w-5 h-5"
+                />
+                <span className="otter-stat-label">Distance</span>
+              </div>
               <span className="otter-stat">{Math.floor(distance)}m</span>
             </div>
           </div>
@@ -61,9 +73,20 @@ export function GameOver(): React.JSX.Element {
           <div className="otter-hud-panel">
             <div className="flex justify-between items-center">
               <span className="otter-stat-label">Collected</span>
-              <span className="otter-stat">
-                {coins} 💰 {gems} 💎
-              </span>
+              <div className="flex items-center gap-2">
+                <img
+                  src="/icons/hud-coin.png"
+                  alt="Coins"
+                  className="w-5 h-5"
+                />
+                <span className="otter-stat">{coins}</span>
+                <img
+                  src="/icons/hud-gem.png"
+                  alt="Gems"
+                  className="w-5 h-5 ml-1"
+                />
+                <span className="otter-stat">{gems}</span>
+              </div>
             </div>
           </div>
 
@@ -79,7 +102,14 @@ export function GameOver(): React.JSX.Element {
 
           <div className="otter-hud-panel">
             <div className="flex justify-between items-center">
-              <span className="otter-stat-label">🏆 Best</span>
+              <div className="flex items-center gap-2">
+                <img
+                  src="/icons/menu-leaderboard.png"
+                  alt="Best"
+                  className="w-5 h-5"
+                />
+                <span className="otter-stat-label">Best</span>
+              </div>
               <span className="otter-stat">{highScore.toLocaleString()}</span>
             </div>
           </div>
@@ -93,7 +123,10 @@ export function GameOver(): React.JSX.Element {
           >
             🌊 Dive Again!
           </button>
-          <button onClick={returnToMenu} className="otter-btn otter-btn-secondary flex-1">
+          <button
+            onClick={returnToMenu}
+            className="otter-btn otter-btn-secondary flex-1"
+          >
             🏠 River Bank
           </button>
         </div>

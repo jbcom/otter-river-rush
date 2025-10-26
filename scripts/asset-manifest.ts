@@ -448,6 +448,8 @@ export const ASSET_MANIFEST: AssetDefinition[] = [
     expectedFormat: 'png',
     maxFileSizeKB: 50,
     requiresTransparency: false,
+    aiPrompt: 'Otter River Rush app icon, cute otter face, blue circular background, simple clean design, mobile game icon style, 180x180',
+    aiModel: 'gpt-image-1',
     canBeGenerated: true,
     priority: 'critical',
   },

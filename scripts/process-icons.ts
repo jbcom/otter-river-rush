@@ -189,6 +189,11 @@ async function optimizeExistingImages(): Promise<void> {
       const originalSize = readFileSync(fullPath).length;
 
       // Use lower quality for larger images to reduce bundle size
+      const VERY_LARGE_IMAGE_THRESHOLD = IMAGE_QUALITY_TIERS[0].threshold;
+      const LARGE_IMAGE_THRESHOLD = IMAGE_QUALITY_TIERS[1].threshold;
+      const VERY_LARGE_IMAGE_QUALITY = IMAGE_QUALITY_TIERS[0].quality;
+      const LARGE_IMAGE_QUALITY = IMAGE_QUALITY_TIERS[1].quality;
+      
       let quality = NORMAL_IMAGE_QUALITY;
       if (originalSize > VERY_LARGE_IMAGE_THRESHOLD) {
         quality = VERY_LARGE_IMAGE_QUALITY; // Very large images

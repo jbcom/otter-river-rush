@@ -10,10 +10,10 @@ import { join } from 'path';
 const PUBLIC_DIR = join(process.cwd(), 'public');
 
 // Image optimization quality settings
-const VERY_LARGE_IMAGE_THRESHOLD = 300 * 1024; // 300KB
-const LARGE_IMAGE_THRESHOLD = 200 * 1024; // 200KB
-const VERY_LARGE_IMAGE_QUALITY = 60;
-const LARGE_IMAGE_QUALITY = 70;
+const IMAGE_QUALITY_TIERS = [
+  { threshold: 300 * 1024, quality: 60 }, // For images > 300KB
+  { threshold: 200 * 1024, quality: 70 }, // For images > 200KB
+];
 const NORMAL_IMAGE_QUALITY = 85;
 
 interface IconTask {

@@ -26,6 +26,16 @@ concurrency:
 
 jobs:
   # ============================================================================
+  # CONTENT GENERATION - Run on main branch before build
+  # ============================================================================
+  
+  generate-content:
+    name: Generate Fresh Content
+    uses: ./.github/workflows/content-generation.yml
+    secrets: inherit
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+  # ============================================================================
   # CI JOBS - Run on all pushes and PRs
   # ============================================================================
   
@@ -102,9 +112,13 @@ jobs:
     name: Build Web
     runs-on: ubuntu-latest
     needs: [lint, type-check, test]
+    # If content generation ran and we're on main, wait for it
+    # Otherwise just depend on CI jobs
     
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}  # Get latest commit (includes generated content)
       
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -114,6 +128,13 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
+      
+      - name: Download generated content (if available)
+        uses: actions/download-artifact@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          name: generated-content
+        continue-on-error: true
       
       - name: Build project
         run: npm run build

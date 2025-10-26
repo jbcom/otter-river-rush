@@ -18,7 +18,7 @@ export function GameOver(): React.JSX.Element {
   } = useGameStore();
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-auto bg-slate-900/95">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-auto bg-slate-900/95 z-50">
       <div className="card bg-base-100 shadow-xl w-full max-w-md">
         <div className="card-body">
           <h2 className="card-title text-3xl text-center justify-center text-error mb-4">

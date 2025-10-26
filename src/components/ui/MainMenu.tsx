@@ -10,8 +10,8 @@ export function MainMenu(): React.JSX.Element {
   const { startGame } = useGameStore();
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-auto bg-slate-900/90">
-      <div className="w-full max-w-2xl p-8 space-y-6">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-auto bg-slate-900/95 z-50">
+      <div className="w-full max-w-2xl p-6 space-y-6">
         {/* Logo */}
         <div className="text-center">
           <img

@@ -14,11 +14,11 @@ export function App(): React.JSX.Element {
   const { status } = useGameStore();
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-br from-slate-900 to-slate-800">
-      {/* Game Canvas (always rendered) */}
+    <div className="fixed inset-0 w-screen h-screen">
+      {/* Fullscreen Game Canvas (always rendered) */}
       <GameCanvas showStats={import.meta.env.DEV} />
 
-      {/* UI Overlays */}
+      {/* UI Overlays positioned absolutely over the game */}
       {status === 'menu' && <MainMenu />}
       {status === 'playing' && <HUD />}
       {status === 'game_over' && <GameOver />}

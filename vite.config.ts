@@ -28,9 +28,9 @@ export default defineConfig({
         short_name: 'OtterRush',
         description:
           'An endless runner game featuring an adventurous otter navigating a rushing river',
-        theme_color: '#1e3a8a',
+        theme_color: '#0f172a',
         background_color: '#0f172a',
-        display: 'standalone',
+        display: 'fullscreen',
         orientation: 'portrait',
         icons: [
           {

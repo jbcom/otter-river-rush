@@ -18,7 +18,7 @@ export function HUD(): React.JSX.Element {
   };
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="fixed inset-0 pointer-events-none z-40">
       {/* Score and stats */}
       <div className="absolute top-4 left-4 space-y-2">
         <div className="text-3xl font-bold text-white drop-shadow-lg">

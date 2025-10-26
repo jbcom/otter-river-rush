@@ -2,87 +2,87 @@ import React from 'react';
 import { useGameStore } from '../../hooks/useGameStore';
 
 /**
- * MainMenu Component - React version of the main menu
- * Uses Zustand store for state management
+ * MainMenu Component - Branded game menu
+ * Features otter mascot, themed UI, and playful personality
  */
 
 export function MainMenu(): React.JSX.Element {
   const { startGame } = useGameStore();
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-auto bg-slate-900/95 z-50">
-      <div className="w-full max-w-2xl p-6 space-y-6">
-        {/* Logo */}
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-auto game-bg-overlay z-50">
+      <div className="w-full max-w-2xl p-6 space-y-6 splash-in">
+        {/* Hero Section with Mascot */}
         <div className="text-center">
           <img
             src="/hud/splash-screen.png"
-            alt="Otter River Rush"
-            className="mx-auto w-48 h-48 object-contain mb-4 animate-bounce"
+            alt="Rusty the Otter"
+            className="mx-auto w-64 h-64 object-contain mb-4 otter-bounce"
           />
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
+          <h1 className="otter-title">
             Otter River Rush
           </h1>
-          <p className="text-xl text-blue-300 mt-2">
-            🌊 Race down the wild river! 🌊
+          <p className="otter-subtitle mt-3">
+            🌊 Jump in and ride the rapids! 🌊
           </p>
-          <p className="text-sm text-slate-400 mt-2">
-            Swipe LEFT/RIGHT or use Arrow Keys to dodge obstacles
-          </p>
+          <div className="otter-speech-bubble inline-block mt-4">
+            Use Arrow Keys or Swipe to Dodge!
+          </div>
         </div>
 
         {/* Mode Selection */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white text-center">
-            Select Game Mode:
+        <div className="space-y-4 mt-8">
+          <h3 className="otter-subtitle text-center mb-4">
+            Choose Your Adventure!
           </h3>
 
           <button
             onClick={() => startGame('classic')}
-            className="btn btn-primary w-full flex items-center justify-start gap-4 h-auto py-4 px-6 text-left hover:scale-105 transition-transform"
+            className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <span className="text-3xl">🏃</span>
+            <div className="otter-mode-icon">🏃</div>
             <div className="flex-1">
-              <div className="font-bold text-lg">Classic</div>
-              <div className="text-sm opacity-80">
-                Endless runner with increasing difficulty
+              <div className="otter-mode-title">Rapid Rush</div>
+              <div className="otter-mode-desc">
+                Endless adventure through wild rapids!
               </div>
             </div>
           </button>
 
           <button
             onClick={() => startGame('time_trial')}
-            className="btn btn-secondary w-full flex items-center justify-start gap-4 h-auto py-4 px-6 text-left hover:scale-105 transition-transform"
+            className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <span className="text-3xl">⏱️</span>
+            <div className="otter-mode-icon">⏱️</div>
             <div className="flex-1">
-              <div className="font-bold text-lg">Time Trial</div>
-              <div className="text-sm opacity-80">
-                Reach max distance in 60 seconds
+              <div className="otter-mode-title">Speed Splash</div>
+              <div className="otter-mode-desc">
+                60 seconds of high-speed thrills!
               </div>
             </div>
           </button>
 
           <button
             onClick={() => startGame('zen')}
-            className="btn btn-accent w-full flex items-center justify-start gap-4 h-auto py-4 px-6 text-left hover:scale-105 transition-transform"
+            className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <span className="text-3xl">🧘</span>
+            <div className="otter-mode-icon">🧘</div>
             <div className="flex-1">
-              <div className="font-bold text-lg">Zen Mode</div>
-              <div className="text-sm opacity-80">
-                Relaxing ride, collect coins peacefully
+              <div className="otter-mode-title">Chill Cruise</div>
+              <div className="otter-mode-desc">
+                Relaxing float down the lazy river
               </div>
             </div>
           </button>
 
           <button
             onClick={() => startGame('daily_challenge')}
-            className="btn btn-warning w-full flex items-center justify-start gap-4 h-auto py-4 px-6 text-left hover:scale-105 transition-transform"
+            className="otter-mode-card w-full flex items-center gap-4 text-left"
           >
-            <span className="text-3xl">🎲</span>
+            <div className="otter-mode-icon">🎲</div>
             <div className="flex-1">
-              <div className="font-bold text-lg">Daily Challenge</div>
-              <div className="text-sm opacity-80">New challenge every day!</div>
+              <div className="otter-mode-title">Daily Dive</div>
+              <div className="otter-mode-desc">Fresh challenge every day!</div>
             </div>
           </button>
         </div>

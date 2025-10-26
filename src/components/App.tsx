@@ -25,26 +25,22 @@ export function App(): React.JSX.Element {
 
       {/* Pause screen */}
       {status === 'paused' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto bg-slate-900/90">
-          <div className="card bg-base-100 shadow-xl w-full max-w-sm">
-            <div className="card-body">
-              <h2 className="card-title text-3xl justify-center mb-6">
-                ⏸️ Paused
-              </h2>
-              <div className="space-y-3">
-                <button
-                  onClick={() => useGameStore.getState().resumeGame()}
-                  className="btn btn-primary btn-lg w-full"
-                >
-                  ▶️ Resume
-                </button>
-                <button
-                  onClick={() => useGameStore.getState().returnToMenu()}
-                  className="btn btn-ghost w-full"
-                >
-                  🏠 Quit to Menu
-                </button>
-              </div>
+        <div className="fixed inset-0 flex items-center justify-center pointer-events-auto game-bg-overlay z-50">
+          <div className="otter-panel w-full max-w-sm splash-in">
+            <h2 className="otter-subtitle text-center mb-6">⏸️ Paused</h2>
+            <div className="space-y-3">
+              <button
+                onClick={() => useGameStore.getState().resumeGame()}
+                className="otter-btn otter-btn-primary w-full"
+              >
+                ▶️ Resume
+              </button>
+              <button
+                onClick={() => useGameStore.getState().returnToMenu()}
+                className="otter-btn otter-btn-secondary w-full"
+              >
+                🏠 River Bank
+              </button>
             </div>
           </div>
         </div>

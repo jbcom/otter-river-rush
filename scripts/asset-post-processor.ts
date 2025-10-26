@@ -134,7 +134,9 @@ async function applyFormatConversion(
         .toBuffer();
       
     default:
-      return pipeline.toBuffer();
+      // This should be unreachable given the type of targetFormat
+      const _exhaustiveCheck: never = targetFormat;
+      throw new Error(`Unsupported format: ${targetFormat}`);
   }
 }
 

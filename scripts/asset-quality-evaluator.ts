@@ -279,7 +279,7 @@ export function generateQualityReport(
 
   // Assets by category
   console.log(`\n📁 By Category:`);
-  const categories = ['sprite', 'hud', 'icon', 'pwa'] as const;
+  const categories = ['sprite', 'hud', 'icon', 'pwa', 'ui'] as const;
   for (const category of categories) {
     const categoryAssets = manifest.filter(a => a.category === category);
     const categoryScore = categoryAssets.reduce((sum, asset) => {

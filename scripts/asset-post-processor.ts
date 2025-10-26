@@ -62,6 +62,38 @@ async function removeWhiteBackground(buffer: Buffer): Promise<Buffer> {
 }
 
 /**
+ * Setup sharp processing pipeline with common operations
+ */
+async function setupPipeline(
+  sourceBuffer: Buffer,
+  asset: AssetDefinition,
+  needsWhiteBackgroundRemoval: boolean,
+  needsResize: boolean
+): Promise<sharp.Sharp> {
+  let pipeline = sharp(sourceBuffer);
+  
+  // Remove white background if requested
+  if (needsWhiteBackgroundRemoval) {
+    console.log(`   🎨 Removing white background...`);
+    const cleaned = await removeWhiteBackground(sourceBuffer);
+    pipeline = sharp(cleaned);
+  }
+  
+  // Resize if needed (preserve aspect ratio)
+  if (needsResize) {
+    console.log(`   📐 Resizing to ${asset.expectedSize.width}x${asset.expectedSize.height}...`);
+    pipeline = pipeline.resize(asset.expectedSize.width, asset.expectedSize.height, {
+      fit: 'contain',
+      background: asset.requiresTransparency 
+        ? { r: 0, g: 0, b: 0, alpha: 0 } 
+        : { r: 255, g: 255, b: 255, alpha: 1 },
+    });
+  }
+  
+  return pipeline;
+}
+
+/**
  * Process a single asset with proper handling
  */
 export async function processAsset(
@@ -105,25 +137,7 @@ export async function processAsset(
     }
 
     // Start sharp pipeline
-    let pipeline = sharp(sourceBuffer);
-    
-    // Remove white background if requested
-    if (needsWhiteBackgroundRemoval) {
-      console.log(`   🎨 Removing white background...`);
-      const cleaned = await removeWhiteBackground(sourceBuffer);
-      pipeline = sharp(cleaned);
-    }
-    
-    // Resize if needed (preserve aspect ratio)
-    if (needsResize) {
-      console.log(`   📐 Resizing to ${asset.expectedSize.width}x${asset.expectedSize.height}...`);
-      pipeline = pipeline.resize(asset.expectedSize.width, asset.expectedSize.height, {
-        fit: 'contain',
-        background: asset.requiresTransparency 
-          ? { r: 0, g: 0, b: 0, alpha: 0 } 
-          : { r: 255, g: 255, b: 255, alpha: 1 },
-      });
-    }
+    let pipeline = await setupPipeline(sourceBuffer, asset, needsWhiteBackgroundRemoval, needsResize);
 
     // Determine quality based on file size target
     const quality = options.quality || 85;
@@ -175,19 +189,8 @@ export async function processAsset(
       // Recalculate quality to hit target
       const targetQuality = Math.max(50, Math.floor(quality * 0.7));
       
-      pipeline = sharp(sourceBuffer);
-      if (needsWhiteBackgroundRemoval) {
-        const cleaned = await removeWhiteBackground(sourceBuffer);
-        pipeline = sharp(cleaned);
-      }
-      if (needsResize) {
-        pipeline = pipeline.resize(asset.expectedSize.width, asset.expectedSize.height, {
-          fit: 'contain',
-          background: asset.requiresTransparency 
-            ? { r: 0, g: 0, b: 0, alpha: 0 } 
-            : { r: 255, g: 255, b: 255, alpha: 1 },
-        });
-      }
+      // Re-setup pipeline with lower quality
+      pipeline = await setupPipeline(sourceBuffer, asset, needsWhiteBackgroundRemoval, needsResize);
       
       outputBuffer = await pipeline
         .png({ quality: targetQuality, compressionLevel: 9, effort: 10 })
@@ -226,7 +229,6 @@ export async function processAllAssets(
   console.log('');
 
   let successCount = 0;
-  let skipCount = 0;
   let failCount = 0;
 
   for (const asset of manifest) {

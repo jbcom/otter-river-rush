@@ -435,6 +435,8 @@ export const ASSET_MANIFEST: AssetDefinition[] = [
     expectedFormat: 'png',
     maxFileSizeKB: 50,
     requiresTransparency: false,
+    aiPrompt: 'Otter River Rush app icon, cute otter face, blue circular background, simple clean design, mobile game icon style, 192x192',
+    aiModel: 'gpt-image-1',
     canBeGenerated: true,
     priority: 'critical',
   },
@@ -467,23 +469,3 @@ export const ASSET_MANIFEST: AssetDefinition[] = [
     priority: 'critical',
   },
 ];
-
-// Helper to get assets by category
-export function getAssetsByCategory(category: AssetDefinition['category']): AssetDefinition[] {
-  return ASSET_MANIFEST.filter(asset => asset.category === category);
-}
-
-// Helper to get asset by ID
-export function getAssetById(id: string): AssetDefinition | undefined {
-  return ASSET_MANIFEST.find(asset => asset.id === id);
-}
-
-// Helper to get assets that need regeneration
-export function getAssetsNeedingRegeneration(): AssetDefinition[] {
-  return ASSET_MANIFEST.filter(asset => asset.currentQuality?.needsRegeneration);
-}
-
-// Helper to get critical assets
-export function getCriticalAssets(): AssetDefinition[] {
-  return ASSET_MANIFEST.filter(asset => asset.priority === 'critical');
-}

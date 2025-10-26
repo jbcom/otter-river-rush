@@ -9,6 +9,13 @@ import { join } from 'path';
 
 const PUBLIC_DIR = join(process.cwd(), 'public');
 
+// Image optimization quality settings
+const VERY_LARGE_IMAGE_THRESHOLD = 300 * 1024; // 300KB
+const LARGE_IMAGE_THRESHOLD = 200 * 1024; // 200KB
+const VERY_LARGE_IMAGE_QUALITY = 60;
+const LARGE_IMAGE_QUALITY = 70;
+const NORMAL_IMAGE_QUALITY = 85;
+
 interface IconTask {
   source: string;
   output: string;
@@ -182,16 +189,16 @@ async function optimizeExistingImages(): Promise<void> {
       const originalSize = readFileSync(fullPath).length;
 
       // Use lower quality for larger images to reduce bundle size
-      let quality = 85;
-      if (originalSize > 300 * 1024) {
-        quality = 60; // Very large images
-      } else if (originalSize > 200 * 1024) {
-        quality = 70; // Large images
+      let quality = NORMAL_IMAGE_QUALITY;
+      if (originalSize > VERY_LARGE_IMAGE_THRESHOLD) {
+        quality = VERY_LARGE_IMAGE_QUALITY; // Very large images
+      } else if (originalSize > LARGE_IMAGE_THRESHOLD) {
+        quality = LARGE_IMAGE_QUALITY; // Large images
       }
 
       // Create optimized version
       const buffer = await sharp(fullPath)
-        .png({ quality: quality, compressionLevel: 9, effort: 10 })
+        .png({ quality, compressionLevel: 9, effort: 10 })
         .toBuffer();
 
       writeFileSync(fullPath, buffer);

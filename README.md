@@ -240,24 +240,18 @@ npm run test:visual:update
 
 ## 🚀 Deployment
 
-The game automatically deploys to GitHub Pages on push to main branch, with **automated content generation** to ensure fresh AI-generated assets.
+The game automatically deploys to GitHub Pages on push to main branch.
 
 ### CI/CD Pipeline
 
-Our workflow automatically:
-1. **Generates Fresh Content** - AI creates level patterns, enemy behaviors, sprites, and icons
+Our automated workflow:
+1. **Generates Fresh Content** - AI creates level patterns, enemy behaviors, sprites (main branch only)
 2. **Runs Quality Checks** - Linting, type-checking, and unit tests
 3. **Builds & Tests** - Creates optimized bundle with E2E tests
 4. **Deploys to Web** - GitHub Pages hosting
-5. **Creates Releases** - Semantic versioning with platform builds (Android, Desktop)
+5. **Creates Releases** - Semantic versioning with platform builds
 
-> 📋 **Setup Required:** Add API keys for content generation
-> See [`.github/SECRETS_SETUP.md`](.github/SECRETS_SETUP.md) for instructions
-
-**Workflow Documentation:**
-- 🔧 [Workflow Architecture](.github/workflows/README.md)
-- 📊 [Workflow Analysis](.github/workflows/WORKFLOW_ANALYSIS.md)
-- 🔑 [Secrets Setup Guide](.github/SECRETS_SETUP.md)
+> 📋 Secrets configured: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` for content generation
 
 ### Manual Deployment
 ```bash
@@ -268,9 +262,8 @@ npm run build
 ### GitHub Pages
 1. Enable GitHub Pages in repository settings
 2. Set source to "GitHub Actions"
-3. **Add API keys** (optional but recommended) - see [Secrets Setup](.github/SECRETS_SETUP.md)
-4. Push to main branch
-5. Game deploys automatically via CI/CD
+3. Push to main branch
+4. Game deploys automatically via CI/CD
 
 ## 🎨 Asset Attribution
 

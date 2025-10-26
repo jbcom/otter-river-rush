@@ -94,7 +94,12 @@ async function setupPipeline(
 }
 
 /**
- * Apply format conversion to a sharp pipeline and return the output buffer
+ * Apply format conversion to a sharp pipeline and return the output buffer.
+ * 
+ * @param {sharp.Sharp} pipeline - The sharp processing pipeline to apply the format conversion to.
+ * @param {'png' | 'webp' | 'jpg' | 'ico'} targetFormat - The desired output image format.
+ * @param {number} quality - The quality setting for the output format (1-100).
+ * @returns {Promise<Buffer>} A promise that resolves to the converted image buffer.
  */
 async function applyFormatConversion(
   pipeline: sharp.Sharp,

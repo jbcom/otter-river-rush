@@ -6,74 +6,61 @@
 
 ## Current Work Focus
 
-### Primary Task: Fix CI/CD Content Generation Gap ✅
+### Primary Task: Migrate to Vercel AI SDK ✅
 **Status**: ✅ COMPLETE  
 **Started**: 2025-10-26
 
-**Problem Identified**:
-- AI-generated content (level patterns, enemy AI, sprites) was NOT regenerated in CI/CD
-- Deployments used stale, manually-committed content
-- No automated asset pipeline in workflows
+**Problem**:
+- Scripts were using native `@anthropic-ai/sdk` directly
+- Inconsistent with OpenAI scripts using Vercel AI SDK
+- Should use `@ai-sdk/anthropic` for consistency
 
 **Solution Implemented**:
-- Added content generation step to `build-web` job in ci-cd.yml
-- Runs on main branch pushes only (to save API costs)
-- Generates: game content (Claude), sprites (OpenAI), asset pipeline
-- Gracefully handles missing API keys (continues with committed files)
-- `continue-on-error: true` prevents build failures
-
-**Changes Made**:
-1. Modified `.github/workflows/ci-cd.yml`:
-   - Added "Generate fresh content" step before build
-   - Uses `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` secrets
-   - Runs `generate-content`, `generate-sprites`, `asset-pipeline`
-   - Only on main branch to avoid API costs on PRs
-
-2. Fixed asset-post-processor.ts bug:
-   - Adaptive quality re-processing now uses PNG format (line 206)
-   - Previous bug: used `targetFormat` which broke ICO/WebP/JPG
-   - Now explicitly uses `'png'` for reliable file size reduction
-
-3. Fixed ICO format handling:
-   - Removed redundant `.resize(32, 32)` (already done in setupPipeline)
-   - Changed hardcoded `quality: 90` to dynamic `quality` parameter
-   - Added `effort: 10` for consistency with PNG case
-
-4. Added exhaustive type check:
-   - Default case now throws error if unsupported format
-   - Compile-time safety for format additions
+1. Replaced `@anthropic-ai/sdk` with `@ai-sdk/anthropic` in package.json
+2. Updated `generate-content.ts` to use Vercel AI SDK:
+   - `import { anthropic } from '@ai-sdk/anthropic'`
+   - `import { generateText } from 'ai'`
+   - Replaced `anthropic.messages.create()` with `generateText({ model: anthropic(...), prompt: ... })`
+3. Updated `generate-level-patterns.ts` to use Vercel AI SDK
+4. All scripts now consistently use Vercel AI SDK
 
 **Result**:
-- ✅ Fresh AI content generated on every main branch deployment
-- ✅ Asset pipeline runs automatically
-- ✅ Works without API keys (uses committed files)
-- ✅ No breaking changes to existing workflows
+- ✅ Consistent API across all generation scripts
+- ✅ Vercel AI SDK handles auth automatically from `process.env.ANTHROPIC_API_KEY`
+- ✅ Simpler, cleaner code
+- ✅ No linter errors
 
-### Secondary Task: Asset Post-Processor Refinement ✅
+### Secondary Task: CI/CD Content Generation Integration ✅
 **Status**: ✅ COMPLETE
 
-**Changes Made**:
-- Fixed adaptive quality bug (now uses PNG for re-processing)
-- Fixed ICO format handling (dynamic quality, no redundant resize)
-- Added exhaustive type checking for format switch
-- Added comprehensive JSDoc to `applyFormatConversion`
-
-### Release System Investigation 🔍
-**Status**: INVESTIGATING
-
-**Known Facts**:
-- Latest release: v1.0.4 (2025-10-26T21:07:49Z)
-- semantic-release configured correctly in .releaserc.json
-- auto-release job exists in ci-cd.yml
-- Last CI/CD run: 18824922683 (success)
-
-**Need to Investigate**:
-- Why releases aren't triggering consistently
-- Check semantic-release logs
-- Verify commit message format compliance
-- Check if platform-builds are completing
-
 ## Recent Changes
+
+### Vercel AI SDK Migration (2025-10-26) ✅
+**Completed**: Migrated all AI generation scripts to use Vercel AI SDK consistently
+
+**What Was Done**:
+
+#### 1. Package Updates
+- **Removed**: `@anthropic-ai/sdk@^0.67.0`
+- **Added**: `@ai-sdk/anthropic@^1.0.11`
+- Now using Vercel AI SDK for both OpenAI and Anthropic
+
+#### 2. Script Updates
+- **scripts/generate-content.ts**:
+  - Replaced native Anthropic SDK with Vercel AI
+  - Changed from `anthropic.messages.create()` to `generateText({ model: anthropic(...), prompt })`
+  - Cleaner, simpler API
+  - 4 functions updated: generateEnemyBehaviors, generateAchievements, generateLevelPatterns, generateGameTips
+
+- **scripts/generate-level-patterns.ts**:
+  - Same migration to Vercel AI SDK
+  - Consistent pattern across all generation scripts
+
+#### 3. Benefits
+- ✅ Consistent API across all scripts
+- ✅ Auto-picks up `ANTHROPIC_API_KEY` from env
+- ✅ Simpler code, less boilerplate
+- ✅ Better type safety
 
 ### CI/CD Content Generation Integration (2025-10-26) ✅
 **Completed**: Integrated AI content generation into build process

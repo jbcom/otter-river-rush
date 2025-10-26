@@ -90,18 +90,18 @@ describe('hasTransparency', () => {
     const width = 10;
     const height = 10;
     const channels = 4;
-    
+
     // Create raw pixel data - all red pixels (255, 0, 0, 255) except first pixel which is transparent
     const pixelData = Buffer.alloc(width * height * channels);
-    
+
     for (let i = 0; i < width * height; i++) {
       const offset = i * channels;
-      pixelData[offset] = 255;     // R
-      pixelData[offset + 1] = 0;   // G
-      pixelData[offset + 2] = 0;   // B
+      pixelData[offset] = 255; // R
+      pixelData[offset + 1] = 0; // G
+      pixelData[offset + 2] = 0; // B
       pixelData[offset + 3] = 255; // A - fully opaque
     }
-    
+
     // Make the first pixel transparent
     pixelData[3] = 0; // Set alpha of first pixel to 0
 

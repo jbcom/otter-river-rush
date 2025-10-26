@@ -1,222 +1,167 @@
-# GitHub Actions Workflows
+# Workflow Architecture
 
-This directory contains a unified CI/CD workflow for all automation needs.
+This directory contains the CI/CD workflows for Otter River Rush.
 
-## 🔄 Unified CI/CD Workflow
+## Workflow Structure
 
-### CI/CD (`.github/workflows/ci-cd.yml`)
-**Single workflow handling all CI/CD, releases, and platform builds with gating logic**
+```
+Main Branch Flow:
+content-generation.yml  →  ci-cd.yml (build-web)  →  deploy-web  →  auto-release  →  platform-builds.yml
+     ↓                                                                                          ↓
+  AI Content                                                                              Desktop/Mobile
+  Sprites/Icons                                                                           Releases
+```
 
+## Workflows
+
+### 1. `content-generation.yml` (NEW)
+**Purpose:** Generate fresh AI content and assets before builds  
 **Triggers:**
-- **Pull Requests** → Fast validation (lint, type-check, test, build) - ~3 min
-- **Push to main** → Full CI + auto-deploy to GitHub Pages - ~6 min
-- **Push to develop** → Full CI only (no deploy)
-- **Version tags (v*)** → Full CI + build all platforms + create release
-- **Manual dispatch** → Configurable: choose what to build/deploy
+- Scheduled (weekly on Sundays)
+- Manual (`workflow_dispatch`)
+- Called by `ci-cd.yml` before build
 
----
+**What it does:**
+- Generates level patterns, enemy AI, achievements (Claude)
+- Creates sprites, HUD, UI icons (OpenAI)
+- Runs asset pipeline for optimization
+- Commits changes back to repo
 
-## 📋 Workflow Jobs
+**Required Secrets:**
+- `OPENAI_API_KEY` - For sprite/icon generation
+- `ANTHROPIC_API_KEY` - For game content generation
 
-### CI Jobs (Run on all events)
-- ✅ **Lint**: ESLint + Prettier checks
-- ✅ **Type Check**: TypeScript compilation
-- ✅ **Test**: Unit tests with Vitest (70 tests)
-- ✅ **Build Web**: Production build + bundle size check (max 5MB)
+### 2. `ci-cd.yml`
+**Purpose:** Main CI/CD pipeline  
+**Triggers:** Push to main/develop, PRs, manual
 
-### Extended Testing (Main branch only)
-- ✅ **E2E Tests**: Playwright end-to-end tests
-- ✅ **Visual Tests**: Visual regression testing
+**Jobs:**
+- **CI Phase:** `lint`, `type-check`, `test` (parallel)
+- **Build Phase:** `build-web` (after CI passes)
+- **Testing Phase:** `e2e`, `visual-tests` (main branch only)
+- **Deploy Phase:** `deploy-web` (GitHub Pages)
+- **Release Phase:** `auto-release` (semantic versioning)
 
-### Deployment (Main branch only)
-- 🚀 **Deploy Web**: Auto-deploy to GitHub Pages
-  - URL: https://jbcom.github.io/otter-river-rush/
+### 3. `platform-builds.yml`
+**Purpose:** Build native apps for Android, macOS, Linux, Windows  
+**Triggers:** 
+- Called by `auto-release` when new version is created
+- Manual with version tag
 
-### Platform Builds (Tags or manual)
-- 📱 **Build Android**: Unsigned APK for Android devices
-- 🖥️ **Build Desktop**: macOS (.dmg), Windows (.exe), Linux (.AppImage, .deb)
+**What it builds:**
+- Android APK
+- macOS DMG/ZIP
+- Linux AppImage/DEB
+- Windows NSIS/Portable
 
-### Release (Tags only)
-- 📦 **Create Release**: GitHub Release with all platform artifacts
+## Configuration Required
 
----
+### GitHub Secrets
 
-## 🎯 Usage Patterns
+Add these in **Settings → Secrets and Variables → Actions**:
 
-### For Contributors (Pull Requests)
+| Secret | Purpose | Get It From |
+|--------|---------|-------------|
+| `OPENAI_API_KEY` | Sprite/icon generation | https://platform.openai.com/api-keys |
+| `ANTHROPIC_API_KEY` | Game content generation | https://console.anthropic.com/settings/keys |
+
+### Permissions
+
+The repository needs these permissions (already configured):
+- `contents: write` - For committing generated content
+- `pages: write` - For GitHub Pages deployment
+- `id-token: write` - For GitHub Pages authentication
+- `actions: write` - For triggering other workflows
+
+## Development Workflow
+
+### For Pull Requests
+1. Push to feature branch
+2. Open PR to `main` or `develop`
+3. CI runs: lint, type-check, test, build
+4. Review and merge
+
+### For Main Branch
+1. Merge PR to `main`
+2. **NEW:** Content generation runs (if scheduled or manual)
+3. CI runs: all checks + build
+4. E2E and visual tests run
+5. Deploy to GitHub Pages
+6. Auto-release creates version tag
+7. Platform builds triggered for new release
+
+### Manual Content Refresh
+
+To regenerate content manually:
+
 ```bash
-# Push your branch → CI runs automatically
-git push origin feature/my-feature
+# Via GitHub Actions UI
+Actions → Content Generation → Run workflow → Run on main
 
-# What runs:
-# - Lint, type-check, test, build (~3 min)
-# - Fast feedback, no deployment
+# Or locally with API keys
+export ANTHROPIC_API_KEY=sk-ant-...
+export OPENAI_API_KEY=sk-...
+npm run generate-content
+npm run generate-sprites
+npm run generate-hud
+npm run generate-ui-icons
+npm run generate-pwa-icons
+npm run asset-pipeline
 ```
 
-### For Maintainers (Main Branch)
-```bash
-# Push to main → Full CI + auto-deploy
-git push origin main
+## Cost Optimization
 
-# What runs:
-# - All CI checks
-# - E2E + visual tests
-# - Auto-deploy to GitHub Pages
-# Total: ~6 min
-```
+To minimize API costs:
 
-### For Releases (Version Tags)
-```bash
-# Create and push a version tag
-git tag v1.0.0
-git push origin v1.0.0
+✅ Content generation runs only on:
+- Main branch pushes (not PRs)
+- Weekly schedule
+- Manual trigger
 
-# What runs:
-# - All CI checks
-# - Build Android APK
-# - Build desktop apps (Mac, Windows, Linux)
-# - Create GitHub Release with all artifacts
-# - Auto-deploy web to GitHub Pages
-```
+✅ Using `continue-on-error: true` prevents build failures if API is down
 
-### Manual Workflow Dispatch
-Go to **Actions** → **CI/CD** → **Run workflow**
+✅ Artifacts are cached between jobs
 
-**Options:**
-- ✅ Deploy to GitHub Pages (default: true)
-- ✅ Build Android APK (default: true)
-- ✅ Build Desktop apps (default: true)
-- ⬜ Create GitHub Release (default: false)
+## Troubleshooting
 
-Use this to:
-- Build specific platforms without creating a release
-- Test release process before tagging
-- Deploy to Pages without waiting for tags
+### Content not generating?
+1. Check that API keys are set in GitHub Secrets
+2. Check workflow run logs for errors
+3. Verify scripts run locally with keys set
 
----
+### Build failing?
+1. CI jobs (lint, test, type-check) run first - check those
+2. Build job runs after CI passes
+3. Generated content is optional - build works with committed files
 
-## 🎨 Workflow Gating Logic
+### Deployment not happening?
+1. Must be on `main` branch
+2. Build must succeed
+3. E2E tests are non-blocking (deploy happens even if they fail)
 
-| Trigger | Lint/Test/Build | E2E/Visual | Deploy Web | Build Platforms | Create Release |
-|---------|----------------|------------|------------|-----------------|----------------|
-| **PR** | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| **Push to develop** | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| **Push to main** | ✅ | ✅ | ✅ | ⬜ | ⬜ |
-| **Tag v\*** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Manual (default)** | ✅ | ✅ | ✅ | ✅ | ⬜ |
+## Future Improvements
 
----
+### Phase 2: Split Workflows (Planned)
+- [ ] Extract `ci.yml` (lint, test, type-check)
+- [ ] Extract `build.yml` (web build)
+- [ ] Extract `test-extended.yml` (e2e, visual)
+- [ ] Extract `deploy-web.yml` (GitHub Pages)
+- [ ] Extract `release.yml` (semantic release)
+- [ ] Use `workflow_call` for reusability
 
-## 📊 Artifact Retention
+Benefits: Better modularity, easier maintenance, clearer ownership
 
-- **CI builds**: 7 days
-- **Platform builds**: 30 days
-- **GitHub Releases**: Permanent
+## Monitoring
 
----
+View workflow status:
+- **Actions tab:** See all workflow runs
+- **Deployments:** See GitHub Pages deployments
+- **Releases:** See published versions and platform builds
 
-## 🚀 Quick Reference
+## Support
 
-### Deploy to Production
-```bash
-git push origin main
-# → Web auto-deploys to GitHub Pages
-```
-
-### Create Full Release
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-# → Builds all platforms + creates GitHub Release
-```
-
-### Build Android Only
-```bash
-# Use manual workflow dispatch:
-# Actions → CI/CD → Run workflow
-# - Uncheck "Build Desktop apps"
-# - Uncheck "Create GitHub Release"
-```
-
-### Build Desktop Only
-```bash
-# Use manual workflow dispatch:
-# Actions → CI/CD → Run workflow
-# - Uncheck "Build Android APK"
-# - Uncheck "Create GitHub Release"
-```
-
----
-
-## 🐛 Troubleshooting
-
-### CI Failing
-```bash
-# Run locally first
-npm run lint
-npm run type-check
-npm test -- --run
-npm run build
-```
-
-### Bundle Size Exceeding Limit
-```bash
-# Check current bundle size
-npm run build
-du -sh dist
-
-# Optimize images
-npm run process-icons
-```
-
-### Android Build Failing
-```bash
-# Test locally
-npm run build
-npx cap sync android
-cd android && ./gradlew assembleRelease
-```
-
-### Desktop Build Failing
-```bash
-# Test locally
-npm run electron:build
-```
-
-### Deploy Failing
-- Check if GitHub Pages is enabled in repo settings
-- Verify `dist/` folder contains `index.html`
-- Check workflow logs for specific errors
-
----
-
-## 🔐 Secrets Required
-
-**None currently!** The workflow uses:
-- `GITHUB_TOKEN` (auto-provided by GitHub Actions)
-- Public npm packages (no auth needed)
-
-**For future enhancements:**
-- `ANDROID_KEYSTORE`: For signed APK releases
-- `CODECOV_TOKEN`: For coverage reporting (optional)
-
----
-
-## 📖 Related Documentation
-
-- [Platform Setup Guide](../../PLATFORM_SETUP.md)
-- [Contributing Guide](../../CONTRIBUTING.md)
-- [Cross-Platform Build Guide](../../docs/implementation/CROSS_PLATFORM_BUILD_GUIDE.md)
-
----
-
-## 💡 Design Philosophy
-
-**One workflow to rule them all:**
-- Single source of truth for all automation
-- Gating logic instead of multiple workflows
-- Clear, maintainable, predictable behavior
-- Fast feedback for common cases (PRs)
-- Comprehensive builds when needed (releases)
-
-**Status**: [![CI/CD](https://github.com/jbcom/otter-river-rush/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/jbcom/otter-river-rush/actions/workflows/ci-cd.yml)
+For issues or questions about workflows:
+1. Check workflow logs in Actions tab
+2. Review this README
+3. Check `WORKFLOW_ANALYSIS.md` for detailed analysis
+4. Open an issue with workflow name and run link

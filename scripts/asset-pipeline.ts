@@ -11,9 +11,9 @@
  * RUN THIS TO AUDIT AND FIX ALL ASSETS
  */
 
-import { ASSET_MANIFEST, getAssetsNeedingRegeneration } from './asset-manifest.js';
-import { evaluateAllAssets, evaluateAssetQuality, generateQualityReport } from './asset-quality-evaluator.js';
-import { processDeficientAssets, processAsset } from './asset-post-processor.js';
+import { ASSET_MANIFEST } from './asset-manifest.js';
+import { evaluateAllAssets, generateQualityReport } from './asset-quality-evaluator.js';
+import { processDeficientAssets } from './asset-post-processor.js';
 
 async function main() {
   console.log('\n' + '='.repeat(80));

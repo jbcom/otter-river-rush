@@ -94,6 +94,46 @@ async function setupPipeline(
 }
 
 /**
+ * Apply format conversion to a sharp pipeline and return the output buffer
+ */
+async function applyFormatConversion(
+  pipeline: sharp.Sharp,
+  targetFormat: 'png' | 'webp' | 'jpg' | 'ico',
+  quality: number
+): Promise<Buffer> {
+  switch (targetFormat) {
+    case 'png':
+      return pipeline
+        .png({ 
+          quality, 
+          compressionLevel: 9,
+          effort: 10,
+        })
+        .toBuffer();
+      
+    case 'webp':
+      return pipeline
+        .webp({ quality, effort: 6 })
+        .toBuffer();
+      
+    case 'jpg':
+      return pipeline
+        .jpeg({ quality })
+        .toBuffer();
+      
+    case 'ico':
+      // ICO creation is complex, use PNG for now
+      return pipeline
+        .resize(32, 32)
+        .png({ quality: 90, compressionLevel: 9 })
+        .toBuffer();
+      
+    default:
+      return pipeline.toBuffer();
+  }
+}
+
+/**
  * Process a single asset with proper handling
  */
 export async function processAsset(
@@ -144,42 +184,7 @@ export async function processAsset(
     
     // Convert format
     const targetFormat = options.targetFormat || asset.expectedFormat;
-    let outputBuffer: Buffer;
-    
-    switch (targetFormat) {
-      case 'png':
-        outputBuffer = await pipeline
-          .png({ 
-            quality, 
-            compressionLevel: 9,
-            effort: 10,
-          })
-          .toBuffer();
-        break;
-        
-      case 'webp':
-        outputBuffer = await pipeline
-          .webp({ quality, effort: 6 })
-          .toBuffer();
-        break;
-        
-      case 'jpg':
-        outputBuffer = await pipeline
-          .jpeg({ quality })
-          .toBuffer();
-        break;
-        
-      case 'ico':
-        // ICO creation is complex, use PNG for now
-        outputBuffer = await pipeline
-          .resize(32, 32)
-          .png({ quality: 90, compressionLevel: 9 })
-          .toBuffer();
-        break;
-        
-      default:
-        outputBuffer = await pipeline.toBuffer();
-    }
+    let outputBuffer = await applyFormatConversion(pipeline, targetFormat, quality);
 
     // Check if output is too large
     const outputSizeKB = Math.round(outputBuffer.length / 1024);
@@ -192,9 +197,7 @@ export async function processAsset(
       // Re-setup pipeline with lower quality
       pipeline = await setupPipeline(sourceBuffer, asset, needsWhiteBackgroundRemoval, needsResize);
       
-      outputBuffer = await pipeline
-        .png({ quality: targetQuality, compressionLevel: 9, effort: 10 })
-        .toBuffer();
+      outputBuffer = await applyFormatConversion(pipeline, 'png', targetQuality);
     }
 
     // Ensure directory exists

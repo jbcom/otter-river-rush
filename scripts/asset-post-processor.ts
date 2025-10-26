@@ -265,7 +265,7 @@ export async function processDeficientAssets(
 ): Promise<void> {
   const deficientAssets = manifest.filter(asset => {
     const quality = qualityMetrics.get(asset.id);
-    return quality?.needsRegeneration || quality?.qualityScore < 70;
+    return quality?.needsRegeneration;
   });
 
   if (deficientAssets.length === 0) {

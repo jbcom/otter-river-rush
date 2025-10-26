@@ -24,7 +24,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   position: fixed;
-  background: #0a2540; /* Deep water blue */
+  background: #0f172a; /* Deep slate blue - matches theme-color */
   overscroll-behavior-y: contain;
   touch-action: pan-x pan-y;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

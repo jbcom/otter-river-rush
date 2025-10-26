@@ -181,9 +181,17 @@ async function optimizeExistingImages(): Promise<void> {
     try {
       const originalSize = readFileSync(fullPath).length;
 
+      // Use lower quality for larger images to reduce bundle size
+      let quality = 85;
+      if (originalSize > 300 * 1024) {
+        quality = 60; // Very large images
+      } else if (originalSize > 200 * 1024) {
+        quality = 70; // Large images
+      }
+
       // Create optimized version
       const buffer = await sharp(fullPath)
-        .png({ quality: 85, compressionLevel: 9 })
+        .png({ quality: quality, compressionLevel: 9, effort: 10 })
         .toBuffer();
 
       writeFileSync(fullPath, buffer);

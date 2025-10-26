@@ -8,11 +8,11 @@ This directory contains automated workflows for CI/CD and releases.
 **Triggers**: Push to `main`/`develop`, Pull Requests
 
 **Jobs**:
-- **Lint**: ESLint + Prettier checks
-- **Type Check**: TypeScript compilation
-- **Test**: Unit tests with Vitest (70 tests)
-- **Build**: Production build + bundle size check (max 5MB)
-- **E2E**: Playwright end-to-end tests
+- **Lint**: ESLint + Prettier checks (all branches/PRs)
+- **Type Check**: TypeScript compilation (all branches/PRs)
+- **Test**: Unit tests with Vitest (70 tests) (all branches/PRs)
+- **Build**: Production build + bundle size check (max 5MB) (all branches/PRs)
+- **E2E**: Playwright end-to-end tests (main branch only)
 - **Visual Tests**: Visual regression testing (main branch only)
 - **Deploy**: Auto-deploy to GitHub Pages (main branch only, after tests pass)
 
@@ -21,10 +21,11 @@ This directory contains automated workflows for CI/CD and releases.
 **Status**: [![CI/CD](https://github.com/jbcom/otter-river-rush/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/jbcom/otter-river-rush/actions/workflows/ci-cd.yml)
 
 **Key Features**:
-- ✅ PRs run validation only (no deploy)
-- ✅ Main branch: validate + auto-deploy
-- ✅ Single build, no redundancy
-- ✅ Fast feedback (~5 minutes)
+- ✅ PRs run fast validation only (lint, type-check, test, build) - no E2E/deploy
+- ✅ Main branch: full validation (E2E + visual) + auto-deploy to Pages
+- ✅ Optimized for speed: PRs ~3 min, main ~6 min
+- ✅ Single build artifact, no redundancy
+
 
 ---
 
@@ -32,22 +33,25 @@ This directory contains automated workflows for CI/CD and releases.
 **Triggers**: Version tags (`v*`), Manual dispatch
 
 **What it builds**:
-1. **Web (Capacitor)** - Production build uploaded as artifact
-2. **Android APK** - Unsigned release APK
-3. **Desktop Apps**:
+1. **Web (Capacitor)** - Production build uploaded as artifact (always)
+2. **Android APK** - Unsigned release APK (optional, can be skipped)
+3. **Desktop Apps** (optional, can be skipped):
    - macOS: `.dmg` and `.zip`
    - Windows: `.exe` installer
    - Linux: `.AppImage` and `.deb` package
 
-**Artifacts**: Uploaded to GitHub Releases automatically
+**Artifacts**: Uploaded to GitHub Releases automatically (for tag triggers)
 
 **How to trigger**:
 ```bash
-# Create and push a version tag
+# Automatic: Create and push a version tag
 git tag v1.0.0
 git push origin v1.0.0
 
-# Or manually via GitHub Actions UI
+# Manual: Via GitHub Actions UI with options:
+# - Version: Custom version tag (default: 'dev')
+# - Skip Android: Checkbox to skip Android build
+# - Skip Desktop: Checkbox to skip desktop builds
 ```
 
 ---

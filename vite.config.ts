@@ -24,7 +24,7 @@ export default defineConfig({
       // - mask-icon.svg
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'Otter River Rush - Rusty\'s Adventure',
+        name: "Otter River Rush - Rusty's Adventure",
         short_name: 'OtterRush',
         description:
           'Join Rusty the Otter on a wild river adventure! Dodge obstacles, collect coins, and ride the rapids in this exciting endless runner game.',

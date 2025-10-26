@@ -73,6 +73,11 @@ button, input, select, textarea, a {
   --otter-orange: #FFA500;
   --otter-tan: #D4A574;
   --otter-brown: #8B4513;
+  --otter-brown-dark: #65320e;
+  
+  /* RGB Components for use with rgba() */
+  --otter-brown-rgb: 139, 69, 19;
+  --otter-brown-dark-rgb: 101, 50, 14;
   
   /* Water Colors */
   --water-light: #87CEEB;
@@ -131,8 +136,8 @@ button, input, select, textarea, a {
 
 .otter-panel {
   background: linear-gradient(135deg, 
-    rgba(139, 69, 19, 0.95) 0%,
-    rgba(101, 50, 14, 0.95) 100%
+    rgba(var(--otter-brown-rgb), 0.95) 0%,
+    rgba(var(--otter-brown-dark-rgb), 0.95) 100%
   );
   border: 4px solid var(--otter-tan);
   border-radius: 20px;
@@ -423,8 +428,8 @@ button, input, select, textarea, a {
 
 .otter-hud-panel {
   background: linear-gradient(135deg,
-    rgba(139, 69, 19, 0.9) 0%,
-    rgba(101, 50, 14, 0.9) 100%
+    rgba(var(--otter-brown-rgb), 0.9) 0%,
+    rgba(var(--otter-brown-dark-rgb), 0.9) 100%
   );
   border: 2px solid var(--otter-tan);
   border-radius: 12px;
@@ -602,13 +607,13 @@ button, input, select, textarea, a {
   gap: 0.75rem;
   padding: 0.75rem;
   border-radius: 0.5rem;
-  background-color: rgba(139, 69, 19, 0.3);
+  background-color: rgba(var(--otter-brown-rgb), 0.3);
   transition: background-color 0.2s;
   border: 2px solid transparent;
 }
 
 .leaderboard-entry:hover {
-  background-color: rgba(139, 69, 19, 0.5);
+  background-color: rgba(var(--otter-brown-rgb), 0.5);
   border-color: var(--otter-tan);
 }
 
@@ -672,8 +677,8 @@ button, input, select, textarea, a {
 /* Stats display styles */
 .stat-category {
   background: linear-gradient(135deg,
-    rgba(139, 69, 19, 0.8) 0%,
-    rgba(101, 50, 14, 0.8) 100%
+    rgba(var(--otter-brown-rgb), 0.8) 0%,
+    rgba(var(--otter-brown-dark-rgb), 0.8) 100%
   );
   border: 2px solid var(--otter-tan);
   border-radius: 12px;

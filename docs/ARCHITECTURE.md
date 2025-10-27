@@ -224,11 +224,14 @@ abstract class System {
   
   public removeEntity(entity: Entity): void {
     const index = this.entities.indexOf(entity);
-    if (index > -1) {
-      // Swap with the last element and pop for O(1) removal
-      this.entities[index] = this.entities[this.entities.length - 1];
-      this.entities.pop();
-    }
+public removeEntity(entity: Entity): void {
+  const index = this.entities.indexOf(entity);
+  if (index > -1) {
+    // Swap with the last element and pop for O(1) removal
+    this.entities[index] = this.entities[this.entities.length - 1];
+    this.entities.pop();
+  }
+}
   }
   
   private matchesRequirements(entity: Entity): boolean {

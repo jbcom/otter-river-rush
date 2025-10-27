@@ -36,7 +36,7 @@ This directory contains the CI/CD workflows for Otter River Rush. The workflows 
 
 ### 🏗️ Platform Builds (`platform-builds.yml`)
 **Triggers:** Called by Release workflow when new version is published, manual dispatch  
-**Purpose:** Build native platform distributions  
+**Purpose:** Build native platform distributions for releases  
 **Jobs:**
 - Android APK (unsigned)
 - Desktop builds (Linux AppImage/deb, macOS dmg, Windows exe)
@@ -45,8 +45,22 @@ This directory contains the CI/CD workflows for Otter River Rush. The workflows 
 See `PLATFORM_BUILD_TESTING.md` for full testing checklist.  
 See `QUICK_TEST_GUIDE.md` for 5-minute smoke test.
 
+### 🧪 Test Builds (`test-builds.yml`)
+**Triggers:** Manual dispatch only  
+**Purpose:** Build platform binaries for testing WITHOUT creating a release  
+**Options:**
+- Select platforms: Android, Linux, macOS, Windows, or all
+- Add version suffix for identification (e.g., `test-1`, `pr-123`)
+
+**Use this to:**
+- Test platform builds before actual release
+- Verify builds work on actual devices
+- Debug platform-specific issues
+- Artifacts retained for 7 days only
+
 ## Workflow Chain
 
+### Production Release Chain
 ```
 Push to main
     ↓
@@ -69,6 +83,19 @@ Release Workflow (release.yml)
 Platform Builds Workflow (platform-builds.yml)
     ├─ build-android
     └─ build-desktop (Linux, macOS, Windows)
+```
+
+### Testing Chain (Manual)
+```
+Manual Trigger
+    ↓
+Test Builds Workflow (test-builds.yml)
+    ├─ build-android (optional)
+    ├─ build-linux (optional)
+    ├─ build-macos (optional)
+    └─ build-windows (optional)
+    ↓
+Download artifacts → Manual testing → Document results
 ```
 
 ## Manual Testing Requirements
@@ -98,7 +125,8 @@ Platform Builds Workflow (platform-builds.yml)
 - ✅ `ci.yml` - CI only (lint, test, build)
 - ✅ `deploy.yml` - Deployment only (GitHub Pages)
 - ✅ `release.yml` - Release automation only (semantic-release)
-- ✅ `platform-builds.yml` - Native builds only (Android, Desktop)
+- ✅ `platform-builds.yml` - Production native builds (Android, Desktop)
+- ✅ `test-builds.yml` - Test builds for manual verification
 
 ## Benefits of New Structure
 
@@ -124,10 +152,17 @@ Go to Actions → Deploy → Run workflow
 Go to Actions → Release → Run workflow
 - Will run semantic-release and create version tag if commits warrant it
 
-### Build Platform Packages
+### Build Platform Packages (Production)
 Go to Actions → Platform Builds → Run workflow
 - Requires `version` input (e.g., `v1.0.0`)
 - **WARNING**: Builds untested, see testing docs first!
+
+### Test Platform Builds (Recommended First!)
+Go to Actions → Test Builds → Run workflow
+- Select platforms to build (android, linux, macos, windows, all)
+- Add version suffix for identification (e.g., `test-1`)
+- Download artifacts and test locally
+- Does NOT create a release
 
 ## Environment Variables & Secrets
 

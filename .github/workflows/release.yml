@@ -1,8 +1,10 @@
 name: Release
 
+# Automated semantic release after successful web deployment
+
 on:
   workflow_run:
-    workflows: ["Deploy"]
+    workflows: ["Web Build & Deploy"]
     types: [completed]
     branches: [main]
   workflow_dispatch:
@@ -14,17 +16,15 @@ permissions:
   actions: write
 
 jobs:
-  auto-release:
-    name: Automated Release
+  semantic-release:
+    name: Semantic Release
     runs-on: ubuntu-latest
-    # Only release after successful deploy
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -50,7 +50,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Create GitHub Release if new version
+      - name: Create GitHub Release
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: softprops/action-gh-release@v2
         with:
@@ -62,29 +62,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Trigger platform builds if new release
+      - name: Trigger mobile & desktop builds
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const version = 'v${{ steps.semantic.outputs.new_release_version }}';
-            console.log(`🚀 Triggering platform builds for ${version}`);
-            console.log('⚠️  NOTE: Platform builds have NOT been manually tested!');
-            console.log('📋 See .github/PLATFORM_BUILD_TESTING.md for testing checklist');
             
-            try {
-              await github.rest.actions.createWorkflowDispatch({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: 'platform-builds.yml',
-                ref: 'main',
-                inputs: {
-                  version: version
-                }
-              });
-              console.log('✅ Platform builds workflow triggered successfully');
-            } catch (error) {
-              console.error('❌ Failed to trigger platform builds:', error);
-              // Don't fail the job if this fails
-            }
+            // Trigger mobile build
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'mobile.yml',
+              ref: 'main',
+              inputs: { version: version }
+            });
+            
+            // Trigger desktop builds
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'desktop.yml',
+              ref: 'main',
+              inputs: { 
+                version: version,
+                platforms: 'all'
+              }
+            });
+            
+            console.log(`✅ Triggered mobile & desktop builds for ${version}`);

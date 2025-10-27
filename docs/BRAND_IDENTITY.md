@@ -159,7 +159,7 @@ TRAITS:
   font-size: 72px;
   font-weight: 900;
   color: #FFD700;
-  text-stroke: 4px #2C1810;
+  -webkit-text-stroke: 4px #2C1810;
   text-shadow: 
     4px 4px 0 #5C3A29,
     0 0 20px rgba(255, 215, 0, 0.5);

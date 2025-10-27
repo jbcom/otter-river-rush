@@ -284,7 +284,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     rarity: 'rare',
     checkCondition: (stats: GameStats) => stats.totalRuns >= 100,
   },
-  
+
   // Social & Sharing (NEW - 23 more achievements to reach 50+)
   {
     id: 'first_blood',

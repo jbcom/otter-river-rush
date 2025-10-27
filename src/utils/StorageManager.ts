@@ -15,14 +15,14 @@ export class StorageManager {
    * Deep merge utility to recursively merge nested objects
    * Implements ARCHITECTURE.md specification (lines 1093-1119)
    */
-  private static deepMerge<T extends Record<string, any>>(
+  private static deepMerge<T extends Record<string, unknown>>(
     target: T,
     source: Partial<T>
   ): T {
     const result = { ...target };
 
     for (const key in source) {
-      if (source.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
         const sourceValue = source[key];
         const targetValue = result[key];
 

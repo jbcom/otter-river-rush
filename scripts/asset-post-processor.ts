@@ -127,10 +127,10 @@ async function applyFormatConversion(
         .toBuffer();
       
     case 'ico':
-      // ICO creation is complex, use PNG for now
+      // ICO creation is complex; using PNG format.
+      // Resizing is handled by setupPipeline based on the asset manifest.
       return pipeline
-        .resize(32, 32)
-        .png({ quality: 90, compressionLevel: 9 })
+        .png({ quality, compressionLevel: 9, effort: 10 })
         .toBuffer();
       
     default:

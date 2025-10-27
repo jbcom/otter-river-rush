@@ -838,7 +838,7 @@ class UISystem {
     const previousBest = SaveSystem.getHighScore();
     if (stats.score > previousBest) {
       this.elements.get('newRecord')!.style.display = 'block';
-      SaveSystem.saveHighScore(stats.score);
+      SaveSystem.save({ highScore: stats.score });
     }
   }
   

@@ -1,5 +1,9 @@
 name: Platform Builds
 
+# ⚠️  WARNING: These builds have NEVER been manually tested!
+# See .github/PLATFORM_BUILD_TESTING.md for testing checklist
+# See .github/QUICK_TEST_GUIDE.md for 5-minute smoke test
+
 on:
   workflow_call:
     inputs:

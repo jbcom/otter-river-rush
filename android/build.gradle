@@ -24,13 +24,11 @@ allprojects {
     }
     
     // Force all modules to use Java 17 to match CI environment
-    afterEvaluate { project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_17
-                    targetCompatibility JavaVersion.VERSION_17
-                }
+    plugins.withType(com.android.build.gradle.BasePlugin) {
+        android {
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
             }
         }
     }

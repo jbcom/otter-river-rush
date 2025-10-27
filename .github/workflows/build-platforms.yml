@@ -43,6 +43,11 @@ concurrency:
 
 jobs:
   # Step 1: Build web once - this is the foundation for all platforms
+  # NOTE: Web build is ALWAYS needed because:
+  #   - Desktop (Electron) wraps the web build
+  #   - Mobile (Capacitor) wraps the web build
+  #   - Web deployment uses the web build
+  # Therefore, we build web for ALL workflow_dispatch triggers and workflow_run events
   build-web:
     name: Build Web
     runs-on: ubuntu-latest

@@ -109,8 +109,7 @@
 - No unnecessary complexity
 
 **Consider adding** (optional):
-1. Test builds workflow (for manual platform testing)
-2. Security scanning (CodeQL)
-3. Preview deployments (for PRs)
+1. Security scanning (CodeQL)
+2. Preview deployments (for PRs)
 
 But the current setup is solid and well-organized!

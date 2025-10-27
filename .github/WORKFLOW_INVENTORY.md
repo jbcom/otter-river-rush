@@ -3,11 +3,11 @@
 ## ✅ Current Workflows (Reorganized)
 
 ### Core Workflows
-1. **`ci.yml`** - Continuous Integration
-2. **`deploy.yml`** - Deployment to GitHub Pages  
-3. **`release.yml`** - Release automation
-4. **`platform-builds.yml`** - Native platform builds (production releases)
-5. **`test-builds.yml`** - Test builds for manual verification (NEW! ✨)
+1. **`integration.yml`** - Integration tests and checks
+2. **`web.yml`** - Web platform build and deployment
+3. **`mobile.yml`** - Mobile platform build and deployment
+4. **`desktop.yml`** - Desktop platform build and deployment
+5. **`release.yml`** - Release automation
 
 ## 🤖 Other Automation
 

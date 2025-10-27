@@ -55,7 +55,7 @@ export class Game {
   private gems: number = 0;
   private combo: number = 0;
   private comboTimer: number = 0;
-  private readonly COMBO_TIMEOUT = 3000; // 3 seconds to maintain combo
+  private readonly COMBO_TIMEOUT = 2000; // 2 seconds per ARCHITECTURE.md line 643
   private scrollSpeed: number = GAME_CONFIG.SCROLL_SPEED;
   private baseScrollSpeed: number = GAME_CONFIG.SCROLL_SPEED;
   private difficulty: number = 0;

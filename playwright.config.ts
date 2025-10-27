@@ -48,9 +48,11 @@ export default defineConfig({
     //   use: { ...devices['iPhone 12'] },
     // },
   ],
-  webServer: process.env.BASE_URL ? undefined : {
-    command: 'npm run preview',
-    port: 4173,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: process.env.BASE_URL
+    ? undefined
+    : {
+        command: 'npm run preview',
+        port: 4173,
+        reuseExistingServer: !process.env.CI,
+      },
 });

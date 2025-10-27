@@ -64,7 +64,7 @@ Update `.github/QUICK_TEST_GUIDE.md` with:
 1. Document them in a GitHub issue
 2. Reference the platform and version
 3. Consider disabling platform builds workflow until fixed
-4. Update platform-builds.yml to mark as "experimental" or "untested"
+4. Update mobile.yml and desktop.yml to mark builds as "experimental" or "untested"
 
 ## Why This Matters
 

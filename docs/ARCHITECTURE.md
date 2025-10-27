@@ -390,10 +390,10 @@ class CollisionSystem extends System {
     if (colliderA.shape === 'circle' && colliderB.shape === 'circle') {
       const dx = transformA.position.x - transformB.position.x;
       const dy = transformA.position.y - transformB.position.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      const distanceSq = dx * dx + dy * dy;
       const radiusSum = colliderA.radius! + colliderB.radius!;
       
-      return distance < radiusSum;
+      return distanceSq < radiusSum * radiusSum;
     }
     
     // Add rect-rect, circle-rect as needed

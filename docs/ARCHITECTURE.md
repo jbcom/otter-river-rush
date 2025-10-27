@@ -1040,9 +1040,40 @@ class SaveSystem {
   private static readonly SAVE_KEY = 'otter_river_rush_save';
   private static readonly CURRENT_VERSION = 1;
   
+  /**
+   * Deep merge utility to recursively merge nested objects
+   */
+  private static deepMerge<T extends Record<string, any>>(target: T, source: Partial<T>): T {
+    const result = { ...target };
+    
+    for (const key in source) {
+      if (source.hasOwnProperty(key)) {
+        const sourceValue = source[key];
+        const targetValue = result[key];
+        
+        // If both values are plain objects, merge recursively
+        if (
+          sourceValue !== null &&
+          typeof sourceValue === 'object' &&
+          !Array.isArray(sourceValue) &&
+          targetValue !== null &&
+          typeof targetValue === 'object' &&
+          !Array.isArray(targetValue)
+        ) {
+          result[key] = this.deepMerge(targetValue, sourceValue);
+        } else {
+          // Otherwise, overwrite with source value
+          result[key] = sourceValue as T[Extract<keyof T, string>];
+        }
+      }
+    }
+    
+    return result;
+  }
+  
   public static save(data: Partial<SaveData>): void {
     const existing = this.load();
-    const merged = { ...existing, ...data };
+    const merged = this.deepMerge(existing, data);
     
     try {
       localStorage.setItem(this.SAVE_KEY, JSON.stringify(merged));
@@ -1107,6 +1138,28 @@ class SaveSystem {
   
   public static clear(): void {
     localStorage.removeItem(this.SAVE_KEY);
+  }
+  
+  /**
+   * Usage examples demonstrating deep merge behavior:
+   * 
+   * // Example 1: Updating a single setting preserves other settings
+   * SaveSystem.save({ settings: { musicVolume: 0.5 } });
+   * // Result: Only musicVolume changes, sfxVolume, reducedMotion, etc. are preserved
+   * 
+   * // Example 2: Updating multiple nested properties
+   * SaveSystem.save({ 
+   *   settings: { musicVolume: 0.5, sfxVolume: 0.3 },
+   *   highScore: 1000
+   * });
+   * // Result: Updates both volume settings and highScore, preserves all other data
+   * 
+   * // Example 3: Updating statistics
+   * SaveSystem.save({ statistics: { longestRun: 500 } });
+   * // Result: Only longestRun updates, highestCombo, totalNearMisses, etc. are preserved
+   */
+  public static getHighScore(): number {
+    return this.load().highScore;
   }
 }
 ```
@@ -1196,12 +1249,14 @@ class AudioSystem {
     if (this.musicTrack) {
       this.musicTrack.volume(this.musicVolume);
     }
+    // Deep merge ensures other settings properties are preserved
     SaveSystem.save({ settings: { musicVolume: this.musicVolume } });
   }
   
   public setSFXVolume(volume: number): void {
     this.sfxVolume = Math.max(0, Math.min(1, volume));
     this.sfxMap.forEach(howl => howl.volume(this.sfxVolume));
+    // Deep merge ensures other settings properties are preserved
     SaveSystem.save({ settings: { sfxVolume: this.sfxVolume } });
   }
 }

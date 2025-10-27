@@ -61,6 +61,10 @@ export class Game {
   private difficulty: number = 0;
   private lastTime: number = 0;
   private difficultyTimer: number = 0;
+  
+  // Fixed timestep game loop (ARCHITECTURE.md specification)
+  private accumulatedTime: number = 0;
+  private readonly FIXED_TIMESTEP = 1000 / 60; // 16.67ms for 60 FPS
 
   // Power-up states
   private scoreMultiplier: number = 1;
@@ -722,14 +726,36 @@ export class Game {
     }, 4000);
   }
 
+  /**
+   * Fixed timestep update loop
+   * Implements ARCHITECTURE.md specification (lines 114-148)
+   * Ensures deterministic physics across all devices
+   */
   update(currentTime: number): void {
     if (this.state !== GameState.PLAYING) return;
 
-    const deltaTime = (currentTime - this.lastTime) / 1000;
+    const deltaTime = currentTime - this.lastTime;
     this.lastTime = currentTime;
+    
+    // Accumulate time for fixed timestep updates
+    this.accumulatedTime += deltaTime;
+    
+    // Fixed timestep physics updates
+    while (this.accumulatedTime >= this.FIXED_TIMESTEP) {
+      this.fixedUpdate(this.FIXED_TIMESTEP / 1000); // Convert to seconds
+      this.accumulatedTime -= this.FIXED_TIMESTEP;
+    }
+  }
+  
+  /**
+   * Fixed timestep update - called consistently at 60 FPS
+   * Physics, collision, gameplay logic
+   */
+  private fixedUpdate(deltaTime: number): void {
 
     // Time Trial: check if time is up
     if (this.gameMode === GameMode.TIME_TRIAL) {
+      const currentTime = performance.now();
       this.timeTrialTimeLeft =
         this.timeTrialDuration - (currentTime - this.timeTrialStartTime);
       if (this.timeTrialTimeLeft <= 0) {
@@ -739,7 +765,7 @@ export class Game {
     }
 
     this.updateDifficulty(deltaTime);
-    this.updatePowerUps(currentTime);
+    this.updatePowerUps(performance.now());
     this.updateCombo(deltaTime);
 
     this.otter.update(deltaTime);

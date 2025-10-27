@@ -3,7 +3,7 @@
 [![CI](https://github.com/jbcom/otter-river-rush/actions/workflows/ci.yml/badge.svg)](https://github.com/jbcom/otter-river-rush/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-An engaging endless runner game featuring an adventurous otter navigating a rushing river. Built with **TypeScript**, **React Three Fiber**, and **Zustand**, deployable across all platforms.
+An engaging endless runner game featuring an adventurous otter navigating a rushing river. Built with **TypeScript** and **HTML5 Canvas 2D**, deployable across all platforms.
 
 🎮 **[Play Now](https://jbcom.github.io/otter-river-rush/)** | 📖 **[Documentation](#documentation)** | 🤝 **[Contributing](./CONTRIBUTING.md)** | 📱 **[Platform Setup](./PLATFORM_SETUP.md)**
 
@@ -35,7 +35,7 @@ See **[PLATFORM_SETUP.md](./PLATFORM_SETUP.md)** for detailed setup instructions
 
 ### Technical Features
 - 📱 **Progressive Web App**: Install and play offline
-- 🎨 **Canvas Rendering**: High-performance 2D graphics
+- 🎨 **Canvas 2D Rendering**: Optimized 60 FPS performance with layered rendering
 - 🔊 **Spatial Audio**: Immersive sound effects with Howler.js
 - 💾 **Auto-Save**: Progress saved automatically to localStorage
 - 📊 **Local Leaderboards**: Track your high scores
@@ -297,8 +297,8 @@ Otter River Rush is built with accessibility in mind:
 
 ### Frontend
 - **Language**: TypeScript 5.5
-- **Framework**: React 19 + React Three Fiber 9
-- **State**: Zustand 5.0
+- **Rendering**: HTML5 Canvas 2D (native)
+- **Architecture**: Entity Component System pattern
 - **Build**: Vite 7.1
 - **Styling**: Tailwind CSS 4 + DaisyUI 5
 

@@ -88,8 +88,8 @@
 | Workflow | Before | After | Status |
 |----------|--------|-------|--------|
 | CI/CD (monolith) | ❌ 372 lines | ✅ Removed | Deleted |
-| CI | ❌ Mixed with CD | ✅ 210 lines | Created |
-| Deploy | ❌ Mixed with CI | ✅ 70 lines | Created |
+| Integration (`integration.yml`) | ❌ Mixed with CD | ✅ 210 lines | Created |
+| Web (`web.yml`) | ❌ Mixed with CI | ✅ 70 lines | Created |
 | Release | ❌ Mixed with CI | ✅ 70 lines | Created |
 | Platform Builds | ✅ Separate | ✅ 145 lines | Updated |
 | Test Builds | ❌ Didn't exist | ✅ 245 lines | Created |

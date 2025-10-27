@@ -115,7 +115,7 @@ DESIGN REQUIREMENTS THIS REVEALS:
 ```
 2:00 PM - Streaming to 45 viewers, attempting world record attempts
 ├─ GOAL: Break personal record, entertain viewers
-├─ Selects: Speed Rush Mode (faster scroll, bonus points)
+├─ Selects: Time Trial Mode (faster scroll, bonus points)
 ├─ Preparation:
 │  ├─ Reviews previous run VODs, identifies mistakes
 │  ├─ Practices lane-switching timing in practice mode
@@ -219,7 +219,7 @@ Perfect dodge sequence: 10 obstacles
     ↓
 Endorphin hit
     ↓
-Eventually: Unavoidable pattern (or mistake)
+Eventually: Mistake or increasing difficulty
     ↓
 [GAME OVER]
     ↓
@@ -275,7 +275,7 @@ Player: *Immediately clicks "DIVE AGAIN!"*
 - **Risk/reward:** Take risky paths for more distance?
 - **Routing:** Multiple paths, optimal line exists
 - **Speed boosts:** Collectibles that increase speed
-- **Leaderboard-focused:** Local rankings
+- **Leaderboard-focused:** Local rankings (privacy-first)
 
 **Unique Mechanics:**
 - Speed boost pickups (+20% speed for 5s)
@@ -576,7 +576,7 @@ PLAYER SKILL
 ### Fun Metrics (Most Important)
 - **Replay Rate:** % who play 5+ times in first session
 - **Flow Achievement:** % who reach 1000m (indicates engagement)
-- **Recommendation:** % who tell friends (NPS equivalent)
+- **Session Quality:** Average session length and games per session (indicates enjoyment)
 
 ### Technical Health
 - **Performance:** 60 FPS maintained 99% of gameplay

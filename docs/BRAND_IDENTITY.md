@@ -250,7 +250,7 @@ STATS:
 
 #### Buttons
 **Primary Button (Call to Action):**
-```css
+```scss
 .button-primary {
   /* Shape */
   border-radius: 16px;

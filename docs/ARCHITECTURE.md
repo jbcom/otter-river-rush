@@ -225,7 +225,9 @@ abstract class System {
   public removeEntity(entity: Entity): void {
     const index = this.entities.indexOf(entity);
     if (index > -1) {
-      this.entities.splice(index, 1);
+      // Swap with the last element and pop for O(1) removal
+      this.entities[index] = this.entities[this.entities.length - 1];
+      this.entities.pop();
     }
   }
   
@@ -423,6 +425,11 @@ interface ObstaclePattern {
 class ProceduralGenerator {
   private seed: number;
   private rng: SeededRandom;
+  private baseDistance: number = 0;
+  private difficultyMultiplier: number = 1.0;
+  private recentDeaths: number[] = []; // Timestamps of recent deaths
+  private perfectRunStreak: number = 0;
+  
   private patterns: ObstaclePattern[] = [
     { name: 'single', lanes: [1], spacing: 200, difficulty: 1 },
     { name: 'double', lanes: [0, 2], spacing: 200, difficulty: 2 },
@@ -462,12 +469,49 @@ class ProceduralGenerator {
   }
   
   private getDifficulty(distance: number): number {
-    // Linear difficulty scaling
+    // Base difficulty scaling
     // 0-500m: diff 1-2
     // 500-1000m: diff 2-4
     // 1000-2000m: diff 4-6
     // 2000m+: diff 6-10
-    return Math.min(10, Math.floor(distance / 200) + 1);
+    const baseDifficulty = Math.min(10, Math.floor(distance / 200) + 1);
+    
+    // Apply Dynamic Difficulty Adjustment (DDA)
+    return Math.max(1, Math.min(10, baseDifficulty * this.difficultyMultiplier));
+  }
+  
+  /**
+   * Dynamic Difficulty Adjustment (DDA)
+   * Adjusts difficulty based on player performance
+   */
+  public recordDeath(): void {
+    const now = Date.now();
+    this.recentDeaths.push(now);
+    
+    // Keep only deaths from last 60 seconds
+    this.recentDeaths = this.recentDeaths.filter(t => now - t < 60000);
+    
+    // If player died 3+ times in last minute, scale back difficulty
+    if (this.recentDeaths.length >= 3) {
+      this.difficultyMultiplier = Math.max(0.7, this.difficultyMultiplier - 0.1);
+    }
+    
+    this.perfectRunStreak = 0;
+  }
+  
+  public recordSuccessfulDodge(): void {
+    this.perfectRunStreak++;
+    
+    // If player is doing well (50+ consecutive dodges), scale up slightly
+    if (this.perfectRunStreak > 50) {
+      this.difficultyMultiplier = Math.min(1.3, this.difficultyMultiplier + 0.05);
+      this.perfectRunStreak = 0; // Reset to avoid runaway difficulty
+    }
+  }
+  
+  public increasePowerUpSpawnRate(): number {
+    // When player is struggling, increase power-up spawn rate
+    return this.recentDeaths.length >= 2 ? 1.5 : 1.0;
   }
   
   private createObstacle(
@@ -1171,7 +1215,6 @@ class SaveSystem {
 ### Spatial Audio System
 ```typescript
 class AudioSystem {
-  private howl: Howl;
   private musicTrack: Howl | null = null;
   private sfxMap: Map<string, Howl> = new Map();
   private masterVolume: number = 1.0;
@@ -1276,11 +1319,17 @@ class PlayerController {
     startX: number;
     targetX: number;
     elapsed: number;
+    animationElapsed: number;
+    animationDuration: number;
+    targetRotation: number;
   } = {
     active: false,
     startX: 0,
     targetX: 0,
-    elapsed: 0
+    elapsed: 0,
+    animationElapsed: 0,
+    animationDuration: 0,
+    targetRotation: 0
   };
   
   constructor(entity: Entity) {
@@ -1368,29 +1417,31 @@ class PlayerController {
     const transform = this.entity.getComponent<TransformComponent>('transform')!;
     const targetRotation = direction === 'left' ? -0.2 : 0.2; // radians
     
-    // Simple tween (would use actual tween library in real impl)
-    let elapsed = 0;
-    const duration = this.LANE_SWITCH_DURATION;
-    
-    const animate = (dt: number) => {
-      elapsed += dt;
-      const progress = Math.min(1, elapsed / duration);
+    // Store animation state to be updated by the main game loop
+    this.laneTransition.animationElapsed = 0;
+    this.laneTransition.animationDuration = this.LANE_SWITCH_DURATION;
+    this.laneTransition.targetRotation = targetRotation;
+  }
+  
+  // Called by the main GameLoop's update method with deltaTime
+  public updateAnimation(deltaTime: number): void {
+    if (this.laneTransition.animationElapsed < this.laneTransition.animationDuration) {
+      this.laneTransition.animationElapsed += deltaTime;
+      const progress = Math.min(1, this.laneTransition.animationElapsed / this.laneTransition.animationDuration);
+      
+      const transform = this.entity.getComponent<TransformComponent>('transform')!;
       
       // Rotate there and back
       if (progress < 0.5) {
-        transform.rotation = targetRotation * (progress * 2);
+        transform.rotation = this.laneTransition.targetRotation * (progress * 2);
       } else {
-        transform.rotation = targetRotation * (2 - progress * 2);
+        transform.rotation = this.laneTransition.targetRotation * (2 - progress * 2);
       }
       
-      if (progress < 1) {
-        requestAnimationFrame(() => animate(16)); // Approximate 60fps
-      } else {
+      if (progress >= 1) {
         transform.rotation = 0;
       }
-    };
-    
-    animate(16);
+    }
   }
 }
 ```

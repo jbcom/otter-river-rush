@@ -275,7 +275,7 @@ Player: *Immediately clicks "DIVE AGAIN!"*
 - **Risk/reward:** Take risky paths for more distance?
 - **Routing:** Multiple paths, optimal line exists
 - **Speed boosts:** Collectibles that increase speed
-- **Leaderboard-focused:** Global rankings
+- **Leaderboard-focused:** Local rankings
 
 **Unique Mechanics:**
 - Speed boost pickups (+20% speed for 5s)

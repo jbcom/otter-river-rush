@@ -40,8 +40,8 @@
 │    ┌────────────────────────────────────────┐              │
 │    │          GAME LOOP (60 FPS)            │              │
 │    │                                        │              │
-│    │  ┌──────────┐  ┌──────────┐  ┌───────┤              │
-│    │  │ Physics  │  │Procedural│  │ Score ││              │
+│    │  │ Physics  │  │Procedural│  │ Score │              │
+│    │  │ System   │  │Generator │  │Manager│              │
 │    │  │ System   │  │Generator │  │Manager││              │
 │    │  └────┬─────┘  └────┬─────┘  └───┬───┘│              │
 │    │       └─────────────┬─────────────┘    │              │

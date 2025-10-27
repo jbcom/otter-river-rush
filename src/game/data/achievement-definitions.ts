@@ -464,7 +464,7 @@ export const ACHIEVEMENT_DEFINITIONS = [
     icon: '💨',
     requirement: 1,
     rarity: 'rare',
-    checkCondition: (stats: GameStats) => stats.coins100In30Seconds,
+    checkCondition: (stats: GameStats) => stats.coins100In30Seconds === true,
   },
   {
     id: 'gem_hunter',

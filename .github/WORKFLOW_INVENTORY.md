@@ -66,7 +66,7 @@
 **Purpose**: Build platform binaries without creating a release  
 **Use case**: Test Android/Desktop builds before release  
 **Priority**: HIGH (addresses untested builds issue)  
-**Status**: ✅ Created as `test-builds.yml`
+**Status**: ✅ Created as `mobile.yml` and `desktop.yml` with workflow_dispatch
 
 ### 2. Security Scanning Workflow (Recommended)
 **Purpose**: CodeQL analysis for security vulnerabilities  
@@ -88,11 +88,11 @@
 | Workflow | Before | After | Status |
 |----------|--------|-------|--------|
 | CI/CD (monolith) | ❌ 372 lines | ✅ Removed | Deleted |
-| Integration (`integration.yml`) | ❌ Mixed with CD | ✅ 210 lines | Created |
-| Web (`web.yml`) | ❌ Mixed with CI | ✅ 70 lines | Created |
-| Release | ❌ Mixed with CI | ✅ 70 lines | Created |
-| Platform Builds | ✅ Separate | ✅ 145 lines | Updated |
-| Test Builds | ❌ Didn't exist | ✅ 245 lines | Created |
+| Integration (`integration.yml`) | ❌ Mixed with CD | ✅ 121 lines | Created |
+| Web (`web.yml`) | ❌ Mixed with CI | ✅ 211 lines | Created |
+| Mobile (`mobile.yml`) | ❌ Mixed in monolith | ✅ 101 lines | Created |
+| Desktop (`desktop.yml`) | ❌ Mixed in monolith | ✅ 120 lines | Created |
+| Release (`release.yml`) | ❌ Mixed with CI | ✅ 70 lines | Created |
 | Renovate | ✅ Active | ✅ Active | Unchanged |
 
 ## 🎯 Summary

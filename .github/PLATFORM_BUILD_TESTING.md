@@ -139,7 +139,7 @@ Currently, platform builds are triggered automatically but NEVER tested. Future 
 2. **Set up Android emulator in CI** for basic APK testing
 3. **Consider signing certificates** for production releases
 4. **Add build artifact retention** (currently 30 days for web, undefined for platforms)
-5. **Create test builds workflow** (manual trigger, doesn't create release)
+5. **Update mobile.yml and desktop.yml** to mark builds as "experimental" or "untested"
 
 ## Important Notes
 

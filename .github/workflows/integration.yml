@@ -104,7 +104,6 @@ jobs:
       
       - name: Run integration tests
         run: npm run test:integration || echo "⚠️  Integration tests not yet implemented"
-        continue-on-error: true
       
       - name: Integration test summary
         run: |

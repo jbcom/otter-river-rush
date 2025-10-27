@@ -273,10 +273,8 @@ Capacitor and Electron wrap already-tested code. Manual testing verifies the wra
 ### What Changed
 
 **Deleted workflows:**
-- ❌ `ci.yml` - Mixed CI with platform builds
-- ❌ `deploy.yml` - Didn't test deployed URL
+- ❌ `ci-cd.yml` - Mixed CI with platform builds
 - ❌ `platform-builds.yml` - Tested after branching
-- ❌ `test-builds.yml` - Wrong testing order
 
 **New workflows:**
 - ✅ `integration.yml` - Test BEFORE branching

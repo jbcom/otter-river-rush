@@ -204,8 +204,7 @@ export async function processAsset(
       // Re-setup pipeline with lower quality
       pipeline = await setupPipeline(sourceBuffer, asset, needsWhiteBackgroundRemoval, needsResize);
       
-      // Always use PNG for adaptive quality re-processing as other formats may not respect quality settings
-      outputBuffer = await applyFormatConversion(pipeline, 'png', targetQuality);
+      outputBuffer = await applyFormatConversion(pipeline, targetFormat, targetQuality);
     }
 
     // Ensure directory exists

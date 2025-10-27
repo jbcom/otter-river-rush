@@ -26,7 +26,7 @@ The automated builds in `platform-builds.yml` generate binaries but they have NE
 1. [ ] Download the `.apk` from GitHub release
 2. [ ] Install on Android device via ADB:
    ```bash
-   adb install otter-river-rush-v1.0.0-unsigned.apk
+   adb install otter-river-rush-*.apk
    ```
 3. [ ] Launch the app from device home screen
 4. [ ] **App Launch**: Verify app opens without crashing

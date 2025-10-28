@@ -29,7 +29,8 @@ export function TrailEffect(): React.JSX.Element | null {
     }
   });
 
-  const _trailGeometry = useMemo(() => {
+  // Generate trail geometry from points
+  const trailGeometry = useMemo(() => {
     const points =
       trailPointsRef.current.length > 0
         ? trailPointsRef.current
@@ -38,6 +39,23 @@ export function TrailEffect(): React.JSX.Element | null {
   }, [trailPointsRef.current.length]);
 
   if (trailPointsRef.current.length < 2) return null;
+
+  return (
+    <line>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={trailGeometry.length}
+          array={
+            new Float32Array(trailGeometry.flatMap((p) => [p.x, p.y, p.z]))
+          }
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <lineBasicMaterial color="#00ffff" linewidth={2} transparent opacity={0.6} />
+    </line>
+  );
+}
 
   return (
     <line>

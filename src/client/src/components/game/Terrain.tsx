@@ -47,8 +47,8 @@ function TerrainMesh(): React.JSX.Element {
   const constraints = useMobileConstraints();
   const meshRef = useRef<THREE.Mesh>(null);
 
-  // Get texture paths for current biome
-  const _texturePaths = useMemo(() => {
+  // Get texture paths for current biome (for future PBR implementation)
+  const texturePaths = useMemo(() => {
     const biomeTextures = {
       forest: AMBIENT_CG_TEXTURES.GRASS,
       mountain: AMBIENT_CG_TEXTURES.ROCK_GRANITE,
@@ -60,6 +60,10 @@ function TerrainMesh(): React.JSX.Element {
       AMBIENT_CG_TEXTURES.GRASS;
     return getLocalTexturePaths(texture.id, '1K', 'jpg');
   }, [biome.name]);
+
+  // TODO: Load PBR textures using texturePaths when texture loading is optimized
+  // For now using simple material fallback to avoid loading hangs
+  console.warn('PBR textures available but not loaded:', texturePaths);
 
   // Simple material fallback (PBR textures cause loading hang)
   const material = useMemo(

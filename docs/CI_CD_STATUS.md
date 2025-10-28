@@ -278,8 +278,8 @@ The CI runs a fast, reliable subset:
 ### Production Artifacts
 
 1. **GitHub Pages** (Web Preview)
-   - URL: https://jbcom.github.io/otter-river-rush/
-     *(Update this URL if repository is forked or organization changes)*
+   - URL pattern: `https://<username>.github.io/<repo-name>/`
+     *(Replace `<username>` and `<repo-name>` with your GitHub username/organization and repository name. For example: `https://jbcom.github.io/otter-river-rush/`)*
    - Auto-deployed on every push to main
    - PWA-enabled for offline play
 

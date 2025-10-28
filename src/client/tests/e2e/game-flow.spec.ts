@@ -18,7 +18,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should start classic mode', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
 
     await page.waitForTimeout(500);
 
@@ -31,7 +33,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should load 3D models', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
 
     await page.waitForTimeout(2000);
 
@@ -44,7 +48,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should display HUD during gameplay', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
     await page.waitForTimeout(1000);
 
     // Score should be visible (starts at 0)
@@ -56,7 +62,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should respond to keyboard input', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
     await page.waitForTimeout(1000);
 
     // Press arrow key
@@ -72,7 +80,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should spawn entities over time', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
 
     // Wait for entities to spawn
     await page.waitForTimeout(5000);
@@ -86,11 +96,15 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should pause game with Escape', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
     await page.waitForTimeout(1000);
 
     // Directly pause via store (more reliable than keyboard in headless)
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.pauseGame?.());
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.pauseGame?.()
+    );
     await page.waitForTimeout(500);
 
     // Check pause status
@@ -101,11 +115,15 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should resume from pause', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
     await page.waitForTimeout(1000);
 
     // Pause via store
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.pauseGame?.());
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.pauseGame?.()
+    );
     await page.waitForTimeout(500);
 
     // Wait for resume button and click via evaluate for reliability
@@ -123,7 +141,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should track score over time', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
 
     // Wait longer and check score increases
     await page.waitForTimeout(5000);
@@ -137,19 +157,25 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should track distance', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
     // Distance should increase over time
     await expect(async () => {
-      const distance = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.distance || 0);
+      const distance = await page.evaluate(
+        () => (window as any).__gameStore?.getState?.()?.distance || 0
+      );
       expect(distance).toBeGreaterThan(0);
     }).toPass({
       // Poll for up to 5 seconds.
-      timeout: 5000
+      timeout: 5000,
     });
   });
 
   test('should handle game over', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
 
     // Trigger game over via debug
     await page.evaluate(() => {
@@ -163,7 +189,9 @@ test.describe('Game Flow E2E Tests', () => {
   });
 
   test('should restart from game over', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
 
     await page.evaluate(() => {
       (window as any).__gameStore?.getState?.()?.endGame?.();
@@ -199,12 +227,14 @@ test.describe('Game Flow E2E Tests', () => {
 
     await page.waitForTimeout(2000);
 
-    const has404Errors = consoleErrors.some(err => err.includes('404'));
+    const has404Errors = consoleErrors.some((err) => err.includes('404'));
     expect(has404Errors).toBe(false);
   });
 
   test('should maintain 30+ FPS', async ({ page }) => {
-    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
+    await page.evaluate(() =>
+      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+    );
     await page.waitForTimeout(3000);
 
     // Measure FPS directly with timeout protection

@@ -5,7 +5,7 @@ export function GhostModeEffect() {
   useFrame(() => {
     const [player] = queries.player.entities;
     if (!player) return;
-    
+
     // Apply ghost shader effect to player's three object
     if (player.three && player.ghost) {
       player.three.traverse((child: any) => {
@@ -27,6 +27,6 @@ export function GhostModeEffect() {
       });
     }
   });
-  
+
   return null;
 }

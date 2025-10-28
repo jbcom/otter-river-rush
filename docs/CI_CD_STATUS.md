@@ -279,6 +279,7 @@ The CI runs a fast, reliable subset:
 
 1. **GitHub Pages** (Web Preview)
    - URL: https://jbcom.github.io/otter-river-rush/
+     *(Update this URL if repository is forked or organization changes)*
    - Auto-deployed on every push to main
    - PWA-enabled for offline play
 
@@ -311,18 +312,18 @@ The CI runs a fast, reliable subset:
 
 ### Regular Tasks
 
-- [ ] Update dependencies monthly
-- [ ] Review and fix flaky tests
-- [ ] Monitor CI duration trends
-- [ ] Clean up old artifacts
-- [ ] Update Node/Java/Android SDK versions
+- [ ] Update dependencies monthly (Owner: DevOps, Automated via Renovate)
+- [ ] Review and fix flaky tests (Owner: QA Team, Manual review)
+- [ ] Monitor CI duration trends (Owner: DevOps, Can be automated)
+- [ ] Clean up old artifacts (Owner: DevOps, Automated by GitHub)
+- [ ] Update Node/Java/Android SDK versions (Owner: DevOps, Renovate PRs)
 
 ### Quarterly Reviews
 
-- [ ] Evaluate test coverage
-- [ ] Review CI/CD performance
-- [ ] Assess artifact retention policies
-- [ ] Update documentation
+- [ ] Evaluate test coverage (Owner: QA Lead, Manual review)
+- [ ] Review CI/CD performance (Owner: DevOps Lead, Manual review)
+- [ ] Assess artifact retention policies (Owner: DevOps, Manual review)
+- [ ] Update documentation (Owner: Tech Writer, Manual update)
 
 ## Resources
 

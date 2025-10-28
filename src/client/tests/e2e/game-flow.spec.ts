@@ -138,14 +138,14 @@ test.describe('Game Flow E2E Tests', () => {
 
   test('should track distance', async ({ page }) => {
     await page.evaluate(() => (window as any).__gameStore?.getState?.()?.startGame?.('classic'));
-    await page.waitForTimeout(4000);
-
-    const distance = await page.evaluate(() => {
-      return (window as any).__gameStore?.getState?.()?.distance || 0;
-    });
-
     // Distance should increase over time
-    expect(distance).toBeGreaterThan(0);
+    await expect(async () => {
+      const distance = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.distance || 0);
+      expect(distance).toBeGreaterThan(0);
+    }).toPass({
+      // Poll for up to 5 seconds.
+      timeout: 5000
+    });
   });
 
   test('should handle game over', async ({ page }) => {

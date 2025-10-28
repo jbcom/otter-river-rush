@@ -330,7 +330,8 @@ The CI runs a fast, reliable subset:
 - **Workflow File:** `.github/workflows/mobile-primary.yml`
 - **Test Documentation:** `docs/TESTING.md`
 - **Actions Dashboard:** https://github.com/jbcom/otter-river-rush/actions
-- **Pages Deployment:** https://github.com/jbcom/otter-river-rush/deployments
+- **Pages Deployment:** https://github.com/<OWNER>/<REPO>/deployments
+  _(Replace `<OWNER>/<REPO>` with your repository path. This avoids hardcoding and adapts to forks, renames, or moves.)_
 
 ## Conclusion
 

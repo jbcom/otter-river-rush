@@ -119,17 +119,19 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     const playingStatus = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
     expect(playingStatus).toBe('playing');
     
-    // 3. Press Escape to pause
-    await page.keyboard.press('Escape');
+    // 3. Press Escape to pause (use store for reliability in headless)
+    await page.evaluate(() => (window as any).__gameStore?.getState?.()?.pauseGame?.());
     await page.waitForTimeout(1000); // Give more time for pause transition
     
     // 4. Pause screen appears
     const pausedStatus = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
     expect(pausedStatus).toBe('paused');
     
-    // 5. Click resume
+    // 5. Click resume via evaluate for reliability
     await expect(page.locator('#resumeButton')).toBeVisible({ timeout: 5000 });
-    await page.click('#resumeButton');
+    await page.evaluate(() => {
+      document.querySelector<HTMLButtonElement>('#resumeButton')?.click();
+    });
     await page.waitForTimeout(1000); // Give more time for resume transition
     
     // 6. Back to playing

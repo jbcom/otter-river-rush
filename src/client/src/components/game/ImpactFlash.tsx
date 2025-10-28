@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { queries } from '../../ecs/world';
 
-export function ImpactFlash() {
+export function ImpactFlash(): React.JSX.Element | null {
   const [flashing, setFlashing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = queries.destroyed.onEntityAdded.subscribe((entity) => {
       if (entity.obstacle) {
         setFlashing(true);
-        setTimeout(() => setFlashing(false), 100);
+        window.setTimeout(() => setFlashing(false), 100);
       }
     });
 

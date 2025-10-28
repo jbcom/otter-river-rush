@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Vector3 } from 'three';
 import { useGameStore } from '../../hooks/useGameStore';
 
@@ -54,7 +54,13 @@ interface LineProps {
   opacity: number;
 }
 
-function Line({ points, color, lineWidth, transparent, opacity }: LineProps): React.JSX.Element {
+function Line({
+  points,
+  color,
+  lineWidth,
+  transparent,
+  opacity,
+}: LineProps): React.JSX.Element {
   return (
     <line>
       <bufferGeometry>

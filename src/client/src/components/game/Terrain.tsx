@@ -5,7 +5,7 @@
  */
 
 import { useFrame } from '@react-three/fiber';
-import { Suspense, useMemo, useRef } from 'react';
+import React, { Suspense, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useBiome } from '../../ecs/biome-system';
 import { useMobileConstraints } from '../../hooks/useMobileConstraints';

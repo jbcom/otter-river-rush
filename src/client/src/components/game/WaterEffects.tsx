@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 import { useBiome } from '../../ecs/biome-system';
@@ -17,8 +17,9 @@ export function WaterEffects(): React.JSX.Element | null {
     rapids: [0.05, 0.2, 0.4], // Dark turbulent water
   };
 
-  const waterColor =
-    waterColors[biome.name as keyof typeof waterColors] || [0.1, 0.2, 0.7];
+  const waterColor = waterColors[biome.name as keyof typeof waterColors] || [
+    0.1, 0.2, 0.7,
+  ];
 
   useFrame((_, dt) => {
     if (!meshRef.current || status !== 'playing') return;

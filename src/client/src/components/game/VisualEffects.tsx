@@ -1,3 +1,4 @@
+import React from 'react';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { useGameStore } from '../../hooks/useGameStore';
 import { Atmosphere } from '@takram/three-atmosphere/r3f';

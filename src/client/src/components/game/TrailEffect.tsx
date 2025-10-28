@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { queries } from '../../ecs/world';
@@ -29,33 +29,12 @@ export function TrailEffect(): React.JSX.Element | null {
     }
   });
 
-  // Generate trail geometry from points
-  const trailGeometry = useMemo(() => {
-    const points =
-      trailPointsRef.current.length > 0
-        ? trailPointsRef.current
-        : [new Vector3(0, -3, 0)];
-    return points;
-  }, [trailPointsRef.current.length]);
-
   if (trailPointsRef.current.length < 2) return null;
 
-  return (
-    <line>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={trailGeometry.length}
-          array={
-            new Float32Array(trailGeometry.flatMap((p) => [p.x, p.y, p.z]))
-          }
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <lineBasicMaterial color="#00ffff" linewidth={2} transparent opacity={0.6} />
-    </line>
+  // Generate trail geometry from current trail points
+  const positions = new Float32Array(
+    trailPointsRef.current.flatMap((p) => [p.x, p.y, p.z])
   );
-}
 
   return (
     <line>
@@ -63,11 +42,7 @@ export function TrailEffect(): React.JSX.Element | null {
         <bufferAttribute
           attach="attributes-position"
           count={trailPointsRef.current.length}
-          array={
-            new Float32Array(
-              trailPointsRef.current.flatMap((p) => [p.x, p.y, p.z])
-            )
-          }
+          array={positions}
           itemSize={3}
         />
       </bufferGeometry>

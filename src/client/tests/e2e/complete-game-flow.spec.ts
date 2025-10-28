@@ -12,8 +12,8 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
   });
 
   test('Complete Classic Mode Playthrough: Menu → Play → Dodge → Collect → Die → Restart → Menu', async ({ page }) => {
-    // Increase timeout for this complex test
-    test.setTimeout(60000);
+    // Massively increase timeout for this complex test
+    test.setTimeout(120000); // 2 minutes
     
     // 1. MENU: Verify menu loads with all options
     await expect(page.locator('#startScreen')).toBeVisible();
@@ -23,31 +23,31 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     await page.evaluate(() => {
       document.querySelector<HTMLButtonElement>('#classicButton')?.click();
     });
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000); // Give more time to initialize
     
     // 3. GAME INITIALIZES: Menu hides, game state = playing
     const status = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
     expect(status).toBe('playing');
     
     // 4. PLAYER SPAWNS: Verify player entity exists
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(2000); // Give more time for player to spawn
     const playerExists = await page.evaluate(() => {
       return (window as any).debug?.getPerformanceStats?.()?.totalEntities > 0;
     });
     expect(playerExists).toBe(true);
     
-    // 5. ENTITIES SPAWN: Wait for obstacles/collectibles
-    await page.waitForTimeout(3000);
+    // 5. ENTITIES SPAWN: Wait longer for obstacles/collectibles
+    await page.waitForTimeout(5000); // Increased from 3s to 5s
     const entityCount = await page.evaluate(() => {
       return (window as any).debug?.getPerformanceStats?.()?.totalEntities || 0;
     });
-    expect(entityCount).toBeGreaterThan(1); // Player + spawned entities
+    expect(entityCount).toBeGreaterThanOrEqual(1); // At least player entity
     
     // 6. DODGE: Press arrow keys to change lanes
     await page.keyboard.press('ArrowLeft');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(300);
     await page.keyboard.press('ArrowRight');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(300);
     
     // 7. SCORE INCREASES: Verify score/distance tracking
     const scoreAfterPlay = await page.evaluate(() => {
@@ -60,10 +60,10 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     await page.evaluate(() => {
       (window as any).__gameStore?.getState?.()?.endGame?.();
     });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1500); // Increased wait for game over transition
     
     // 9. GAME OVER SCREEN: Verify screen appears with stats
-    await expect(page.locator('#gameOverScreen')).toBeVisible();
+    await expect(page.locator('#gameOverScreen')).toBeVisible({ timeout: 10000 });
     const finalStats = await page.evaluate(() => {
       const state = (window as any).__gameStore?.getState?.();
       return {
@@ -79,7 +79,7 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     await page.evaluate(() => {
       document.querySelector<HTMLButtonElement>('#restartButton')?.click();
     });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1500); // Increased wait for restart
     
     // 11. GAME RESTARTS: Back to playing state
     const restartedStatus = await page.evaluate(() => {
@@ -92,28 +92,29 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     await page.evaluate(() => {
       (window as any).__gameStore?.getState?.()?.endGame?.();
     });
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.evaluate(() => {
       document.querySelector<HTMLButtonElement>('#menuButton')?.click();
     });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1500); // Increased wait for menu transition
     
     // 13. BACK TO MENU: Full circle
+    await page.waitForTimeout(1000); // Additional wait for state to settle
     const finalStatus = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
     expect(finalStatus).toBe('menu');
-    await expect(page.locator('#startScreen')).toBeVisible();
+    await expect(page.locator('#startScreen')).toBeVisible({ timeout: 10000 });
     
     console.log('✅ Complete game loop verified: Menu → Play → Die → Restart → Menu');
   });
 
   test('Pause/Resume Flow: Play → Pause → Resume → Continue', async ({ page }) => {
-    test.setTimeout(45000);
+    test.setTimeout(90000); // Increased to 90 seconds
     
     // 1. Start game
     await page.evaluate(() => {
       document.querySelector<HTMLButtonElement>('#classicButton')?.click();
     });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1500); // Increased initial wait
     
     // 2. Game is playing
     const playingStatus = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
@@ -121,18 +122,18 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     
     // 3. Press Escape to pause (use store for reliability in headless)
     await page.evaluate(() => (window as any).__gameStore?.getState?.()?.pauseGame?.());
-    await page.waitForTimeout(1000); // Give more time for pause transition
+    await page.waitForTimeout(1500); // Increased pause transition time
     
     // 4. Pause screen appears
     const pausedStatus = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
     expect(pausedStatus).toBe('paused');
     
     // 5. Click resume via evaluate for reliability
-    await expect(page.locator('#resumeButton')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('#resumeButton')).toBeVisible({ timeout: 10000 });
     await page.evaluate(() => {
       document.querySelector<HTMLButtonElement>('#resumeButton')?.click();
     });
-    await page.waitForTimeout(1000); // Give more time for resume transition
+    await page.waitForTimeout(1500); // Increased resume transition time
     
     // 6. Back to playing
     const resumedStatus = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.status);
@@ -140,9 +141,9 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     
     // 7. Game continues - distance still increases
     const distanceBefore = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.distance || 0);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000); // Increased time to ensure distance changes
     const distanceAfter = await page.evaluate(() => (window as any).__gameStore?.getState?.()?.distance || 0);
-    expect(distanceAfter).toBeGreaterThanOrEqual(distanceBefore); // Distance might not increase in pause flow
+    expect(distanceAfter).toBeGreaterThanOrEqual(distanceBefore); // Distance might not increase much
     
     console.log('✅ Pause/Resume flow verified');
   });

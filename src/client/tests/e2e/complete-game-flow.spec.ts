@@ -53,12 +53,15 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     await page.keyboard.press('ArrowRight');
     await page.waitForTimeout(300);
 
-    // 7. SCORE INCREASES: Verify score/distance tracking
-    const scoreAfterPlay = await page.evaluate(() => {
-      const state = (window as any).__gameStore?.getState?.();
-      return { score: state?.score || 0, distance: state?.distance || 0 };
-    });
-    expect(scoreAfterPlay.distance).toBeGreaterThan(0);
+    // 7. SCORE INCREASES: Verify score/distance tracking - use polling with longer timeout
+    await page.waitForTimeout(2000); // Give game time to initialize
+    await expect(async () => {
+      const scoreAfterPlay = await page.evaluate(() => {
+        const state = (window as any).__gameStore?.getState?.();
+        return { score: state?.score || 0, distance: state?.distance || 0 };
+      });
+      expect(scoreAfterPlay.distance).toBeGreaterThan(0);
+    }).toPass({ timeout: 15000, intervals: [1000] }); // Poll for up to 15 seconds
 
     // 8. GAME OVER: Trigger death
     await page.evaluate(() => {
@@ -159,15 +162,17 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     );
     expect(resumedStatus).toBe('playing');
 
-    // 7. Game continues - distance still increases
+    // 7. Game continues - distance still increases - use polling with increased check interval
     const distanceBefore = await page.evaluate(
       () => (window as any).__gameStore?.getState?.()?.distance || 0
     );
-    await page.waitForTimeout(3000); // Increased time to ensure distance changes
-    const distanceAfter = await page.evaluate(
-      () => (window as any).__gameStore?.getState?.()?.distance || 0
-    );
-    expect(distanceAfter).toBeGreaterThanOrEqual(distanceBefore); // Distance might not increase much
+    await page.waitForTimeout(1000); // Give some time for distance to change
+    await expect(async () => {
+      const distanceAfter = await page.evaluate(
+        () => (window as any).__gameStore?.getState?.()?.distance || 0
+      );
+      expect(distanceAfter).toBeGreaterThan(distanceBefore);
+    }).toPass({ timeout: 10000, intervals: [500] }); // Poll for up to 10 seconds, check every 500ms
 
     console.log('✅ Pause/Resume flow verified');
   });

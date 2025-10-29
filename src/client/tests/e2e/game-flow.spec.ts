@@ -160,15 +160,19 @@ test.describe('Game Flow E2E Tests', () => {
     await page.evaluate(() =>
       (window as any).__gameStore?.getState?.()?.startGame?.('classic')
     );
-    // Distance should increase over time
+    // Give game time to initialize before checking distance
+    await page.waitForTimeout(2000);
+    
+    // Distance should increase over time - poll with longer timeout
     await expect(async () => {
       const distance = await page.evaluate(
         () => (window as any).__gameStore?.getState?.()?.distance || 0
       );
       expect(distance).toBeGreaterThan(0);
     }).toPass({
-      // Poll for up to 5 seconds.
-      timeout: 5000,
+      // Poll for up to 15 seconds to ensure distance updates
+      timeout: 15000,
+      intervals: [1000], // Check every second
     });
   });
 

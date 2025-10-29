@@ -10,28 +10,28 @@ export function GhostModeEffect(): null {
     // Apply ghost shader effect to player's three object
     if (player.three && player.ghost) {
       player.three.traverse((child) => {
-        if ((child as THREE.Mesh).isMesh) {
-          const mesh = child as THREE.Mesh;
-          const material = mesh.material as THREE.MeshStandardMaterial;
-          if (material) {
-            material.opacity = 0.5;
-            material.transparent = true;
-            material.emissive?.setHex(0x9333ea);
-            material.emissiveIntensity = 0.3;
-          }
+        if (
+          child instanceof THREE.Mesh &&
+          child.material instanceof THREE.MeshStandardMaterial
+        ) {
+          const material = child.material;
+          material.opacity = 0.5;
+          material.transparent = true;
+          material.emissive?.setHex(0x9333ea);
+          material.emissiveIntensity = 0.3;
         }
       });
     } else if (player.three && !player.ghost) {
       // Reset to normal
       player.three.traverse((child) => {
-        if ((child as THREE.Mesh).isMesh) {
-          const mesh = child as THREE.Mesh;
-          const material = mesh.material as THREE.MeshStandardMaterial;
-          if (material) {
-            material.opacity = 1.0;
-            material.transparent = false;
-            material.emissiveIntensity = 0;
-          }
+        if (
+          child instanceof THREE.Mesh &&
+          child.material instanceof THREE.MeshStandardMaterial
+        ) {
+          const material = child.material;
+          material.opacity = 1.0;
+          material.transparent = false;
+          material.emissiveIntensity = 0;
         }
       });
     }

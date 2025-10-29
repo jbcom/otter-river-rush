@@ -63,7 +63,9 @@ function TerrainMesh(): React.JSX.Element {
 
   // TODO: Load PBR textures using texturePaths when texture loading is optimized
   // For now using simple material fallback to avoid loading hangs
-  console.warn('PBR textures available but not loaded:', texturePaths);
+  if (import.meta.env.DEV) {
+    console.warn('PBR textures available but not loaded:', texturePaths);
+  }
 
   // Simple material fallback (PBR textures cause loading hang)
   const material = useMemo(

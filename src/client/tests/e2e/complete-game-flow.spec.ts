@@ -40,12 +40,12 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     });
     expect(playerExists).toBe(true);
 
-    // 5. ENTITIES SPAWN: Wait longer for obstacles/collectibles
-    await page.waitForTimeout(5000); // Increased from 3s to 5s
-    const entityCount = await page.evaluate(() => {
-      return (window as any).debug?.getPerformanceStats?.()?.totalEntities || 0;
-    });
-    expect(entityCount).toBeGreaterThanOrEqual(1); // At least player entity
+    await expect(async () => {
+      const entityCount = await page.evaluate(() => {
+        return (window as any).debug?.getPerformanceStats?.()?.totalEntities || 0;
+      });
+      expect(entityCount).toBeGreaterThanOrEqual(1); // At least player entity
+    }).toPass({ timeout: 5000 });
 
     // 6. DODGE: Press arrow keys to change lanes
     await page.keyboard.press('ArrowLeft');

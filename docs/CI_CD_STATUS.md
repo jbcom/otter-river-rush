@@ -115,8 +115,8 @@ pnpm test:e2e --project=chromium --grep="game-flow|complete-game"
 **Duration:** ~1-2 minutes
 
 **Output:**
-- Live game at: `https://<username>.github.io/<repo-name>/`
-  *(Currently deployed at: https://jbcom.github.io/otter-river-rush/ - update if repository moves)*
+- Live game at: `https://[YOUR_USERNAME].github.io/[YOUR_REPO]/`
+  *(Replace placeholders with your GitHub username/organization and repository name. For example: `https://jbcom.github.io/otter-river-rush/`)*
 
 ## Test Results
 
